@@ -1,0 +1,39 @@
+{
+  "name": "hackfs",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "Robin Thomas <robinthomas2591@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha 'src/**/*.spec.js'",
+    "coverage": "nyc npm run test"
+  },
+  "dependencies": {
+    "ipfs-http-client": "^44.3.0"
+  },
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "ipfs-only-hash": "^2.0.1",
+    "jsdom": "^16.2.2",
+    "lint-staged": "^10.2.11",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
+    "prettier": "^2.0.5"
+  },
+  "mocha": {
+    "recursive": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,css,json,md,sol}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
