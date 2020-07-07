@@ -1,0 +1,48 @@
+.app-header {
+  font-size: 2.5rem;
+  background: var(--bg-navbar);
+  height: 100vh;
+  position: relative;
+  z-index: 12;
+}
+
+.app-header-title {
+  font-family: 'Liu Jian Mao Cao', cursive;
+  font-size: 2.1rem;
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 25px;
+}
+
+.app-card {
+  background: transparent !important;
+  cursor: pointer;
+}
+
+.app-card i {
+  color: #6c757d;
+}
+
+.app-header-theme {
+  position: absolute;
+  bottom: 0;
+  left: 2.5px;
+}
+
+.app-header-theme > .app-card {
+  box-shadow: none !important;
+}
+
+.app-header-icon-start-chat {
+  animation: blink 2s ease-in infinite;
+}
+
+@keyframes blink {
+  from,
+  to {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}

@@ -1,20 +1,20 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import './App.css';
 
-import Theme from '../Theme';
-import getComponent from './Component';
-import { DataContext } from '../utils/DataProvider';
+import { Row, Col } from 'react-bootstrap';
 
-import styles from './App.module.css';
+import AppHeader from './AppHeader';
+import AppBody from './AppBody';
 
-const App = () => {
-  const ctx = useContext(DataContext);
-
-  return (
-    <div className={styles.app}>
-      <Theme />
-      <header className={styles.header}>{getComponent(ctx.page)}</header>
-    </div>
-  );
-};
+const App = () => (
+  <Row style={{ height: '100vh' }} noGutters={true}>
+    <Col md="auto">
+      <AppHeader />
+    </Col>
+    <Col>
+      <AppBody />
+    </Col>
+  </Row>
+);
 
 export default App;

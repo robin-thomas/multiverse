@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { MDBIcon } from 'mdbreact';
 import { Row, Col } from 'react-bootstrap';
 
 import Box from '../utils/3box';
+import { DataContext } from './utils/DataProvider';
 
-const Icon = ({ icon, theme, setTheme, style }) => {
+const Icon = ({ icon, theme, setTheme, style, loggedIn }) => {
   const onClick = (theme) => {
     document.body.setAttribute('data-theme', theme);
-    // await Box.set(Box.DATASTORE_THEME, theme);
+    if (loggedIn) {
+      Box.set(Box.DATASTORE_THEME, theme);
+    }
     setTheme(theme);
   };
 
@@ -17,12 +20,15 @@ const Icon = ({ icon, theme, setTheme, style }) => {
       size="sm"
       style={style}
       icon={icon}
+      title={`Use ${theme} mode`}
       onClick={() => onClick(theme)}
     />
   );
 };
 
 const Theme = (props) => {
+  const ctx = useContext(DataContext);
+
   const [theme, setTheme] = useState(0);
 
   useEffect(() => {
@@ -45,6 +51,7 @@ const Theme = (props) => {
             icon="moon"
             theme="dark"
             setTheme={setTheme}
+            loggedIn={ctx.loggedIn}
           />
         ) : (
           <Icon
@@ -52,6 +59,7 @@ const Theme = (props) => {
             icon="sun"
             theme="light"
             setTheme={setTheme}
+            loggedIn={ctx.loggedIn}
           />
         )}
       </Col>
