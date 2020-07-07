@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 
+import Theme from '../Theme';
 import getComponent from './Component';
 import { DataContext } from '../utils/DataProvider';
 
@@ -10,6 +11,7 @@ const App = () => {
 
   return (
     <div className={styles.app}>
+      <Theme />
       <header className={styles.header}>{getComponent(ctx.page)}</header>
     </div>
   );

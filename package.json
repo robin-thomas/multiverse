@@ -7,8 +7,8 @@
   "author": "Robin Thomas <robinthomas2591@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "HTTPS=true react-scripts start",
-    "build": "react-scripts build",
+    "start": "HTTPS=true react-app-rewired start",
+    "build": "react-app-rewired build",
     "test": "mocha 'src/**/*.spec.js'",
     "coverage": "nyc npm run test"
   },
@@ -16,20 +16,23 @@
     "3box": "^1.20.1",
     "ethers": "^5.0.4",
     "ipfs-http-client": "^44.3.0",
+    "lodash": "^4.17.15",
     "mdbreact": "^4.27.0",
     "react": "^16.13.1",
-    "react-bootstrap": "^1.1.0",
+    "react-bootstrap": "1.0.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1"
   },
   "devDependencies": {
+    "customize-cra": "^1.0.0",
     "husky": "^4.2.5",
     "ipfs-only-hash": "^2.0.1",
     "jsdom": "^16.2.2",
     "lint-staged": "^10.2.11",
     "mocha": "^8.0.1",
     "nyc": "^15.1.0",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "react-app-rewired": "^2.1.6"
   },
   "mocha": {
     "recursive": true

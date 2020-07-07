@@ -5,17 +5,16 @@ import { app } from '../../config.json';
 const Box = {
   space: null,
 
-  DATASTORE_PROFILE: 'datastore_profile',
-
-  KEYSTORE_PROFILE: 'keystore_profile',
+  DATASTORE_PROFILE: 'profile',
+  DATASTORE_THEME: 'theme',
 
   /**
    * create a new 3Box space client
    *
    * @returns {Object} authenticated 3Box space client
    */
-  getClient: async (web3Provider = null) => {
-    if (Box.space === null) {
+  getClient: async (web3Provider = null, noCreate = false) => {
+    if (Box.space === null && !noCreate) {
       const account = (await web3Provider.eth.getAccounts())[0];
       const box = await openBox(account, web3Provider.currentProvider);
 
@@ -47,9 +46,9 @@ const Box = {
    * @param {Object} key
    * @returns {Object} value
    */
-  get: async (key, web3Provider = null) => {
+  get: async (key, web3Provider = null, noCreate = false) => {
     try {
-      const client = await Box.getClient(web3Provider);
+      const client = await Box.getClient(web3Provider, noCreate);
       return await client.private.get(key);
     } catch (err) {
       throw err;
