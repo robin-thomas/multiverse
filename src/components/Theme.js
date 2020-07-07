@@ -31,14 +31,16 @@ const Theme = (props) => {
 
   useEffect(() => {
     const fn = async () => {
-      // const boxTheme = await Box.get(Box.DATASTORE_THEME, null, true);
-      // if (boxTheme) {
-      //   setTheme(boxTheme);
-      // }
+      const boxTheme = await Box.get(Box.DATASTORE_THEME, ctx.provider);
+      if (boxTheme) {
+        ctx.setTheme(boxTheme);
+      }
     };
 
-    fn();
-  }, []);
+    if (ctx.provider) {
+      fn();
+    }
+  }, [ctx.provider]);
 
   return (
     <Row>

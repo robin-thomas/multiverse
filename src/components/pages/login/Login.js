@@ -8,11 +8,11 @@ const Login = () => {
 
   switch (stage) {
     case 1:
-      return <Space />;
+      return <Space setStage={setStage} />;
 
     case 0:
     default:
-      return <Metamask />;
+      return <Metamask setStage={setStage} />;
   }
 };
 

@@ -1,4 +1,4 @@
-import ThreeBox from '3box';
+import { openBox } from '3box';
 
 import Ethers from './ethers';
 
@@ -7,26 +7,22 @@ import { app } from '../../config.json';
 const Box = {
   space: null,
 
-  DATASTORE_PROFILE: 'profile',
-  DATASTORE_THEME: 'theme',
+  DATASTORE_PROFILE: `${app.name}-profile`,
+  DATASTORE_THEME: `${app.name}-theme`,
 
   /**
    * create a new 3Box space client
    *
    * @returns {Object} authenticated 3Box space client
    */
-  getClient: async (ethersProvider, noCreate = false) => {
-    if (Box.space === null && !noCreate) {
+  getClient: async (ethersProvider) => {
+    if (Box.space === null) {
       const address = await Ethers.getAccount(ethersProvider);
 
-      const box = await ThreeBox.create();
-      await box.auth([app.name], {
-        address,
-        provider: ethersProvider.provider,
-      });
+      const box = await openBox(address, window.ethereum);
       await box.syncDone;
 
-      Box.space = box;
+      Box.space = await box.openSpace(app.name);
     }
 
     return Box.space;
@@ -53,9 +49,9 @@ const Box = {
    * @param {Object} key
    * @returns {Object} value
    */
-  get: async (key, web3Provider, noCreate = false) => {
+  get: async (key, ethersProvider) => {
     try {
-      const client = await Box.getClient(web3Provider, noCreate);
+      const client = await Box.getClient(ethersProvider);
       return await client.private.get(key);
     } catch (err) {
       throw err;

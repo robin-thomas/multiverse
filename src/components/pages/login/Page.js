@@ -7,7 +7,7 @@ import EmptyRow from '../../utils/EmptyRow';
 
 import styles from './Page.module.css';
 
-const Page = ({ text, loader, error }) => (
+const Page = ({ text, loader, error, errorNext }) => (
   <Container className={styles['container']}>
     <Row className={styles['row']}>
       <Col className="align-self-center">
@@ -22,6 +22,8 @@ const Page = ({ text, loader, error }) => (
         <Row>
           <Col>{error ? error : text}</Col>
         </Row>
+        <EmptyRow />
+        {errorNext ? errorNext : null}
       </Col>
     </Row>
   </Container>

@@ -6,7 +6,7 @@ import { DataContext } from '../../utils/DataProvider';
 import Box from '../../../utils/3box';
 import Ethers from '../../../utils/ethers';
 
-const Space = () => {
+const Space = ({ setStage }) => {
   const ctx = useContext(DataContext);
 
   useEffect(() => {
@@ -14,14 +14,16 @@ const Space = () => {
       // Setup the 3box space.
       try {
         await Box.set(Box.DATASTORE_THEME, ctx.theme, ctx.provider);
+        // setStage(2);
       } catch (err) {
+        // TODO: metamask rejections doesnt seem to be handled by 3box.
+
         console.log(err);
-        // something went wrong. handle it.
       }
     };
 
     fn();
-  }, [ctx.loggedIn]);
+  }, []);
 
   return <Page loader={true} text="Setting Up Your Space" />;
 };
