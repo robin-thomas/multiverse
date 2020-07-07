@@ -1,4 +1,7 @@
 {
+  "app": {
+    "name": "multiverse"
+  },
   "ipfs": {
     "protocol": "https",
     "host": "ipfs.infura.io",
