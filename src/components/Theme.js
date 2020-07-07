@@ -29,14 +29,12 @@ const Icon = ({ icon, theme, setTheme, style, loggedIn }) => {
 const Theme = (props) => {
   const ctx = useContext(DataContext);
 
-  const [theme, setTheme] = useState(0);
-
   useEffect(() => {
     const fn = async () => {
-      const boxTheme = await Box.get(Box.DATASTORE_THEME, null, true);
-      if (boxTheme) {
-        setTheme(boxTheme);
-      }
+      // const boxTheme = await Box.get(Box.DATASTORE_THEME, null, true);
+      // if (boxTheme) {
+      //   setTheme(boxTheme);
+      // }
     };
 
     fn();
@@ -45,12 +43,12 @@ const Theme = (props) => {
   return (
     <Row>
       <Col>
-        {theme === 'light' ? (
+        {ctx.theme === 'light' ? (
           <Icon
             style={{ color: '#6c757d' }}
             icon="moon"
             theme="dark"
-            setTheme={setTheme}
+            setTheme={ctx.setTheme}
             loggedIn={ctx.loggedIn}
           />
         ) : (
@@ -58,7 +56,7 @@ const Theme = (props) => {
             style={{ color: 'rgb(255, 193, 7)' }}
             icon="sun"
             theme="light"
-            setTheme={setTheme}
+            setTheme={ctx.setTheme}
             loggedIn={ctx.loggedIn}
           />
         )}

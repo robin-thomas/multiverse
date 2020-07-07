@@ -1,11 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
+import { MDBBtn } from 'mdbreact';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import { DataContext } from '../../utils/DataProvider';
 
 import styles from './Home.module.css';
 
 const Home = () => {
-  return <>Hello</>;
+  const ctx = useContext(DataContext);
+
+  const onClick = () => {
+    ctx.setPage('login');
+  };
+
+  return (
+    <Container fluid={true}>
+      <Row>
+        <Col md="auto" className="ml-auto">
+          <MDBBtn color="primary" onClick={onClick}>
+            Get In
+          </MDBBtn>
+        </Col>
+      </Row>
+    </Container>
+  );
 };
 
 export default Home;

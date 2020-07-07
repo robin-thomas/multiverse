@@ -1,4 +1,6 @@
-import { openBox } from '3box';
+import ThreeBox from '3box';
+
+import Ethers from './ethers';
 
 import { app } from '../../config.json';
 
@@ -13,13 +15,18 @@ const Box = {
    *
    * @returns {Object} authenticated 3Box space client
    */
-  getClient: async (web3Provider = null, noCreate = false) => {
+  getClient: async (ethersProvider, noCreate = false) => {
     if (Box.space === null && !noCreate) {
-      const account = (await web3Provider.eth.getAccounts())[0];
-      const box = await openBox(account, web3Provider.currentProvider);
+      const address = await Ethers.getAccount(ethersProvider);
 
+      const box = await ThreeBox.create();
+      await box.auth([app.name], {
+        address,
+        provider: ethersProvider.provider,
+      });
       await box.syncDone;
-      Box.space = await box.openSpace(app.name);
+
+      Box.space = box;
     }
 
     return Box.space;
@@ -31,9 +38,9 @@ const Box = {
    * @param {Object} key
    * @param {Object} value
    */
-  set: async (key, value, web3Provider = null) => {
+  set: async (key, value, ethersProvider) => {
     try {
-      const client = await Box.getClient(web3Provider);
+      const client = await Box.getClient(ethersProvider);
       await client.private.set(key, value);
     } catch (err) {
       throw err;
@@ -46,7 +53,7 @@ const Box = {
    * @param {Object} key
    * @returns {Object} value
    */
-  get: async (key, web3Provider = null, noCreate = false) => {
+  get: async (key, web3Provider, noCreate = false) => {
     try {
       const client = await Box.getClient(web3Provider, noCreate);
       return await client.private.get(key);

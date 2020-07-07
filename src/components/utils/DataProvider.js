@@ -4,8 +4,9 @@ const DataContext = React.createContext();
 
 const DataProvider = (props) => {
   const [page, setPage] = useState('home');
-  const [theme, setTheme] = useState(0);
+  const [theme, setTheme] = useState('light');
   const [loggedIn, setLoggedIn] = useState(false);
+  const [provider, setProvider] = useState(null);
 
   return (
     <DataContext.Provider
@@ -16,6 +17,8 @@ const DataProvider = (props) => {
         setTheme,
         loggedIn,
         setLoggedIn,
+        provider,
+        setProvider,
       }}
     >
       {props.children}

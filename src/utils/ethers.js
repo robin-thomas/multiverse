@@ -6,14 +6,18 @@ const Ethers = {
    *
    * @returns {Object} ethers provider
    */
-  getProvider: (ethersProvider = null) => {
+  getProvider: async (ethersProvider = null) => {
     if (ethersProvider !== null) {
       return ethersProvider;
     }
 
     if (typeof window !== 'undefined' && window.ethereum !== undefined) {
+      // TODO: enable only on mainnet network.
       window.ethereum.autoRefreshOnNetworkChange = false;
+      await window.ethereum.enable();
       ethersProvider = new ethers.providers.Web3Provider(window.ethereum);
+    } else {
+      throw new Error('No metamask detected!');
     }
 
     return ethersProvider;
@@ -24,9 +28,9 @@ const Ethers = {
    *
    * @returns {Object} ethers signer
    */
-  getWallet: (ethersProvider = null) => {
+  getSigner: async (ethersProvider = null) => {
     try {
-      return Ethers.getProvider(ethersProvider).getSigner();
+      return (await Ethers.getProvider(ethersProvider)).getSigner();
     } catch (err) {
       return null;
     }
@@ -54,7 +58,7 @@ const Ethers = {
    * @returns {string} returns account address
    */
   getAccount: async (ethersProvider = null) => {
-    return await Ethers.getWallet(ethersProvider).getAddress();
+    return await (await Ethers.getSigner(ethersProvider)).getAddress();
   },
 };
 
