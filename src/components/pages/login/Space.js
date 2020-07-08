@@ -6,7 +6,7 @@ import { DataContext } from '../../utils/DataProvider';
 import Box from '../../../utils/3box';
 import Ethers from '../../../utils/ethers';
 
-const Space = ({ setStage }) => {
+const Space = () => {
   const ctx = useContext(DataContext);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const Space = ({ setStage }) => {
       // Setup the 3box space.
       try {
         await Box.set(Box.DATASTORE_THEME, ctx.theme, ctx.provider);
-        // setStage(2);
+        ctx.setPage('profile');
       } catch (err) {
         // TODO: metamask rejections doesnt seem to be handled by 3box.
 

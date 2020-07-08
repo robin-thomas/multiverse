@@ -1,8 +1,7 @@
 {
-  "name": "hackfs",
+  "name": "multiverse",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "Decentralized Social Network",
   "keywords": [],
   "author": "Robin Thomas <robinthomas2591@gmail.com>",
   "license": "MIT",
@@ -13,7 +12,7 @@
     "coverage": "nyc npm run test"
   },
   "dependencies": {
-    "3box": "^1.20.0",
+    "3box": "^1.20.1",
     "ethers": "^5.0.4",
     "ipfs-http-client": "^44.3.0",
     "lodash": "^4.17.15",
