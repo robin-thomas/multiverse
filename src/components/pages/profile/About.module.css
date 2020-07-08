@@ -1,11 +1,26 @@
 .about-card {
   position: absolute;
-  margin-top: -200px;
+  z-index: 3;
+  margin-top: -180px;
   background: var(--bg-contact-body) !important;
   color: var(--color-default) !important;
 }
 
-.about-pic {
+.about-pic,
+.about-pic-overlay-trigger {
   height: 500px;
   border: 0;
+  transition: all 0.3s;
+}
+
+.about-pic-overlay-trigger {
+  opacity: 80%;
+  filter: blur(2px);
+}
+
+.about-edit-pic-icon {
+  height: 60px !important;
+  width: 60px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
 }
