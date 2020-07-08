@@ -17,13 +17,11 @@ const AppCard = ({ active, buttonText, onClick, cls }) => (
   </Card>
 );
 
-const AppCardHeader = ({ active, blink, icon, text }) => (
+const AppCardHeader = ({ active, icon, text }) => (
   <Row>
     <Col className="text-center">
       <MDBIcon
-        className={`${active ? 'active-icon' : ''} ${
-          blink ? styles['app-header-icon-start-chat'] : ''
-        }`}
+        className={`${active ? 'active-icon' : ''}`}
         size="sm"
         icon={icon}
         title={text}

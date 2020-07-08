@@ -7,14 +7,14 @@ import AppHeader from './AppHeader';
 import AppBody from './AppBody';
 
 const App = () => (
-  <Row style={{ height: '100vh' }} noGutters={true}>
-    <Col md="auto">
-      <AppHeader />
-    </Col>
-    <Col>
-      <AppBody />
-    </Col>
-  </Row>
+  <>
+    <AppHeader />
+    <Row style={{ height: '100vh' }} noGutters={true}>
+      <Col>
+        <AppBody />
+      </Col>
+    </Row>
+  </>
 );
 
 export default App;

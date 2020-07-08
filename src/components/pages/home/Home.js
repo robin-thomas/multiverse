@@ -15,7 +15,7 @@ const Home = () => {
   };
 
   return (
-    <Container fluid={true}>
+    <Container fluid={true} className={styles['home']}>
       <Row>
         <Col md="auto" className="ml-auto">
           <MDBBtn color="primary" onClick={onClick}>

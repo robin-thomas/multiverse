@@ -1,25 +1,20 @@
 .app-header,
-.app-header-bars {
+.app-header-bars-fake {
   background: var(--bg-navbar);
+  position: absolute;
+  z-index: 2;
 }
 
 .app-header {
   height: 100vh;
-  position: relative;
-  z-index: 13;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 1px 0 rgba(0, 0, 0, 0.12) !important;
 }
 
 .app-header-bars,
 .app-header-bars-fake {
   cursor: pointer;
-  padding-top: 0.75rem;
-}
-
-.app-header-bars-fake {
-  position: absolute;
-  z-index: 2;
   padding: 0.75rem 1.05rem;
+  background: transparent;
 }
 
 .app-header-title {
@@ -30,7 +25,9 @@
 .app-card {
   background: transparent !important;
   cursor: pointer;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 1px 0 rgba(0, 0, 0, 0.12) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.125) !important;
+  box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.16),
+    0 1px 1px 0 rgba(0, 0, 0, 0.12) !important;
 }
 
 .app-card i {
