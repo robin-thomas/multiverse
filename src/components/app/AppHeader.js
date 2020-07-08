@@ -4,6 +4,7 @@ import { Card, Row, Col } from 'react-bootstrap';
 import { MDBIcon } from 'mdbreact';
 
 import Theme from '../Theme';
+import EmptyRow from '../utils/EmptyRow';
 import { DataContext } from '../utils/DataProvider';
 
 import styles from './AppHeader.module.css';
@@ -31,14 +32,23 @@ const AppCardHeader = ({ active, blink, icon, text }) => (
   </Row>
 );
 
-const AppHeader = (props) => {
+const AppHeaderToggle = ({ display, setDisplay, fake }) => (
+  <div className={styles[`app-header-bars${fake ? '-fake' : ''}`]}>
+    <div className={styles['app-header-title']}>
+      <MDBIcon icon="bars" size="lg" onClick={() => setDisplay(!display)} />
+    </div>
+  </div>
+);
+
+const AppHeader = ({ display, setDisplay }) => {
   const ctx = useContext(DataContext);
 
   const items = [{ key: 'home', icon: 'home', text: 'Home' }];
 
   return (
     <div className={styles['app-header']}>
-      <div className={styles['app-header-title']}>m</div>
+      <AppHeaderToggle display={display} setDisplay={setDisplay} />
+      <EmptyRow />
       {items.map(({ key, icon, text, action }, index) => (
         <AppCard
           key={index}
@@ -66,4 +76,16 @@ const AppHeader = (props) => {
   );
 };
 
-export default AppHeader;
+const Header = () => {
+  const [display, setDisplay] = useState(false);
+
+  if (display) {
+    return <AppHeader display={display} setDisplay={setDisplay} />;
+  } else {
+    return (
+      <AppHeaderToggle display={display} setDisplay={setDisplay} fake={true} />
+    );
+  }
+};
+
+export default Header;

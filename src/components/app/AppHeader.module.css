@@ -1,18 +1,30 @@
-.app-header {
-  font-size: 2.5rem;
+.app-header,
+.app-header-bars {
   background: var(--bg-navbar);
+}
+
+.app-header {
   height: 100vh;
   position: relative;
-  z-index: 12;
+  z-index: 13;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 1px 1px 0 rgba(0, 0, 0, 0.12) !important;
 }
 
+.app-header-bars,
+.app-header-bars-fake {
+  cursor: pointer;
+  padding-top: 0.75rem;
+}
+
+.app-header-bars-fake {
+  position: absolute;
+  z-index: 2;
+  padding: 0.75rem 1.05rem;
+}
+
 .app-header-title {
-  font-family: 'Liu Jian Mao Cao', cursive;
-  font-size: 2.1rem;
   text-align: center;
-  padding-top: 15px;
-  padding-bottom: 25px;
+  color: #6c757d;
 }
 
 .app-card {
@@ -33,18 +45,4 @@
 
 .app-header-theme > .app-card {
   box-shadow: none !important;
-}
-
-.app-header-icon-start-chat {
-  animation: blink 2s ease-in infinite;
-}
-
-@keyframes blink {
-  from,
-  to {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
 }

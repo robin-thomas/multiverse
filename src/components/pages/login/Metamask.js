@@ -1,12 +1,30 @@
 import React, { useEffect, useContext, useState } from 'react';
 
 import { MDBBtn } from 'mdbreact';
+import { Alert } from 'react-bootstrap';
 
 import Page from './Page';
 import { DataContext } from '../../utils/DataProvider';
 
 import Box from '../../../utils/3box';
 import Ethers from '../../../utils/ethers';
+
+import styles from './Metamask.module.css';
+
+const LoginPrompt = () => (
+  <Alert variant="primary" className={styles['alert']}>
+    <Alert.Heading>Hello there!</Alert.Heading>
+    <p>
+      This dapp requires access to your wallet. Please <b>login & authorize</b>{' '}
+      acces to your Metamask wallet to continue.
+    </p>
+    <hr />
+    <p>
+      Learn more about Metamask{' '}
+      <Alert.Link href="https://metamask.io/">here</Alert.Link>
+    </p>
+  </Alert>
+);
 
 const Metamask = ({ setStage }) => {
   const ctx = useContext(DataContext);
@@ -18,6 +36,7 @@ const Metamask = ({ setStage }) => {
   useEffect(() => {
     const fn = async () => {
       try {
+        setErrorNext(<LoginPrompt />);
         const provider = await Ethers.getProvider();
         ctx.setProvider(provider);
         setStage(1);
