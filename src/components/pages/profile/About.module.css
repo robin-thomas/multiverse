@@ -1,0 +1,11 @@
+.about-card {
+  position: absolute;
+  margin-top: -200px;
+  background: var(--bg-contact-body) !important;
+  color: var(--color-default) !important;
+}
+
+.about-pic {
+  height: 500px;
+  border: 0;
+}

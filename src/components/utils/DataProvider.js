@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const DataContext = React.createContext();
 
 const DataProvider = (props) => {
-  const [page, setPage] = useState('home');
+  const [page, setPage] = useState('profile');
   const [theme, setTheme] = useState('light');
   const [loggedIn, setLoggedIn] = useState(false);
   const [provider, setProvider] = useState(null);
