@@ -9,7 +9,7 @@ import { DataContext } from '../../utils/DataProvider';
 import Box from '../../../utils/3box';
 import Ethers from '../../../utils/ethers';
 
-import styles from './Metamask.module.css';
+import styles from './Page.module.css';
 
 const LoginPrompt = () => (
   <Alert variant="primary" className={styles['alert']}>
