@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
+import uuid from 'uuid';
 import { Alert } from 'react-bootstrap';
 
 import Page from './Page';
@@ -36,7 +37,22 @@ const Space = () => {
     const fn = async () => {
       // Setup the 3box space.
       try {
-        await Box.set(Box.DATASTORE_THEME, ctx.theme, ctx.provider);
+        await Box.set(Box.DATASTORE_THEME, ctx.theme, {
+          ethersProvider: ctx.provider,
+        });
+
+        // Setup an encrypting key (if not set).
+        const key = await Box.get(Box.DATASTORE_ENCRYPTION_KEY, {
+          ethersProvider: ctx.provider,
+        });
+        if (key === null) {
+          const encryptionKey = uuid.v4();
+
+          await Box.set(Box.DATASTORE_ENCRYPTION_KEY, encryptionKey, {
+            ethersProvider: ctx.provider,
+          });
+        }
+
         setRedirect(true);
       } catch (err) {
         // TODO: metamask rejections doesnt seem to be handled by 3box.

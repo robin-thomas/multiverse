@@ -9,6 +9,7 @@ const Box = {
 
   DATASTORE_PROFILE: `${app.name}-profile`,
   DATASTORE_THEME: `${app.name}-theme`,
+  DATASTORE_ENCRYPTION_KEY: `${app.name}-encryptionKey`,
 
   /**
    * create a new 3Box space client
@@ -34,10 +35,20 @@ const Box = {
    * @param {Object} key
    * @param {Object} value
    */
-  set: async (key, value, ethersProvider) => {
+  set: async (key, value, opts = {}) => {
     try {
-      const client = await Box.getClient(ethersProvider);
-      await client.private.set(key, value);
+      opts.ethersProvider = opts.ethersProvider || null;
+      opts.private = opts.private === undefined ? true : opts.private;
+
+      const client = await Box.getClient(opts.ethersProvider);
+
+      if (opts.private) {
+        await client.public.remove(key);
+        await client.private.set(key, value);
+      } else {
+        await client.private.remove(key);
+        await client.public.set(key, value);
+      }
     } catch (err) {
       throw err;
     }
@@ -49,10 +60,18 @@ const Box = {
    * @param {Object} key
    * @returns {Object} value
    */
-  get: async (key, ethersProvider) => {
+  get: async (key, opts = {}) => {
     try {
-      const client = await Box.getClient(ethersProvider);
-      return await client.private.get(key);
+      opts.ethersProvider = opts.ethersProvider || null;
+      opts.private = opts.private === undefined ? true : opts.private;
+
+      if (opts.private) {
+        const client = await Box.getClient(opts.ethersProvider);
+        return await client.private.get(key);
+      } else {
+        const spaceData = await Box.getSpace(opts.address, app.name);
+        return spaceData[key];
+      }
     } catch (err) {
       throw err;
     }

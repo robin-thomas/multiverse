@@ -9,9 +9,6 @@ import { DataContext } from './utils/DataProvider';
 const Icon = ({ icon, theme, setTheme, style, loggedIn }) => {
   const onClick = (theme) => {
     document.body.setAttribute('data-theme', theme);
-    if (loggedIn) {
-      Box.set(Box.DATASTORE_THEME, theme);
-    }
     setTheme(theme);
   };
 
@@ -31,7 +28,9 @@ const Theme = (props) => {
 
   useEffect(() => {
     const fn = async () => {
-      const boxTheme = await Box.get(Box.DATASTORE_THEME, ctx.provider);
+      const boxTheme = await Box.get(Box.DATASTORE_THEME, {
+        ethersProvider: ctx.provider,
+      });
       if (boxTheme) {
         ctx.setTheme(boxTheme);
       }
