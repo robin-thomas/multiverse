@@ -6,7 +6,7 @@ import { Row, Col } from 'react-bootstrap';
 import Box from '../utils/3box';
 import { DataContext } from './utils/DataProvider';
 
-const Icon = ({ icon, theme, setTheme, style, loggedIn }) => {
+const Icon = ({ icon, theme, setTheme, style }) => {
   const onClick = (theme) => {
     document.body.setAttribute('data-theme', theme);
     setTheme(theme);
@@ -28,18 +28,18 @@ const Theme = (props) => {
 
   useEffect(() => {
     const fn = async () => {
-      const boxTheme = await Box.get(Box.DATASTORE_KEY_THEME, {
-        ethersProvider: ctx.provider,
+      const boxTheme = await Box.get([Box.DATASTORE_KEY_THEME], {
+        address: ctx.address,
       });
       if (boxTheme) {
         ctx.setTheme(boxTheme);
       }
     };
 
-    if (ctx.provider) {
+    if (ctx.address) {
       fn();
     }
-  }, [ctx.provider]);
+  }, [ctx.address]);
 
   return (
     <Row>
@@ -50,7 +50,6 @@ const Theme = (props) => {
             icon="moon"
             theme="dark"
             setTheme={ctx.setTheme}
-            loggedIn={ctx.loggedIn}
           />
         ) : (
           <Icon
@@ -58,7 +57,6 @@ const Theme = (props) => {
             icon="sun"
             theme="light"
             setTheme={ctx.setTheme}
-            loggedIn={ctx.loggedIn}
           />
         )}
       </Col>

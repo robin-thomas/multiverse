@@ -1,8 +1,6 @@
 import { openBox } from '3box';
 import CryptoJS from 'crypto-js';
 
-import Ethers from './ethers';
-
 import { app } from '../../config.json';
 
 const Box = {
@@ -12,8 +10,13 @@ const Box = {
   DATASTORE_STATE_FRIENDS: 'friends',
   DATASTORE_STATE_PUBLIC: 'public',
 
-  DATASTORE_KEY_PROFILE: `${app.name}-profile`,
+  DATASTORE_KEY_NAME: `${app.name}-name`,
   DATASTORE_KEY_THEME: `${app.name}-theme`,
+  DATASTORE_KEY_COUNTRY: `${app.name}-country`,
+  DATASTORE_KEY_PROFILE: `${app.name}-profile`,
+  DATASTORE_KEY_USERNAME: `${app.name}-username`,
+  DATASTORE_KEY_PROFILE_PIC: `${app.name}-profilePic`,
+  DATASTORE_KEY_PROFILE_BACKGROUND: `${app.name}-profileBackground`,
   DATASTORE_KEY_ENCRYPTION_KEY: `${app.name}-encryptionKey`,
 
   /**
@@ -21,10 +24,8 @@ const Box = {
    *
    * @returns {Object} authenticated 3Box space client
    */
-  getClient: async (ethersProvider) => {
+  getClient: async (address) => {
     if (Box.space === null) {
-      const address = await Ethers.getAddress(ethersProvider);
-
       const box = await openBox(address, window.ethereum);
       await box.syncDone;
 
@@ -42,21 +43,25 @@ const Box = {
    */
   set: async (key, value, opts = {}) => {
     try {
-      opts.ethersProvider = opts.ethersProvider || null;
+      opts.stateChange = opts.stateChange || false;
       opts.state =
         opts.state === undefined ? Box.DATASTORE_STATE_PRIVATE : opts.state;
 
-      const client = await Box.getClient(opts.ethersProvider);
+      const client = await Box.getClient(opts.address);
 
       if (opts.state === Box.DATASTORE_STATE_PRIVATE) {
-        await client.public.remove(key);
+        if (opts.stateChange) {
+          client.public.remove(key);
+        }
         await client.private.set(key, value);
       } else {
         if (opts.state === Box.DATASTORE_STATE_FRIENDS) {
           value = CryptoJS.AES.encrypt(value, opts.encryptionKey).toString();
         }
 
-        await client.private.remove(key);
+        if (opts.stateChange) {
+          client.private.remove(key);
+        }
         await client.public.set(key, value);
       }
     } catch (err) {
@@ -70,28 +75,59 @@ const Box = {
    * @param {Object} key
    * @returns {Object} value
    */
-  get: async (key, opts = {}) => {
+  get: async (keys, opts = {}) => {
     try {
-      opts.ethersProvider = opts.ethersProvider || null;
-      opts.state =
-        opts.state === undefined ? Box.DATASTORE_STATE_PRIVATE : opts.state;
-
-      if (opts.state === Box.DATASTORE_STATE_PRIVATE) {
-        const client = await Box.getClient(opts.ethersProvider);
-        return await client.private.get(key);
-      } else {
-        const spaceData = await Box.getSpace(opts.address, app.name);
-
-        let value = spaceData[key];
-
-        if (opts.state === Box.DATASTORE_STATE_FRIENDS) {
-          value = CryptoJS.AES.decrypt(value, opts.encryptionKey).toString(
-            CryptoJS.enc.Utf8
-          );
+      opts.state = opts.state !== undefined ? opts.state : {};
+      opts.state = keys.reduce((p, c) => {
+        if (!p[c]) {
+          p[c] = Box.DATASTORE_STATE_PRIVATE;
         }
 
-        return value;
+        return p;
+      }, opts.state);
+
+      // Filter out the private key data.
+      const privateKeys = [];
+      const publicKeys = [];
+      for (const key of keys) {
+        if (opts.state[key] === Box.DATASTORE_STATE_PRIVATE) {
+          privateKeys.push(key);
+        } else {
+          publicKeys.push(key);
+        }
       }
+
+      let spaceData = {};
+      if (privateKeys.length > 0) {
+        const client = await Box.getClient(opts.address);
+        const data = await client.private.all();
+        spaceData = { ...spaceData, ...data };
+      }
+      if (publicKeys.length > 0) {
+        const data = await Box.getSpace(opts.address, app.name);
+        spaceData = { ...spaceData, ...data };
+      }
+
+      const response = Object.keys(spaceData)
+        .filter((e) => keys.includes(e))
+        .reduce((p, c) => {
+          if (opts.state[c] === Box.DATASTORE_STATE_FRIENDS) {
+            p[c] = CryptoJS.AES.decrypt(
+              spaceData[c],
+              opts.encryptionKey
+            ).toString(CryptoJS.enc.Utf8);
+          } else {
+            p[c] = spaceData[c];
+          }
+
+          return p;
+        }, {});
+
+      if (Object.keys(response).length === 1) {
+        return response[keys[0]];
+      }
+
+      return response;
     } catch (err) {
       throw err;
     }

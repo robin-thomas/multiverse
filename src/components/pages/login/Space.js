@@ -17,7 +17,8 @@ const LoginPrompt = () => (
     <p>
       All your profile information will be stored securely on your{' '}
       <b>3Box account.</b>. Please authorize access to your 3Box account to
-      continue. If you don't have a 3Box account, one shall be created for you.
+      continue (if first time). If you don't have a 3Box account, one shall be
+      created for you.
     </p>
     <hr />
     <p>
@@ -38,18 +39,18 @@ const Space = () => {
       // Setup the 3box space.
       try {
         await Box.set(Box.DATASTORE_KEY_THEME, ctx.theme, {
-          ethersProvider: ctx.provider,
+          address: ctx.address,
         });
 
         // Setup an encrypting key (if not set).
-        let key = await Box.get(Box.DATASTORE_KEY_ENCRYPTION_KEY, {
-          ethersProvider: ctx.provider,
+        let key = await Box.get([Box.DATASTORE_KEY_ENCRYPTION_KEY], {
+          address: ctx.address,
         });
         if (key === null) {
           key = uuidV4();
 
           await Box.set(Box.DATASTORE_KEY_ENCRYPTION_KEY, key, {
-            ethersProvider: ctx.provider,
+            address: ctx.address,
           });
         }
         ctx.setEncryptionKey(key);
@@ -63,7 +64,7 @@ const Space = () => {
     };
 
     fn();
-  }, [ctx.theme, ctx.provider]);
+  }, [ctx.theme, ctx.address]);
 
   return (
     <>
