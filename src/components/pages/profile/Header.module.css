@@ -11,9 +11,9 @@
   position: absolute;
   height: 250px !important;
   width: 100vw !important;
-  background-image: url('https://i.imgur.com/BZ6fQeb.png');
-  background-position: center;
-  /* background-size: cover; */
+  background: url('http://www.zingerbugimages.com/backgrounds/beveled_indented_squares_seamless_wallpaper_background_navy_blue.jpg');
+  background-size: 100% auto;
+  background-size: contain;
 }
 
 .container-child {

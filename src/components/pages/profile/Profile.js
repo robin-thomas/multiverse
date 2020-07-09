@@ -4,10 +4,11 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import Header from './Header';
 import About from './About';
+import Content from '../../app/Content';
 
 const Profile = () => {
   return (
-    <>
+    <Content>
       <Header />
       <Container>
         <Row>
@@ -16,7 +17,7 @@ const Profile = () => {
           </Col>
         </Row>
       </Container>
-    </>
+    </Content>
   );
 };
 

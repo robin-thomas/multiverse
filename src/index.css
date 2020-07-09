@@ -3,7 +3,7 @@
   --color-white: hsl(0, 0%, 100%);
   --color-black: hsl(240, 8%, 12%);
   --bg-default: hsl(0, 0%, 100%);
-  --bg-navbar: hsla(0, 0%, 95%, 1);
+  --bg-navbar: hsl(0, 0%, 95%);
   --bg-contact-body: hsla(0, 0%, 95%, 1);
   --bg-contact-body-link: #6c757d;
   --bg-contact-body-hr: #6c757d;
@@ -15,7 +15,7 @@
   --color-white: hsl(0, 0%, 100%);
   --color-black: hsl(240, 8%, 12%);
   --bg-default: hsl(240, 8%, 12%);
-  --bg-navbar: hsla(240, 6%, 15%, 1);
+  --bg-navbar: hsl(240, 6%, 15%);
   --bg-contact-body: hsla(240, 6%, 15%, 1);
   --bg-contact-body-link: #6c757d;
   --bg-contact-body-hr: rgb(76, 117, 242);

@@ -8,6 +8,8 @@ const DataProvider = (props) => {
   const [provider, setProvider] = useState(null);
   const [encryptionKey, setEncryptionKey] = useState(null);
 
+  document.body.setAttribute('data-theme', theme);
+
   return (
     <DataContext.Provider
       value={{

@@ -13,7 +13,7 @@ const About = () => {
       <Card.Img
         variant="top"
         className={styles[`about-pic${overlay ? '-overlay-trigger' : ''}`]}
-        src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"
+        src="https://marketplace.canva.com/is4RU/MAB_5dis4RU/2/tl/canva-businesswoman-avatar-with-business-icon-MAB_5dis4RU.png"
         onMouseEnter={() => setOverlay(true)}
       />
       {overlay ? (
