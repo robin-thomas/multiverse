@@ -17,7 +17,7 @@ const Box = {
    */
   getClient: async (ethersProvider) => {
     if (Box.space === null) {
-      const address = await Ethers.getAccount(ethersProvider);
+      const address = await Ethers.getAddress(ethersProvider);
 
       const box = await openBox(address, window.ethereum);
       await box.syncDone;

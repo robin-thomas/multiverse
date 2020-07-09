@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 import * as serviceWorker from './components/app/serviceWorker';
 
@@ -12,9 +13,11 @@ import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 
 const Multiverse = () => (
-  <DataProvider>
-    <App />
-  </DataProvider>
+  <BrowserRouter>
+    <DataProvider>
+      <App />
+    </DataProvider>
+  </BrowserRouter>
 );
 
 ReactDOM.render(<Multiverse />, document.getElementById('root'));

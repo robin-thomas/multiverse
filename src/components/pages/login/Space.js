@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import { Alert } from 'react-bootstrap';
 
@@ -6,7 +7,6 @@ import Page from './Page';
 import { DataContext } from '../../utils/DataProvider';
 
 import Box from '../../../utils/3box';
-import Ethers from '../../../utils/ethers';
 
 import styles from './Page.module.css';
 
@@ -29,6 +29,7 @@ const LoginPrompt = () => (
 const Space = () => {
   const ctx = useContext(DataContext);
 
+  const [redirect, setRedirect] = useState(false);
   const [errorNext, setErrorNext] = useState(<LoginPrompt />);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const Space = () => {
       // Setup the 3box space.
       try {
         await Box.set(Box.DATASTORE_THEME, ctx.theme, ctx.provider);
-        ctx.setPage('profile');
+        setRedirect(true);
       } catch (err) {
         // TODO: metamask rejections doesnt seem to be handled by 3box.
 
@@ -45,10 +46,20 @@ const Space = () => {
     };
 
     fn();
-  }, []);
+  }, [ctx.theme, ctx.provider]);
 
   return (
-    <Page loader={true} text="Setting Up Your Space" errorNext={errorNext} />
+    <>
+      {redirect ? (
+        <Redirect to={`/profile/${ctx.address}`} />
+      ) : (
+        <Page
+          loader={true}
+          text="Setting Up Your Space"
+          errorNext={errorNext}
+        />
+      )}
+    </>
   );
 };
 

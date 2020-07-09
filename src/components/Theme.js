@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 
 import { MDBIcon } from 'mdbreact';
 import { Row, Col } from 'react-bootstrap';

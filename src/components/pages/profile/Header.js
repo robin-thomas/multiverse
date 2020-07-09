@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { MDBBtn, MDBIcon } from 'mdbreact';
-import { Card, Button, Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import EmptyRow from '../../utils/EmptyRow';
 
@@ -10,6 +10,7 @@ import styles from './Header.module.css';
 const Header = () => {
   return (
     <Container className={styles['container']} fluid={true}>
+      <div className={styles['container-overlay']} />
       <Container className={styles['container-child']}>
         <Row>
           <Col>&nbsp;</Col>
@@ -27,7 +28,7 @@ const Header = () => {
           <Col md="3">
             <MDBBtn
               outline
-              color="primary"
+              color="success"
               className={styles['last-row-share-profile']}
             >
               <MDBIcon icon="share-square" />

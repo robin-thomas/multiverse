@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Card, Row, Col } from 'react-bootstrap';
 import { MDBIcon } from 'mdbreact';
@@ -8,8 +8,6 @@ import EmptyRow from '../utils/EmptyRow';
 import { DataContext } from '../utils/DataProvider';
 
 import styles from './AppHeader.module.css';
-
-import { app } from '../../../config.json';
 
 const AppCard = ({ active, buttonText, onClick, cls }) => (
   <Card className={styles['app-card']}>

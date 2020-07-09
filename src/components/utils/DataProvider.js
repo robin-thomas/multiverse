@@ -3,20 +3,17 @@ import React, { useState } from 'react';
 const DataContext = React.createContext();
 
 const DataProvider = (props) => {
-  const [page, setPage] = useState('profile');
   const [theme, setTheme] = useState('light');
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [address, setAddress] = useState(null);
   const [provider, setProvider] = useState(null);
 
   return (
     <DataContext.Provider
       value={{
-        page,
-        setPage,
         theme,
         setTheme,
-        loggedIn,
-        setLoggedIn,
+        address,
+        setAddress,
         provider,
         setProvider,
       }}

@@ -6,7 +6,6 @@ import { Alert } from 'react-bootstrap';
 import Page from './Page';
 import { DataContext } from '../../utils/DataProvider';
 
-import Box from '../../../utils/3box';
 import Ethers from '../../../utils/ethers';
 
 import styles from './Page.module.css';
@@ -37,8 +36,13 @@ const Metamask = ({ setStage }) => {
     const fn = async () => {
       try {
         setErrorNext(<LoginPrompt />);
+
         const provider = await Ethers.getProvider();
         ctx.setProvider(provider);
+
+        const address = await Ethers.getAddress(provider);
+        ctx.setAddress(address);
+
         setStage(1);
       } catch (err) {
         switch (err.message) {
@@ -76,6 +80,7 @@ const Metamask = ({ setStage }) => {
             break;
 
           default:
+            console.log(err);
             setError('Hmm, something weird happened!');
         }
       }

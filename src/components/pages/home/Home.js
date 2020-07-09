@@ -1,30 +1,25 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { MDBBtn } from 'mdbreact';
 import { Container, Row, Col } from 'react-bootstrap';
 
-import { DataContext } from '../../utils/DataProvider';
+import Content from '../../app/Content';
 
 import styles from './Home.module.css';
 
-const Home = () => {
-  const ctx = useContext(DataContext);
-
-  const onClick = () => {
-    ctx.setPage('login');
-  };
-
-  return (
+const Home = () => (
+  <Content>
     <Container fluid={true} className={styles['home']}>
       <Row>
         <Col md="auto" className="ml-auto">
-          <MDBBtn color="primary" onClick={onClick}>
-            Get In
-          </MDBBtn>
+          <Link to="/login">
+            <MDBBtn color="primary">Get In</MDBBtn>
+          </Link>
         </Col>
       </Row>
     </Container>
-  );
-};
+  </Content>
+);
 
 export default Home;

@@ -57,7 +57,7 @@ const Ethers = {
    * @param {Object} ethersProvider
    * @returns {string} returns account address
    */
-  getAccount: async (ethersProvider = null) => {
+  getAddress: async (ethersProvider = null) => {
     return await (await Ethers.getSigner(ethersProvider)).getAddress();
   },
 };
