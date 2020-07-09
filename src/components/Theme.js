@@ -28,7 +28,7 @@ const Theme = (props) => {
 
   useEffect(() => {
     const fn = async () => {
-      const boxTheme = await Box.get(Box.DATASTORE_THEME, {
+      const boxTheme = await Box.get(Box.DATASTORE_KEY_THEME, {
         ethersProvider: ctx.provider,
       });
       if (boxTheme) {

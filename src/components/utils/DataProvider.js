@@ -6,6 +6,7 @@ const DataProvider = (props) => {
   const [theme, setTheme] = useState('light');
   const [address, setAddress] = useState(null);
   const [provider, setProvider] = useState(null);
+  const [encryptionKey, setEncryptionKey] = useState(null);
 
   return (
     <DataContext.Provider
@@ -16,6 +17,8 @@ const DataProvider = (props) => {
         setAddress,
         provider,
         setProvider,
+        encryptionKey,
+        setEncryptionKey,
       }}
     >
       {props.children}

@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import uuid from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 import { Alert } from 'react-bootstrap';
 
 import Page from './Page';
@@ -37,21 +37,22 @@ const Space = () => {
     const fn = async () => {
       // Setup the 3box space.
       try {
-        await Box.set(Box.DATASTORE_THEME, ctx.theme, {
+        await Box.set(Box.DATASTORE_KEY_THEME, ctx.theme, {
           ethersProvider: ctx.provider,
         });
 
         // Setup an encrypting key (if not set).
-        const key = await Box.get(Box.DATASTORE_ENCRYPTION_KEY, {
+        let key = await Box.get(Box.DATASTORE_KEY_ENCRYPTION_KEY, {
           ethersProvider: ctx.provider,
         });
         if (key === null) {
-          const encryptionKey = uuid.v4();
+          key = uuidV4();
 
-          await Box.set(Box.DATASTORE_ENCRYPTION_KEY, encryptionKey, {
+          await Box.set(Box.DATASTORE_KEY_ENCRYPTION_KEY, key, {
             ethersProvider: ctx.provider,
           });
         }
+        ctx.setEncryptionKey(key);
 
         setRedirect(true);
       } catch (err) {
