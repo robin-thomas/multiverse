@@ -13,11 +13,11 @@ import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 
 const Multiverse = () => (
-  <BrowserRouter>
-    <DataProvider>
+  <DataProvider>
+    <BrowserRouter>
       <App />
-    </DataProvider>
-  </BrowserRouter>
+    </BrowserRouter>
+  </DataProvider>
 );
 
 ReactDOM.render(<Multiverse />, document.getElementById('root'));

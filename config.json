@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "multiverse"
+    "name": "multiverse",
+    "url": "https://localhost:3000"
   },
   "ipfs": {
     "protocol": "https",

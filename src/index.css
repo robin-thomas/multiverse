@@ -36,3 +36,8 @@ body {
   color: var(--color-default) !important;
   user-select: none;
 }
+
+.md-form {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}

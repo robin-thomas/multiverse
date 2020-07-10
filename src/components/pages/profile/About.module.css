@@ -24,3 +24,8 @@
   border-radius: 50% !important;
   padding: 0 !important;
 }
+
+.about-title {
+  font-size: 0.9rem !important;
+  text-transform: uppercase;
+}

@@ -7,6 +7,7 @@ const DataProvider = (props) => {
   const [address, setAddress] = useState(null);
   const [provider, setProvider] = useState(null);
   const [encryptionKey, setEncryptionKey] = useState(null);
+  const [profileAddress, setProfileAddress] = useState(null);
 
   document.body.setAttribute('data-theme', theme);
 
@@ -21,6 +22,8 @@ const DataProvider = (props) => {
         setProvider,
         encryptionKey,
         setEncryptionKey,
+        profileAddress,
+        setProfileAddress,
       }}
     >
       {props.children}

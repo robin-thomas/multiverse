@@ -57,8 +57,6 @@ const AppHeader = ({ display, setDisplay }) => {
             />
           }
           onClick={() => {
-            ctx.setPage(key);
-
             if (action) {
               action();
             }

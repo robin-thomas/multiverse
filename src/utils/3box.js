@@ -1,4 +1,4 @@
-import { openBox } from '3box';
+import { openBox, getSpace } from '3box';
 import CryptoJS from 'crypto-js';
 
 import { app } from '../../config.json';
@@ -10,7 +10,6 @@ const Box = {
   DATASTORE_STATE_FRIENDS: 'friends',
   DATASTORE_STATE_PUBLIC: 'public',
 
-  DATASTORE_KEY_NAME: `${app.name}-name`,
   DATASTORE_KEY_THEME: `${app.name}-theme`,
   DATASTORE_KEY_COUNTRY: `${app.name}-country`,
   DATASTORE_KEY_PROFILE: `${app.name}-profile`,
@@ -62,7 +61,10 @@ const Box = {
         if (opts.stateChange) {
           client.private.remove(key);
         }
-        await client.public.set(key, value);
+        await client.public.set(
+          key,
+          JSON.stringify({ value, state: opts.state })
+        );
       }
     } catch (err) {
       throw err;
@@ -131,6 +133,29 @@ const Box = {
     } catch (err) {
       throw err;
     }
+  },
+
+  getAllPublic: async (opts = {}) => {
+    opts.encryptionKey = opts.encryptionKey || null;
+
+    const data = await getSpace(opts.address, app.name);
+
+    return Object.keys(data).reduce((p, c) => {
+      const result = JSON.parse(data[c]);
+
+      if (result.state === Box.DATASTORE_STATE_FRIENDS) {
+        if (opts.encryptionKey) {
+          p[c] = CryptoJS.AES.decrypt(
+            result.value,
+            opts.encryptionKey
+          ).toString(CryptoJS.enc.Utf8);
+        }
+      } else {
+        p[c] = result.value;
+      }
+
+      return p;
+    }, {});
   },
 };
 

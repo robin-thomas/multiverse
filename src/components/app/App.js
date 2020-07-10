@@ -6,21 +6,19 @@ import Login from '../pages/login';
 import Profile from '../pages/profile';
 
 const App = () => (
-  <>
-    <Switch>
-      <Route path="/login">
-        <Login />
-      </Route>
+  <Switch>
+    <Route path="/login">
+      <Login />
+    </Route>
 
-      <Route path="/profile/:address">
-        <Profile />
-      </Route>
+    <Route path="/profile/:address">
+      <Profile />
+    </Route>
 
-      <Route path="/">
-        <Home />
-      </Route>
-    </Switch>
-  </>
+    <Route path="/">
+      <Home />
+    </Route>
+  </Switch>
 );
 
 export default App;

@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { MDBBtn, MDBIcon } from 'mdbreact';
 import { Container, Row, Col } from 'react-bootstrap';
 
+import Name from './Name';
 import ShareButton from './ShareButton';
 import EmptyRow from '../../../utils/EmptyRow';
 
 import styles from './Header.module.css';
 
-const Header = ({ url }) => (
+const Header = ({ url, profile }) => (
   <Container className={styles['container']} fluid={true}>
     <div className={styles['container-overlay']} />
     <Container className={styles['container-child']}>
@@ -19,10 +19,9 @@ const Header = ({ url }) => (
       <Row>
         <Col md={{ span: 5, offset: 4 }}>
           <Row>
-            <Col>Robin Thomas</Col>
-          </Row>
-          <Row className={styles['last-row-country']}>
-            <Col>Singapore, Singapore</Col>
+            <Col>
+              <Name profile={profile} />
+            </Col>
           </Row>
         </Col>
         <Col md="3">
