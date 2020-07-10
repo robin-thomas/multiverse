@@ -1,3 +1,30 @@
-.home {
-  padding: 1% 10%;
+.section-which,
+.section-finish,
+.section-home {
+  width: 750px !important;
+  margin: auto;
+  text-align: center;
+  color: var(--color-white) !important;
+}
+
+.section-which > h1,
+.section-finish > h1 {
+  font-size: 4rem !important;
+}
+
+.section-home p,
+.section-which p,
+.section-finish p {
+  margin-top: 10px;
+  font-size: 1rem !important;
+}
+
+.section-home-icons {
+  width: 600px;
+}
+
+.logo {
+  font-family: 'Grand Hotel', cursive;
+  color: var(--color-white);
+  font-size: 5rem !important;
 }

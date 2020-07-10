@@ -1,0 +1,5 @@
+.home {
+  position: absolute;
+  top: 10px;
+  z-index: 2;
+}
