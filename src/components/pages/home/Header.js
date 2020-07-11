@@ -1,35 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { MDBBtn } from 'mdbreact';
 import { Container, Row, Col } from 'react-bootstrap';
 
-import Upload from '../../utils/Upload';
-
 import styles from './Header.module.css';
 
-const Header = ({ button }) => {
-  const [show, setShow] = useState(false);
-
-  return (
-    <Container fluid={true} className={styles['home']}>
-      <Row>
-        <Col>
-          <MDBBtn color={button} size="sm" onClick={() => setShow(true)}>
-            Upload
+const Header = ({ button }) => (
+  <Container fluid={true} className={styles['home']}>
+    <Row>
+      <Col md="auto" className="ml-auto">
+        <Link to="/login">
+          <MDBBtn color={button} size="sm">
+            Try it out
           </MDBBtn>
-          <Upload show={show} toggle={() => setShow(!show)} />
-        </Col>
-        <Col md="auto" className="ml-auto">
-          <Link to="/login">
-            <MDBBtn color={button} size="sm">
-              Try it out
-            </MDBBtn>
-          </Link>
-        </Col>
-      </Row>
-    </Container>
-  );
-};
+        </Link>
+      </Col>
+    </Row>
+  </Container>
+);
 
 export default Header;

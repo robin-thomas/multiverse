@@ -1,0 +1,23 @@
+.about-pic,
+.about-pic-overlay-trigger {
+  border: 0;
+  transition: all 0.3s;
+  background: var(--bg-contact-body) !important;
+}
+
+.about-pic-overlay-trigger {
+  opacity: 50%;
+  filter: blur(2px);
+}
+
+.about-delete-pic-icon {
+  height: 60px !important;
+  width: 60px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+}
+
+.about-title {
+  font-size: 0.9rem !important;
+  text-transform: uppercase;
+}

@@ -1,0 +1,17 @@
+.file-upload-icon {
+  font-size: 47px !important;
+}
+
+.file-upload-progress-file-name {
+  font-size: 1rem !important;
+}
+
+.file-upload-size {
+  font-size: 11px;
+  color: grey;
+}
+
+.file-upload-status {
+  font-size: 12px;
+  color: grey;
+}
