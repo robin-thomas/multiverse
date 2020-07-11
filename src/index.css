@@ -32,7 +32,7 @@ body {
   width: 100vw !important;
   height: 100vh !important;
   overflow: hidden !important;
-  font-size: 2rem !important;
+  font-size: 2rem;
   color: var(--color-default) !important;
   user-select: none;
 }
@@ -40,4 +40,9 @@ body {
 .md-form {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+}
+
+.progress {
+  height: 2px !important;
+  width: 100%;
 }

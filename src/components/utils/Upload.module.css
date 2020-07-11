@@ -1,0 +1,28 @@
+.file-upload-progress {
+  height: 300px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.file-upload-progress-container {
+  padding-right: 15px;
+}
+
+.file-upload-progress-footer {
+  color: ##000;
+  font-size: 13px;
+  line-height: 40px;
+}
+
+.file-upload-progress-total-size-display {
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.file-upload-icon {
+  font-size: 47px !important;
+}
+
+.file-upload-progress-file-name {
+  font-size: 1rem !important;
+}
