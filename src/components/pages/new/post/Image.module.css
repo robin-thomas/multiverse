@@ -1,3 +1,7 @@
+.about-card {
+  height: 100px;
+}
+
 .about-pic,
 .about-pic-overlay-trigger {
   border: 0;
@@ -11,8 +15,8 @@
 }
 
 .about-delete-pic-icon {
-  height: 60px !important;
-  width: 60px !important;
+  height: 40px !important;
+  width: 40px !important;
   border-radius: 50% !important;
   padding: 0 !important;
 }

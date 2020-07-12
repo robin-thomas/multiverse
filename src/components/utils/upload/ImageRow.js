@@ -10,7 +10,14 @@ import styles from './ImageRow.module.css';
 
 import { app } from '../../../../config.json';
 
-const ImageRow = ({ file, name, size, setSize, addImageUrl }) => {
+const ImageRow = ({
+  file,
+  name,
+  size,
+  setSize,
+  addImageUrl,
+  addImageHashes,
+}) => {
   const chunkSize = app.chunk.size;
 
   const [error, setError] = useState('');
@@ -29,7 +36,7 @@ const ImageRow = ({ file, name, size, setSize, addImageUrl }) => {
 
           // TODO: upload to IPFS and get the hash.
 
-          return { chunk };
+          return { chunk, hash: Math.random().toString(36) };
         },
       });
 
@@ -40,6 +47,7 @@ const ImageRow = ({ file, name, size, setSize, addImageUrl }) => {
       const url = URL.createObjectURL(blob);
       const resizedUrl = await Image.resize(url, 100);
       addImageUrl(resizedUrl);
+      addImageHashes(results.map((e) => e.hash));
 
       setProgress(100);
       setStatus('Completed');

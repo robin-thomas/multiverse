@@ -46,3 +46,12 @@ body {
   height: 2px !important;
   width: 100%;
 }
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.modal-backdrop {
+  margin: 0 !important;
+}

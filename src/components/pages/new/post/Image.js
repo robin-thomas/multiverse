@@ -9,12 +9,14 @@ const Image = ({ url, removeImage }) => {
   const [overlay, setOverlay] = useState(false);
 
   return (
-    <Card className={styles['about-card']}>
+    <Card
+      className={styles['about-card']}
+      onMouseEnter={() => setOverlay(true)}
+    >
       <Card.Img
         variant="top"
         className={styles[`about-pic${overlay ? '-overlay-trigger' : ''}`]}
         src={url}
-        onMouseEnter={() => setOverlay(true)}
       />
       {overlay ? (
         <Card.ImgOverlay onMouseLeave={() => setOverlay(false)}>
@@ -24,7 +26,7 @@ const Image = ({ url, removeImage }) => {
             title="Remove image"
             className={styles['about-delete-pic-icon']}
           >
-            <MDBIcon icon="trash-alt" size="lg" onClick={removeImage} />
+            <MDBIcon icon="trash-alt" onClick={removeImage} />
           </MDBBtn>
         </Card.ImgOverlay>
       ) : null}

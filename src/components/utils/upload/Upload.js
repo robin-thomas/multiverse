@@ -25,6 +25,7 @@ const Upload = ({
   setImageRows,
   uploaded,
   setUploaded,
+  addImageHashes,
 }) => {
   const hiddenFileInput = useRef(null);
   const simpleBar = useRef(null);
@@ -103,6 +104,7 @@ const Upload = ({
                           setReadSize((_readSize) => _readSize + newSize)
                         }
                         addImageUrl={addImageUrl}
+                        addImageHashes={addImageHashes}
                       />
                     ))
                   ) : (
