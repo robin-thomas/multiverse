@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
 import { Row, Col } from 'react-bootstrap';
 
@@ -10,14 +10,36 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import SettingsIcon from '@material-ui/icons/Settings';
+import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 
+import Name from './Name';
 import ShareButton from './ShareButton';
+import Box from '../../../utils/3box';
+import TextInput from '../../utils/TextInput';
+import { DataContext } from '../../utils/DataProvider';
 
 import styles from './ProfileBox.module.css';
 
-const ProfileBox = ({ url }) => {
+const ProfileBox = ({ url, profile }) => {
+  const ctx = useContext(DataContext);
+
+  const [about, setAbout] = useState(null);
+
+  useEffect(() => {
+    console.log(profile);
+    if (profile[Box.DATASTORE_KEY_ABOUT]) {
+      setAbout(profile[Box.DATASTORE_KEY_ABOUT]);
+    }
+  }, [profile]);
+
+  const updateAbout = async () => {
+    await Box.set(Box.DATASTORE_KEY_ABOUT, about, {
+      address: ctx.address,
+      state: Box.DATASTORE_STATE_PUBLIC,
+    });
+  };
+
   return (
     <Card className={styles['card']} variant="outlined">
       <GridListTile class={styles['tile']}>
@@ -29,14 +51,14 @@ const ProfileBox = ({ url }) => {
           titlePosition="top"
           actionIcon={
             <IconButton className={styles['icon']}>
-              <SettingsIcon fontSize="large" color="info" />
+              <EditIcon fontSize="large" />
             </IconButton>
           }
           actionPosition="left"
           className={styles['title-bar']}
         />
         <GridListTileBar
-          title="@username"
+          title={<Name profile={profile} />}
           actionIcon={
             <Button
               variant="contained"
@@ -59,8 +81,14 @@ const ProfileBox = ({ url }) => {
               About
             </Typography>
             <Typography variant="caption">
-              We are going to learn different kinds of species in nature that
-              live together to form amazing environment.
+              <TextInput
+                type="textarea"
+                value={about}
+                hint="<Write that killer bio about yourself>"
+                editable={profile.editable}
+                onChange={setAbout}
+                updateText={updateAbout}
+              />
             </Typography>
           </Col>
         </Row>

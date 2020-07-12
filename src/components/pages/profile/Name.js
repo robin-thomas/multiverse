@@ -2,9 +2,9 @@ import React, { useState, useContext, useEffect } from 'react';
 
 import { Row, Col } from 'react-bootstrap';
 
-import Box from '../../../../utils/3box';
-import TextInput from '../../../utils/TextInput';
-import { DataContext } from '../../../utils/DataProvider';
+import Box from '../../../utils/3box';
+import TextInput from '../../utils/TextInput';
+import { DataContext } from '../../utils/DataProvider';
 
 import styles from './Name.module.css';
 
