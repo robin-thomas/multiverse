@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 
 import {
-  MDBBtn,
   MDBIcon,
   MDBModal,
   MDBModalBody,
@@ -10,10 +9,12 @@ import {
 } from 'mdbreact';
 import { Alert, Container, Row, Col, ProgressBar } from 'react-bootstrap';
 import SimpleBar from 'simplebar-react';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Button from '@material-ui/core/Button';
 
 import ImageRow from './ImageRow';
-import EmptyRow from '../EmptyRow';
-import Uploader from '../../../utils/file';
+import EmptyRow from '../../../../utils/EmptyRow';
+import Uploader from '../../../../../utils/file';
 
 import styles from './Upload.module.css';
 
@@ -78,11 +79,16 @@ const Upload = ({
   };
 
   return (
-    <MDBModal isOpen={show} toggle={onToggle}>
+    <MDBModal isOpen={show} toggle={onToggle} disableBackdrop={true}>
       <MDBModalHeader toggle={onToggle} style={{ padding: '0.5rem' }}>
-        <MDBBtn color="elegant" onClick={() => hiddenFileInput.current.click()}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<CloudUploadIcon />}
+          onClick={() => hiddenFileInput.current.click()}
+        >
           Upload
-        </MDBBtn>
+        </Button>
       </MDBModalHeader>
       <MDBModalBody>
         <Container>

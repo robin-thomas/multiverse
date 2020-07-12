@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { MDBIcon } from 'mdbreact';
 import { Row, Col, ProgressBar } from 'react-bootstrap';
 
-import Uploader from '../../../utils/file';
-import Image from '../../../utils/image';
+import Uploader from '../../../../../utils/file';
+import Image from '../../../../../utils/image';
 
 import styles from './ImageRow.module.css';
 
-import { app } from '../../../../config.json';
+import { app } from '../../../../../../config.json';
 
 const ImageRow = ({
   file,

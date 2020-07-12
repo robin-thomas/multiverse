@@ -16,7 +16,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 
 import ImagePreview from './ImagePreview';
 import Visibility from './Visibility';
-import Upload from '../../../utils/upload';
+import Upload from './upload';
 
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';

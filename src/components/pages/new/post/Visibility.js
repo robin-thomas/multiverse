@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 import ShareIcon from '@material-ui/icons/Share';
-import Fab from '@material-ui/core/Fab';
 import Avatar from '@material-ui/core/Avatar';
 
 const useStyles = makeStyles((theme) => ({
