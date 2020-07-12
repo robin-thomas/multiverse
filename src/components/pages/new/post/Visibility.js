@@ -5,6 +5,7 @@ import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 import ShareIcon from '@material-ui/icons/Share';
 import Fab from '@material-ui/core/Fab';
+import Avatar from '@material-ui/core/Avatar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
   },
   margin: {
     margin: theme.spacing(1),
+  },
+  padding: {
+    padding: theme.spacing(4),
   },
 }));
 
@@ -42,9 +46,9 @@ const Visibility = ({ setVisibility }) => {
     <div className={classes.root}>
       <Grid container spacing={5} alignItems="center">
         <Grid item>
-          <Fab disabled aria-label="share" className={classes.margin}>
+          <Avatar className={classes.padding}>
             <ShareIcon fontSize="large" />
-          </Fab>
+          </Avatar>
         </Grid>
         <Grid item md>
           <Slider

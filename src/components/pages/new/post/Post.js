@@ -14,7 +14,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
-import Image from './Image';
+import ImagePreview from './ImagePreview';
 import Visibility from './Visibility';
 import Upload from '../../../utils/upload';
 
@@ -34,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
   },
   cardContent: {
     paddingTop: 0,
+  },
+  cardAction: {
+    padding: 0,
+    paddingBottom: '8px',
   },
 }));
 
@@ -82,9 +86,10 @@ const Post = () => {
               <hr />
               <Row>
                 <Col>
-                  <CardActions>
+                  <CardActions className={classes.cardAction}>
                     <Button
                       size="small"
+                      variant="outlined"
                       color="primary"
                       onClick={() => setShow(true)}
                     >
@@ -132,36 +137,27 @@ const Post = () => {
               </Row>
               <Row>
                 <Col>
-                  <Row>
-                    {images.map((url, index) => (
-                      <Col
-                        md="2"
-                        key={url.substr(25, 20) + url.substr(url.length - 20)}
-                      >
-                        <Image
-                          url={url}
-                          removeImage={() => {
-                            setImages((_images) => [
-                              ..._images.slice(0, index),
-                              ..._images.slice(index + 1),
-                            ]);
-                            setImageRows((_imageRows) => [
-                              ..._imageRows.slice(0, index),
-                              ..._imageRows.slice(index + 1),
-                            ]);
-                            setUploaded((_uploaded) => [
-                              ..._uploaded.slice(0, index),
-                              ..._uploaded.slice(index + 1),
-                            ]);
-                            setImageHashes((_hashes) => [
-                              ..._hashes.slice(0, index),
-                              ..._hashes.slice(index + 1),
-                            ]);
-                          }}
-                        />
-                      </Col>
-                    ))}
-                  </Row>
+                  <ImagePreview
+                    images={images}
+                    removeImage={(index) => {
+                      setImages((_images) => [
+                        ..._images.slice(0, index),
+                        ..._images.slice(index + 1),
+                      ]);
+                      setImageRows((_imageRows) => [
+                        ..._imageRows.slice(0, index),
+                        ..._imageRows.slice(index + 1),
+                      ]);
+                      setUploaded((_uploaded) => [
+                        ..._uploaded.slice(0, index),
+                        ..._uploaded.slice(index + 1),
+                      ]);
+                      setImageHashes((_hashes) => [
+                        ..._hashes.slice(0, index),
+                        ..._hashes.slice(index + 1),
+                      ]);
+                    }}
+                  />
                 </Col>
               </Row>
               <hr />

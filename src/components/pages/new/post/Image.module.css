@@ -1,5 +1,9 @@
 .about-card {
   height: 100px;
+  width: 100px;
+  float: left;
+  margin: 15px;
+  overflow: hidden;
 }
 
 .about-pic,
