@@ -39,4 +39,4 @@ uploader.File = {
   },
 };
 
-module.exports = uploader;
+export default uploader;
