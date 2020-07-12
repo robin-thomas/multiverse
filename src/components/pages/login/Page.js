@@ -10,7 +10,7 @@ import styles from './Page.module.css';
 const Page = ({ text, loader, error, errorNext }) => (
   <Container fluid={true} className={styles['container']}>
     <Row className={styles['row']}>
-      <Col md="8" className="align-self-center mx-auto">
+      <Col md="5" className="align-self-center mx-auto">
         {loader && !error ? (
           <Row>
             <Col>
@@ -18,7 +18,6 @@ const Page = ({ text, loader, error, errorNext }) => (
             </Col>
           </Row>
         ) : null}
-        <EmptyRow />
         <Row>
           <Col>{error ? error : text}</Col>
         </Row>

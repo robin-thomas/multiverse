@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { withRouter } from 'react-router';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -13,11 +14,14 @@ import { green } from '@material-ui/core/colors';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { PageHeader } from '../../home/Header';
 import ImagePreview from './ImagePreview';
 import Visibility from './Visibility';
 import Upload from './upload';
+import { DataContext } from '../../../utils/DataProvider';
 
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
@@ -40,11 +44,18 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     paddingBottom: '8px',
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
 
-const Post = () => {
+const Post = ({ history }) => {
+  const ctx = useContext(DataContext);
+
   const classes = useStyles();
 
+  const [open, setOpen] = React.useState(false);
   const [images, setImages] = useState([]);
   const [imageRows, setImageRows] = useState([]);
   const [uploaded, setUploaded] = useState([]);
@@ -54,6 +65,13 @@ const Post = () => {
   const [imageHashes, setImageHashes] = useState([]);
 
   const createPost = () => {
+    setOpen(true);
+
+    const redirect = () => {
+      setOpen(false);
+      history.push(`/profile/${ctx.address}`);
+    };
+
     const post = {
       text: input,
       images: imageHashes,
@@ -61,6 +79,12 @@ const Post = () => {
     };
 
     // TODO: store the post.
+
+    // fake delay.
+    const sleep = (ms) => {
+      return new Promise((resolve) => setTimeout(resolve, 1000 * ms));
+    };
+    sleep(5).then(redirect);
   };
 
   return (
@@ -183,9 +207,12 @@ const Post = () => {
             </Card>
           </Col>
         </Row>
+        <Backdrop className={classes.backdrop} open={open}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Container>
     </>
   );
 };
 
-export default Post;
+export default withRouter(Post);

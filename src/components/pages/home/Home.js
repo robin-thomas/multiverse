@@ -5,10 +5,6 @@ import { MDBBtn, MDBIcon } from 'mdbreact';
 import { Row, Col } from 'react-bootstrap';
 import ReactFullpage from '@fullpage/react-fullpage';
 import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 
 import Circle from './Circle';
@@ -16,18 +12,6 @@ import Header from './Header';
 import EmptyRow from '../../utils/EmptyRow';
 
 import styles from './Home.module.css';
-
-const useStyles = makeStyles({
-  root: {
-    maxWidth: 300,
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-});
 
 const Home = () => (
   <div className="section">

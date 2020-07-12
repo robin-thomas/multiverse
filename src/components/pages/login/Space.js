@@ -2,7 +2,9 @@ import React, { useEffect, useContext, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import { v4 as uuidV4 } from 'uuid';
-import { Alert } from 'react-bootstrap';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+import Link from '@material-ui/core/Link';
 
 import Page from './Page';
 import { DataContext } from '../../utils/DataProvider';
@@ -12,8 +14,8 @@ import Box from '../../../utils/3box';
 import styles from './Page.module.css';
 
 const LoginPrompt = () => (
-  <Alert variant="primary" className={styles['alert']}>
-    <Alert.Heading>#OwnYourData</Alert.Heading>
+  <Alert severity="info" className={styles['alert']}>
+    <AlertTitle>#OwnYourData</AlertTitle>
     <p>
       All your profile information will be stored securely on your{' '}
       <b>3Box account.</b>. Please authorize access to your 3Box account to
@@ -23,7 +25,9 @@ const LoginPrompt = () => (
     <hr />
     <p>
       Learn more about 3Box{' '}
-      <Alert.Link href="https://3box.io/">here</Alert.Link>
+      <Link href="https://3box.io/" target="_blank" color="inherit">
+        <strong>here</strong>
+      </Link>
     </p>
   </Alert>
 );

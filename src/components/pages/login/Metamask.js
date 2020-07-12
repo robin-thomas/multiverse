@@ -1,7 +1,9 @@
 import React, { useEffect, useContext, useState } from 'react';
 
-import { MDBBtn } from 'mdbreact';
-import { Alert } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+import Link from '@material-ui/core/Link';
 
 import Page from './Page';
 import { DataContext } from '../../utils/DataProvider';
@@ -11,16 +13,19 @@ import Ethers from '../../../utils/ethers';
 import styles from './Page.module.css';
 
 const LoginPrompt = () => (
-  <Alert variant="primary" className={styles['alert']}>
-    <Alert.Heading>Hello there!</Alert.Heading>
+  <Alert severity="info" className={styles['alert']}>
+    <AlertTitle>Hello there!</AlertTitle>
     <p>
-      This dapp requires access to your wallet. Please <b>login & authorize</b>{' '}
-      acces to your Metamask wallet to continue.
+      This dapp requires access to your wallet. Please{' '}
+      <strong>login & authorize</strong> acces to your Metamask wallet to
+      continue.
     </p>
     <hr />
     <p>
       Learn more about Metamask{' '}
-      <Alert.Link href="https://metamask.io/">here</Alert.Link>
+      <Link href="https://metamask.io/" target="_blank" color="inherit">
+        <strong>here</strong>
+      </Link>
     </p>
   </Alert>
 );
@@ -50,7 +55,8 @@ const Metamask = ({ setStage }) => {
             setError('Uh oh.. you denied Metamask!');
             setErrorNext(
               <>
-                <MDBBtn
+                <Button
+                  variant="contained"
                   color="primary"
                   onClick={() => {
                     setError('');
@@ -59,7 +65,7 @@ const Metamask = ({ setStage }) => {
                   }}
                 >
                   Retry
-                </MDBBtn>
+                </Button>
               </>
             );
             break;
@@ -68,13 +74,14 @@ const Metamask = ({ setStage }) => {
             setError('Uh oh.. you need Metamask!');
             setErrorNext(
               <>
-                <MDBBtn
+                <Button
+                  variant="contained"
                   color="primary"
                   href="https://metamask.io/"
                   target="_blank"
                 >
                   Get Metamask
-                </MDBBtn>
+                </Button>
               </>
             );
             break;
