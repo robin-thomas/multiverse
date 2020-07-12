@@ -23,8 +23,18 @@
   width: 600px;
 }
 
-.logo {
-  font-family: 'Grand Hotel', cursive;
-  color: var(--color-white);
+.home-first-text {
   font-size: 5rem !important;
+  color: var(--color-white) !important;
+  font-weight: 800 !important;
+}
+
+.home-desc {
+  font-size: 1rem !important;
+  color: var(--color-white) !important;
+  /* font-style: italic; */
+}
+
+.home-desc-row {
+  margin-bottom: 10px !important;
 }

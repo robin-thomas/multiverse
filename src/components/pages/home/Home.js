@@ -4,6 +4,12 @@ import { Link } from 'react-router-dom';
 import { MDBBtn, MDBIcon } from 'mdbreact';
 import { Row, Col, Overlay } from 'react-bootstrap';
 import ReactFullpage from '@fullpage/react-fullpage';
+import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
 
 import Circle from './Circle';
 import Header from './Header';
@@ -14,35 +20,61 @@ import Icons from '../../assets/doodles.png';
 
 import { app } from '../../../../config.json';
 
-const Home = () => {
-  const target = useRef(null);
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 300,
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+});
+
+const HomeCard = ({ title, desc }) => {
+  const classes = useStyles();
 
   return (
-    <div className="section">
-      <Row ref={target}>
-        <Col md="auto" className="mx-auto">
-          <img src={Icons} className={styles['section-home-icons']} />
-        </Col>
-      </Row>
-      <Row>
-        <Col md="6" className="mx-auto">
-          <div className={styles['section-home']}>
-            <p>Post whatever you want. Full control. You own your data.</p>
-          </div>
-        </Col>
-      </Row>
-      <Overlay target={target.current} show={true} placement="top">
-        {(props) => (
-          <Row {...props}>
-            <Col className="mx-auto" md="auto">
-              <span className={styles['logo']}>{app.name}</span>
-            </Col>
-          </Row>
-        )}
-      </Overlay>
-    </div>
+    <Card className={classes.root}>
+      <CardContent>
+        <Typography variant="h5" component="h2">
+          {title}
+        </Typography>
+      </CardContent>
+    </Card>
   );
 };
+
+const Home = () => (
+  <div className="section">
+    <Row>
+      <Col md={{ span: 4, offset: 2 }} className={styles['home-first-text']}>
+        Decentralized Social Network.
+      </Col>
+      <Divider light orientation="vertical" flexItem />
+      <Col className={styles['home-desc']}>
+        <Row className={styles['home-desc-row']}>
+          <Col>
+            <Button variant="contained">No central authority</Button>
+          </Col>
+        </Row>
+        <Row className={styles['home-desc-row']}>
+          <Col>
+            <Button variant="contained">You own your data</Button>
+          </Col>
+        </Row>
+        <Row className={styles['home-desc-row']}>
+          <Col>
+            <Button variant="contained">
+              Powered by blockchain technologies
+            </Button>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
+  </div>
+);
 
 const Which = () => (
   <div className="section">
@@ -105,7 +137,7 @@ const Page = () => {
       <Header button={button} />
       <ReactFullpage
         navigation
-        sectionsColor={['#282c34', '#8e24aa', '#0798ec']}
+        sectionsColor={['#191A1E', '#8e24aa', '#0798ec']}
         onLeave={(_, destination) => {
           switch (destination.index) {
             case 1:

@@ -1,5 +1,11 @@
-.home {
+.home,
+.home-page {
   position: absolute;
-  top: 10px;
   z-index: 2;
+}
+
+.home-logo {
+  font-family: 'Grand Hotel', cursive;
+  color: var(--color-white);
+  font-size: 3rem !important;
 }
