@@ -14,6 +14,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 
 import Name from './Name';
+import FriendRequest from './FriendRequest';
 import ShareButton from './ShareButton';
 import Box from '../../../utils/3box';
 import TextInput from '../../utils/TextInput';
@@ -42,7 +43,7 @@ const ProfileBox = ({ url, profile }) => {
 
   return (
     <Card className={styles['card']} variant="outlined">
-      <GridListTile class={styles['tile']}>
+      <GridListTile className={styles['tile']}>
         <CardMedia
           className={styles['media']}
           image="https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg"
@@ -59,15 +60,7 @@ const ProfileBox = ({ url, profile }) => {
         />
         <GridListTileBar
           title={<Name profile={profile} />}
-          actionIcon={
-            <Button
-              variant="contained"
-              color="primary"
-              className={styles['icon-bottom']}
-            >
-              Add as friend
-            </Button>
-          }
+          actionIcon={<FriendRequest profile={profile} />}
           className={styles['bottom-title-bar']}
         />
       </GridListTile>

@@ -1,0 +1,9 @@
+.icon-bottom {
+  color: white;
+  margin-right: 10px !important;
+}
+
+.backdrop {
+  z-index: 99 !important;
+  color: #fff !important;
+}
