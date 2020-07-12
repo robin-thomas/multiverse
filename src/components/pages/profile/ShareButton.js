@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 
-import { MDBBtn, MDBIcon } from 'mdbreact';
 import { Row, Col, Overlay, Popover } from 'react-bootstrap';
 import {
   FacebookIcon,
@@ -14,8 +13,8 @@ import {
   RedditIcon,
   RedditShareButton,
 } from 'react-share';
-
-import styles from './ShareButton.module.css';
+import ShareIcon from '@material-ui/icons/Share';
+import IconButton from '@material-ui/core/IconButton';
 
 const ShareButton = ({ url }) => {
   const [show, setShow] = useState(false);
@@ -29,15 +28,9 @@ const ShareButton = ({ url }) => {
 
   return (
     <>
-      <MDBBtn
-        outline
-        color="success"
-        className={styles['share-profile']}
-        onClick={handleClick}
-      >
-        <MDBIcon icon="share-square" />
-        &nbsp;Share profile
-      </MDBBtn>
+      <IconButton onClick={handleClick}>
+        <ShareIcon fontSize="large" />
+      </IconButton>
       <Overlay
         show={show}
         target={target}

@@ -1,4 +1,5 @@
-.app-body {
-  background: var(--bg-default) !important;
-  height: 100vh;
+.container {
+  height: 100vh !important;
+  background: #191a1e !important;
+  padding: 0 !important;
 }

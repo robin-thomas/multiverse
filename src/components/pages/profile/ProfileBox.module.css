@@ -1,0 +1,45 @@
+.card {
+  transition: 0.3s;
+  box-shadow: 0 8px 40px -12px rgba(0, 0, 0, 0.3);
+  border: 0;
+  background-color: black !important;
+}
+
+.tile {
+  line-height: 0 !important;
+}
+
+.media {
+  padding-top: 56.25% !important;
+}
+
+.icon {
+  color: white;
+  margin-top: 5px;
+  margin-right: 15px;
+}
+
+.title-bar {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.3) 70%,
+    rgba(0, 0, 0, 0) 100%
+  ) !important;
+}
+
+.icon-bottom {
+  color: white;
+  margin-right: 10px !important;
+}
+
+.bottom-title-bar {
+  background: rgba(255, 255, 255, 0.4) !important;
+  border-radius: 5px;
+  height: 50px;
+  margin: 5px;
+}
+
+.card-content {
+  background-color: white !important;
+}

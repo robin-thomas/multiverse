@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 
 import { MDBBtn, MDBIcon } from 'mdbreact';
 import { Card, Button } from 'react-bootstrap';
+import SettingsIcon from '@material-ui/icons/Settings';
+import IconButton from '@material-ui/core/IconButton';
 
 import Box from '../../../utils/3box';
 import TextInput from '../../utils/TextInput';
@@ -13,8 +15,6 @@ const About = ({ profile }) => {
   const ctx = useContext(DataContext);
 
   const [about, setAbout] = useState(null);
-
-  const [overlay, setOverlay] = useState(false);
 
   useEffect(() => {
     console.log(profile);
@@ -34,22 +34,14 @@ const About = ({ profile }) => {
     <Card className={styles['about-card']}>
       <Card.Img
         variant="top"
-        className={styles[`about-pic${overlay ? '-overlay-trigger' : ''}`]}
-        src="https://marketplace.canva.com/is4RU/MAB_5dis4RU/2/tl/canva-businesswoman-avatar-with-business-icon-MAB_5dis4RU.png"
-        onMouseEnter={() => setOverlay(true)}
+        className={styles[`about-pic-overlay-trigger`]}
+        src="https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg"
       />
-      {overlay ? (
-        <Card.ImgOverlay onMouseLeave={() => setOverlay(false)}>
-          <MDBBtn
-            outline
-            color="primary"
-            title="Edit your picture"
-            className={styles['about-edit-pic-icon']}
-          >
-            <MDBIcon icon="edit" />
-          </MDBBtn>
-        </Card.ImgOverlay>
-      ) : null}
+      <Card.ImgOverlay>
+        <IconButton aria-label="delete">
+          <SettingsIcon fontSize="large" />
+        </IconButton>
+      </Card.ImgOverlay>
       <Card.Body>
         <Card.Title class={styles['about-title']}>About</Card.Title>
         <Card.Text>

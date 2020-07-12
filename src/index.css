@@ -59,3 +59,8 @@ body {
 .MuiDivider-light {
   background-color: rgba(255, 255, 255, 0.5) !important;
 }
+
+button:focus {
+  border: none !important;
+  outline: none !important;
+}

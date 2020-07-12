@@ -16,6 +16,7 @@
 
 .about-pic-overlay-trigger {
   opacity: 80%;
+  filter: sepia(75%) saturate(290%) brightness(70%) hue-rotate(180deg);
 }
 
 .about-edit-pic-icon {
