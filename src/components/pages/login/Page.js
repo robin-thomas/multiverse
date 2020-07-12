@@ -8,9 +8,9 @@ import EmptyRow from '../../utils/EmptyRow';
 import styles from './Page.module.css';
 
 const Page = ({ text, loader, error, errorNext }) => (
-  <Container className={styles['container']}>
+  <Container fluid={true} className={styles['container']}>
     <Row className={styles['row']}>
-      <Col className="align-self-center">
+      <Col md="8" className="align-self-center mx-auto">
         {loader && !error ? (
           <Row>
             <Col>

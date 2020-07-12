@@ -1,10 +1,13 @@
 .container {
   height: 100vh !important;
   text-align: center;
+  background: #191a1e;
 }
 
 .row {
   height: 100% !important;
+  color: white;
+  font-size: 2rem;
 }
 
 .alert {

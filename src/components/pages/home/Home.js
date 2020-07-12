@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { MDBBtn, MDBIcon } from 'mdbreact';
-import { Row, Col, Overlay } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import ReactFullpage from '@fullpage/react-fullpage';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
@@ -16,9 +16,6 @@ import Header from './Header';
 import EmptyRow from '../../utils/EmptyRow';
 
 import styles from './Home.module.css';
-import Icons from '../../assets/doodles.png';
-
-import { app } from '../../../../config.json';
 
 const useStyles = makeStyles({
   root: {
@@ -31,20 +28,6 @@ const useStyles = makeStyles({
     marginBottom: 12,
   },
 });
-
-const HomeCard = ({ title, desc }) => {
-  const classes = useStyles();
-
-  return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Typography variant="h5" component="h2">
-          {title}
-        </Typography>
-      </CardContent>
-    </Card>
-  );
-};
 
 const Home = () => (
   <div className="section">
@@ -128,9 +111,7 @@ const Finish = () => (
 );
 
 const Page = () => {
-  const [button, setButton] = useState('danger');
-
-  //"#ff5f45"
+  const [button, setButton] = useState('primary');
 
   return (
     <>
@@ -141,7 +122,7 @@ const Page = () => {
         onLeave={(_, destination) => {
           switch (destination.index) {
             case 1:
-              setButton('elegant');
+              setButton('');
               break;
 
             case 2:
@@ -149,7 +130,7 @@ const Page = () => {
 
             case 0:
             default:
-              setButton('danger');
+              setButton('primary');
           }
         }}
         render={() => (

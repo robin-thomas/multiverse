@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { MDBBtn } from 'mdbreact';
 import { Container, Row, Col } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
 
 import styles from './Header.module.css';
 
@@ -16,9 +16,9 @@ const Header = ({ button }) => (
       </Col>
       <Col md="auto" className="ml-auto align-self-center">
         <Link to="/login">
-          <MDBBtn color={button} size="sm">
+          <Button variant="contained" color={button}>
             Try it out
-          </MDBBtn>
+          </Button>
         </Link>
       </Col>
     </Row>
