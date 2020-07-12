@@ -4,7 +4,7 @@
   width: 750px !important;
   margin: auto;
   text-align: center;
-  color: var(--color-white) !important;
+  color: white !important;
 }
 
 .section-which > h1,
@@ -25,14 +25,13 @@
 
 .home-first-text {
   font-size: 5rem !important;
-  color: var(--color-white) !important;
+  color: white !important;
   font-weight: 800 !important;
 }
 
 .home-desc {
   font-size: 1rem !important;
-  color: var(--color-white) !important;
-  /* font-style: italic; */
+  color: white !important;
 }
 
 .home-desc-row {

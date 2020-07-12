@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -9,20 +9,23 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import Box from '../../../utils/3box';
+import Box from '../../../../utils/3box';
+import { DataContext } from '../../../utils/DataProvider';
 
 import styles from './FriendRequest.module.css';
 
-const FriendRequest = ({ profile }) => {
+const FriendRequest = () => {
+  const ctx = useContext(DataContext);
+
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(null);
   const [backdropOpen, setBackdropOpen] = useState(false);
 
   useEffect(() => {
-    if (profile[Box.DATASTORE_KEY_USERNAME]) {
-      setName(profile[Box.DATASTORE_KEY_USERNAME]);
+    if (ctx.profile[Box.DATASTORE_KEY_USERNAME]) {
+      setName(ctx.profile[Box.DATASTORE_KEY_USERNAME]);
     }
-  }, [profile]);
+  }, [ctx.profile]);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

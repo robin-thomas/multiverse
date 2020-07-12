@@ -6,6 +6,6 @@
 
 .home-logo {
   font-family: 'Grand Hotel', cursive;
-  color: var(--color-white);
+  color: white !important;
   font-size: 3rem !important;
 }

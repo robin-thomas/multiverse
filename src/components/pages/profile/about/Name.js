@@ -2,22 +2,22 @@ import React, { useState, useContext, useEffect } from 'react';
 
 import { Row, Col } from 'react-bootstrap';
 
-import Box from '../../../utils/3box';
-import TextInput from '../../utils/TextInput';
-import { DataContext } from '../../utils/DataProvider';
+import Box from '../../../../utils/3box';
+import TextInput from '../../../utils/TextInput';
+import { DataContext } from '../../../utils/DataProvider';
 
 import styles from './Name.module.css';
 
-const Name = ({ profile }) => {
+const Name = () => {
   const ctx = useContext(DataContext);
 
   const [name, setName] = useState(null);
 
   useEffect(() => {
-    if (profile[Box.DATASTORE_KEY_USERNAME]) {
-      setName(profile[Box.DATASTORE_KEY_USERNAME]);
+    if (ctx.profile[Box.DATASTORE_KEY_USERNAME]) {
+      setName(ctx.profile[Box.DATASTORE_KEY_USERNAME]);
     }
-  }, [profile]);
+  }, [ctx.profile]);
 
   const onChange = (name) => {
     if (/^[a-z0-9]+$/.test(name)) {
@@ -34,14 +34,13 @@ const Name = ({ profile }) => {
 
   return (
     <Row className={styles['name']}>
-      <Col md="auto" className="pr-0">
+      <Col md="auto" className="pr-0 align-self-justify">
         @
       </Col>
-      <Col className="pl-0">
+      <Col className="pl-0 align-self-justify">
         <TextInput
           value={name}
           hint="<username>"
-          editable={profile.editable}
           onChange={onChange}
           updateText={updateName}
         />

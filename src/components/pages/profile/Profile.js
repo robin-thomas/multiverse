@@ -8,7 +8,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import Box from '../../../utils/3box';
 import Content from '../../app/Content';
-import ProfileBox from './ProfileBox';
+import ProfileBox from './about/ProfileBox';
 import EmptyRow from '../../utils/EmptyRow';
 import { DataContext } from '../../utils/DataProvider';
 
@@ -19,16 +19,13 @@ const Profile = ({ history }) => {
 
   const { address } = useParams();
 
-  const [profile, setProfile] = useState({});
-
   useEffect(() => {
     ctx.setProfileAddress(address);
 
     const fn = async () => {
       const data = await Box.getAllPublic({ address });
-      data.editable = ctx.address === address;
-
-      setProfile(data);
+      ctx.setEditable(ctx.address === address);
+      ctx.setProfile(data);
     };
 
     fn();
@@ -42,22 +39,24 @@ const Profile = ({ history }) => {
     <Content>
       <Row style={{ height: '100vh' }}>
         <Col md={{ span: 3, offset: 1 }} className="align-self-center">
-          <ProfileBox url={`${app.url}/profile/${address}`} profile={profile} />
+          <ProfileBox url={`${app.url}/profile/${address}`} />
         </Col>
         <Col md="7" className="mr-auto">
           <EmptyRow rows={3} />
-          <Row>
-            <Col md="auto" className="ml-auto">
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<CloudUploadIcon />}
-                onClick={redirect}
-              >
-                Create New Post
-              </Button>
-            </Col>
-          </Row>
+          {ctx.editable ? (
+            <Row>
+              <Col md="auto" className="ml-auto">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<CloudUploadIcon />}
+                  onClick={redirect}
+                >
+                  Create New Post
+                </Button>
+              </Col>
+            </Row>
+          ) : null}
         </Col>
       </Row>
     </Content>

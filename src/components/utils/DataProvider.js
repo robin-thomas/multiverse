@@ -3,19 +3,20 @@ import React, { useState } from 'react';
 const DataContext = React.createContext();
 
 const DataProvider = (props) => {
-  const [theme, setTheme] = useState('light');
+  const [profile, setProfile] = useState({});
   const [address, setAddress] = useState(null);
   const [provider, setProvider] = useState(null);
+  const [editable, setEditable] = useState(false);
   const [encryptionKey, setEncryptionKey] = useState(null);
   const [profileAddress, setProfileAddress] = useState(null);
 
-  document.body.setAttribute('data-theme', theme);
+  // document.body.setAttribute('data-theme', theme);
 
   return (
     <DataContext.Provider
       value={{
-        theme,
-        setTheme,
+        profile,
+        setProfile,
         address,
         setAddress,
         provider,
@@ -24,6 +25,8 @@ const DataProvider = (props) => {
         setEncryptionKey,
         profileAddress,
         setProfileAddress,
+        editable,
+        setEditable,
       }}
     >
       {props.children}

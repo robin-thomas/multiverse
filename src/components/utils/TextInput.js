@@ -9,7 +9,7 @@ import styles from './TextInput.module.css';
 const TextInput = (props) => {
   const ctx = useContext(DataContext);
 
-  if (props.editable) {
+  if (ctx.editable) {
     return (
       <MDBInput
         type={props.type ? props.type : 'text'}

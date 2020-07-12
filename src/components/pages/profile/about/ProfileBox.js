@@ -16,23 +16,23 @@ import IconButton from '@material-ui/core/IconButton';
 import Name from './Name';
 import FriendRequest from './FriendRequest';
 import ShareButton from './ShareButton';
-import Box from '../../../utils/3box';
-import TextInput from '../../utils/TextInput';
-import { DataContext } from '../../utils/DataProvider';
+import Box from '../../../../utils/3box';
+import TextInput from '../../../utils/TextInput';
+import { DataContext } from '../../../utils/DataProvider';
 
 import styles from './ProfileBox.module.css';
 
-const ProfileBox = ({ url, profile }) => {
+const ProfileBox = ({ url }) => {
   const ctx = useContext(DataContext);
 
   const [about, setAbout] = useState(null);
 
   useEffect(() => {
-    console.log(profile);
-    if (profile[Box.DATASTORE_KEY_ABOUT]) {
-      setAbout(profile[Box.DATASTORE_KEY_ABOUT]);
+    console.log(ctx.profile);
+    if (ctx.profile[Box.DATASTORE_KEY_ABOUT]) {
+      setAbout(ctx.profile[Box.DATASTORE_KEY_ABOUT]);
     }
-  }, [profile]);
+  }, [ctx.profile]);
 
   const updateAbout = async () => {
     await Box.set(Box.DATASTORE_KEY_ABOUT, about, {
@@ -59,8 +59,8 @@ const ProfileBox = ({ url, profile }) => {
           className={styles['title-bar']}
         />
         <GridListTileBar
-          title={<Name profile={profile} />}
-          actionIcon={<FriendRequest profile={profile} />}
+          title={<Name />}
+          actionIcon={<FriendRequest />}
           className={styles['bottom-title-bar']}
         />
       </GridListTile>
@@ -78,7 +78,6 @@ const ProfileBox = ({ url, profile }) => {
                 type="textarea"
                 value={about}
                 hint="<Write that killer bio about yourself>"
-                editable={profile.editable}
                 onChange={setAbout}
                 updateText={updateAbout}
               />
