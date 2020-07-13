@@ -75,25 +75,21 @@ const FriendRequest = ({ username, address, setOpen, setBackdropOpen }) => {
         <Col md="auto" className="px-0">
           <Row noGutters={true}>
             <Col md="auto">
-              <IconButton
-                className={styles['request-btn']}
-                title="Accept"
-                onClick={accept}
-              >
-                <CheckCircleOutlineIcon
-                  fontSize="large"
-                  style={{ color: green[500] }}
-                />
-              </IconButton>
+              <Tooltip title="Accept">
+                <IconButton className={styles['request-btn']} onClick={accept}>
+                  <CheckCircleOutlineIcon
+                    fontSize="large"
+                    style={{ color: green[500] }}
+                  />
+                </IconButton>
+              </Tooltip>
             </Col>
             <Col md="auto">
-              <IconButton
-                className={styles['request-btn']}
-                title="Reject"
-                onClick={reject}
-              >
-                <HighlightOffIcon fontSize="large" color="secondary" />
-              </IconButton>
+              <Tooltip title="Reject">
+                <IconButton className={styles['request-btn']} onClick={reject}>
+                  <HighlightOffIcon fontSize="large" color="secondary" />
+                </IconButton>
+              </Tooltip>
             </Col>
           </Row>
         </Col>
@@ -151,13 +147,11 @@ const FriendRequests = ({ setBackdropOpen }) => {
         disableFocusListener
       >
         <Badge badgeContent={count} color="secondary">
-          <IconButton
-            color="primary"
-            title="Friend Requests"
-            onClick={() => setOpen(!open)}
-          >
-            <PermContactCalendarIcon fontSize="large" />
-          </IconButton>
+          <Tooltip title="Friend Requests">
+            <IconButton color="primary" onClick={() => setOpen(!open)}>
+              <PermContactCalendarIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
         </Badge>
       </NTooltip>
     </>

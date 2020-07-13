@@ -7,6 +7,9 @@ import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import FriendRequests from './FriendRequests';
 import Box from '../../../utils/3box';
@@ -41,6 +44,19 @@ const Profile = ({ history }) => {
     history.push('/new/post');
   };
 
+  const logout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      ctx.setProfile({});
+      ctx.setAddress(null);
+      ctx.setProvider(null);
+      ctx.setEditable(false);
+      ctx.setEncryptionKey(null);
+      ctx.setFriendRequests([]);
+
+      history.push('/');
+    }
+  };
+
   return (
     <Content>
       <Row style={{ height: '100vh' }}>
@@ -49,11 +65,20 @@ const Profile = ({ history }) => {
         </Col>
         <Col md="7" className="mr-auto">
           <EmptyRow rows={2} />
-          <Row>
-            <Col className="ml-auto" md="auto">
-              <FriendRequests setBackdropOpen={setBackdropOpen} />
-            </Col>
-          </Row>
+          {ctx.editable ? (
+            <Row>
+              <Col className="ml-auto" md="auto">
+                <FriendRequests setBackdropOpen={setBackdropOpen} />
+              </Col>
+              <Col md="auto" className="pl-0">
+                <Tooltip title="Logout">
+                  <IconButton color="primary" onClick={logout}>
+                    <PowerSettingsNewIcon fontSize="large" />
+                  </IconButton>
+                </Tooltip>
+              </Col>
+            </Row>
+          ) : null}
           <EmptyRow rows={1} />
           {ctx.editable ? (
             <Row>
