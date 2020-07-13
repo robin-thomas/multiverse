@@ -1,7 +1,7 @@
 .circle {
   height: 120px;
   width: 120px;
-  background-color: var(--color-white);
+  background-color: white;
   border-radius: 50%;
   display: inline-block;
   color: #8e24aa;

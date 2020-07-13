@@ -32,6 +32,12 @@ const Profile = ({ history }) => {
   useEffect(() => {
     const fn = async () => {
       const data = await Box.getAllPublic({ address });
+
+      // if no profile found.
+      if (!data[Box.DATASTORE_KEY_USERNAME]) {
+        history.push('/profile/404');
+      }
+
       console.log('profile', { ...data, address });
       ctx.setEditable(ctx.address === address);
       ctx.setProfile({ ...data, address });
@@ -61,7 +67,9 @@ const Profile = ({ history }) => {
     <Content>
       <Row style={{ height: '100vh' }}>
         <Col md={{ span: 3, offset: 1 }} className="align-self-center">
-          <ProfileBox url={`${app.url}/profile/${address}`} />
+          {ctx.profile && ctx.profile.address ? (
+            <ProfileBox url={`${app.url}/profile/${address}`} />
+          ) : null}
         </Col>
         <Col md="7" className="mr-auto">
           <EmptyRow rows={2} />
