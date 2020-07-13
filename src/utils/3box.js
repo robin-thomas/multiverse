@@ -5,6 +5,8 @@ import { app } from '../../config.json';
 
 const Box = {
   space: null,
+  threadRequest: null,
+  threadResponse: null,
 
   DATASTORE_STATE_PRIVATE: 'private',
   DATASTORE_STATE_FRIENDS: 'friends',
@@ -18,6 +20,8 @@ const Box = {
   DATASTORE_KEY_PROFILE_BACKGROUND: `${app.name}-profileBackground`,
   DATASTORE_KEY_ENCRYPTION_KEY: `${app.name}-encryptionKey`,
 
+  DATASTORE_PENDING_SENT_REQUESTS: `${app.name}-pendingSentRequests`,
+
   /**
    * create a new 3Box space client
    *
@@ -29,6 +33,14 @@ const Box = {
       await box.syncDone;
 
       Box.space = await box.openSpace(app.name);
+      Box.threadRequest = await Box.space.joinThread(
+        `${app.name}-threadRequest`
+      );
+      Box.threadResponse = await Box.space.joinThread(
+        `${app.name}-threadResponse`
+      );
+      console.log('threadRequest', Box.threadRequest);
+      console.log('threadResponse', Box.threadResponse);
     }
 
     return Box.space;
@@ -113,14 +125,21 @@ const Box = {
       const response = Object.keys(spaceData)
         .filter((e) => keys.includes(e))
         .reduce((p, c) => {
+          let val;
           if (opts.state[c] === Box.DATASTORE_STATE_FRIENDS) {
-            p[c] = CryptoJS.AES.decrypt(
+            val = CryptoJS.AES.decrypt(
               spaceData[c],
               opts.encryptionKey
             ).toString(CryptoJS.enc.Utf8);
           } else {
-            p[c] = spaceData[c];
+            val = spaceData[c];
           }
+
+          try {
+            val = JSON.parse(val);
+          } catch (err) {}
+
+          p[c] = val;
 
           return p;
         }, {});
@@ -156,6 +175,59 @@ const Box = {
 
       return p;
     }, {});
+  },
+
+  append: async (key, value, opts = {}) => {
+    try {
+      const client = await Box.getClient(opts.address);
+
+      let data = JSON.parse(await client.private.get(key));
+
+      if (value.key) {
+        data[key] = value.value;
+      } else {
+        data.push(value);
+      }
+
+      await client.private.set(key, JSON.stringify(data));
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  message: {
+    request: {
+      getAll: async (address) => {
+        try {
+          const client = await Box.getClient(address);
+          const [requests, responses] = await Promise.all([
+            Box.threadRequest.getPosts(),
+            Box.threadResponse.getPosts(),
+          ]);
+
+          const pendingRequests = requests
+            .map((e) => JSON.parse(e.message))
+            .filter((e) => e.friend === address);
+          const completed = responses
+            .map((e) => JSON.parse(e.message))
+            .filter((e) => e.address === address)
+            .map((e) => e.friend);
+
+          return pendingRequests.filter((e) => !completed.includes(e.address));
+        } catch (err) {
+          throw err;
+        }
+      },
+
+      post: async (data, opts = {}) => {
+        try {
+          const client = await Box.getClient(opts.address);
+          await Box.threadRequest.post(JSON.stringify(data));
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
   },
 };
 

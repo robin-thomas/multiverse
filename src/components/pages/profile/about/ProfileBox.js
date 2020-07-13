@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 
 import { Row, Col } from 'react-bootstrap';
 
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import Avatar from '@material-ui/core/Avatar';
 import CardContent from '@material-ui/core/CardContent';
@@ -48,16 +47,18 @@ const ProfileBox = ({ url }) => {
           className={styles['media']}
           image="https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg"
         />
-        <GridListTileBar
-          titlePosition="top"
-          actionIcon={
-            <IconButton className={styles['icon']}>
-              <EditIcon fontSize="large" />
-            </IconButton>
-          }
-          actionPosition="left"
-          className={styles['title-bar']}
-        />
+        {ctx.editable ? (
+          <GridListTileBar
+            titlePosition="top"
+            actionIcon={
+              <IconButton className={styles['icon']}>
+                <EditIcon fontSize="large" />
+              </IconButton>
+            }
+            actionPosition="left"
+            className={styles['title-bar']}
+          />
+        ) : null}
         <GridListTileBar
           title={<Name />}
           actionIcon={<FriendRequest />}

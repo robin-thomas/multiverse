@@ -8,6 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import CheckIcon from '@material-ui/icons/Check';
 
 import Box from '../../../../utils/3box';
 import { DataContext } from '../../../utils/DataProvider';
@@ -21,10 +22,26 @@ const FriendRequest = () => {
   const [name, setName] = useState(null);
   const [backdropOpen, setBackdropOpen] = useState(false);
 
+  // -1 => loading
+  //  0 => no pending
+  //  1 => pending
+  const [pending, setPending] = useState(-1);
+
   useEffect(() => {
     if (ctx.profile[Box.DATASTORE_KEY_USERNAME]) {
       setName(ctx.profile[Box.DATASTORE_KEY_USERNAME]);
     }
+
+    // Check and see if a friend request is already sent to this user.
+    Box.get([Box.DATASTORE_PENDING_SENT_REQUESTS], {
+      address: ctx.address,
+    }).then((_pending) => {
+      if (_pending[ctx.profileAddress]) {
+        setPending(1);
+      } else {
+        setPending(0);
+      }
+    });
   }, [ctx.profile]);
 
   const handleClickOpen = () => setOpen(true);
@@ -34,29 +51,53 @@ const FriendRequest = () => {
     setOpen(false);
     setBackdropOpen(true);
 
-    const redirect = () => {
-      setBackdropOpen(false);
-    };
+    const opts = { address: ctx.address };
 
-    // TODO: create & send friend request.
+    // create & send friend request.
+    await Box.append(
+      Box.DATASTORE_PENDING_SENT_REQUESTS,
+      {
+        key: ctx.profileAddress,
+        value: 1,
+      },
+      opts
+    );
 
-    // fake delay.
-    const sleep = (ms) => {
-      return new Promise((resolve) => setTimeout(resolve, 1000 * ms));
-    };
-    sleep(5).then(redirect);
+    await Box.message.request.post(
+      {
+        pubKey: '', // TODO.
+        username: ctx.profile[Box.DATASTORE_KEY_USERNAME],
+        address: ctx.address,
+        friend: ctx.profileAddress,
+      },
+      opts
+    );
+
+    setBackdropOpen(false);
   };
 
   return (
     <>
-      <Button
-        variant="contained"
-        color="primary"
-        className={styles['icon-bottom']}
-        onClick={handleClickOpen}
-      >
-        Add as friend
-      </Button>
+      {!ctx.editable && ctx.address && pending === 0 ? (
+        <Button
+          variant="contained"
+          color="primary"
+          className={styles['icon-bottom']}
+          onClick={handleClickOpen}
+        >
+          Add as friend
+        </Button>
+      ) : pending === 1 ? (
+        <Button
+          variant="contained"
+          color="primary"
+          className={styles['icon-bottom']}
+          disableElevation
+          startIcon={<CheckIcon />}
+        >
+          Pending Friend
+        </Button>
+      ) : null}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Send a friend request?</DialogTitle>
         <DialogContent>

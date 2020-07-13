@@ -1,0 +1,4 @@
+.backdrop {
+  z-index: 10000 !important;
+  color: #fff;
+}

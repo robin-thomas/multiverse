@@ -11,7 +11,7 @@ import { app } from '../../../../config.json';
 const Header = ({ button }) => (
   <Container fluid={true} className={styles['home']}>
     <Row>
-      <Col md={{ scale: 1, offset: 1 }} className={styles['home-logo']}>
+      <Col md={{ span: 2, offset: 1 }} className={styles['home-logo']}>
         {app.name}
       </Col>
       <Col md="auto" className="ml-auto align-self-center">
@@ -28,7 +28,7 @@ const Header = ({ button }) => (
 const PageHeader = ({ button }) => (
   <Container fluid={true} className={styles['home-page']}>
     <Row>
-      <Col md={{ scale: 1, offset: 1 }} className={styles['home-logo']}>
+      <Col md={{ span: 2, offset: 1 }} className={styles['home-logo']}>
         {app.name}
       </Col>
     </Row>

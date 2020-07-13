@@ -1,0 +1,29 @@
+.card-title {
+  color: black !important;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.card-body {
+  color: black !important;
+  font-size: 0.75rem;
+  padding: 0 !important;
+}
+
+.name {
+  color: black !important;
+  font-weight: 600 !important;
+}
+
+.name:hover {
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+
+.send-request {
+  color: grey;
+}
+
+.request-btn {
+  padding: 3px !important;
+}

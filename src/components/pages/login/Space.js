@@ -50,6 +50,7 @@ const Space = () => {
         let key = await Box.get([Box.DATASTORE_KEY_ENCRYPTION_KEY], {
           address: ctx.address,
         });
+
         if (key === null) {
           key = uuidV4();
 
@@ -58,6 +59,10 @@ const Space = () => {
           });
         }
         ctx.setEncryptionKey(key);
+
+        // get all pending friend requests.
+        const requests = await Box.message.request.getAll(ctx.address);
+        ctx.setFriendRequests(requests);
 
         setRedirect(true);
       } catch (err) {
