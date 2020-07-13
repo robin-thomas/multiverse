@@ -17,7 +17,6 @@ const About = ({ profile }) => {
   const [about, setAbout] = useState(null);
 
   useEffect(() => {
-    console.log(profile);
     if (profile[Box.DATASTORE_KEY_ABOUT]) {
       setAbout(profile[Box.DATASTORE_KEY_ABOUT]);
     }

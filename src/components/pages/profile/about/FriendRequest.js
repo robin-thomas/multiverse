@@ -36,7 +36,7 @@ const FriendRequest = () => {
     Box.get([Box.DATASTORE_PENDING_SENT_REQUESTS], {
       address: ctx.address,
     }).then((_pending) => {
-      if (_pending[ctx.profileAddress]) {
+      if (_pending[ctx.profile.address]) {
         setPending(1);
       } else {
         setPending(0);
@@ -57,7 +57,7 @@ const FriendRequest = () => {
     await Box.append(
       Box.DATASTORE_PENDING_SENT_REQUESTS,
       {
-        key: ctx.profileAddress,
+        key: ctx.profile.address,
         value: 1,
       },
       opts
@@ -68,7 +68,7 @@ const FriendRequest = () => {
         pubKey: '', // TODO.
         username: ctx.profile[Box.DATASTORE_KEY_USERNAME],
         address: ctx.address,
-        friend: ctx.profileAddress,
+        friend: ctx.profile.address,
       },
       opts
     );

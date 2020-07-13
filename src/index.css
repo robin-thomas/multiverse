@@ -1,27 +1,3 @@
-[data-theme='light'] {
-  --color-default: hsl(240, 8%, 12%);
-  --color-white: hsl(0, 0%, 100%);
-  --color-black: hsl(240, 8%, 12%);
-  --bg-default: hsl(0, 0%, 100%);
-  --bg-navbar: hsl(0, 0%, 95%);
-  --bg-contact-body: hsla(0, 0%, 95%, 1);
-  --bg-contact-body-link: #6c757d;
-  --bg-contact-body-hr: #6c757d;
-  --bg-textarea: hsl(240, 1%, 48%);
-}
-
-[data-theme='dark'] {
-  --color-default: hsl(0, 0%, 100%);
-  --color-white: hsl(0, 0%, 100%);
-  --color-black: hsl(240, 8%, 12%);
-  --bg-default: hsl(240, 8%, 12%);
-  --bg-navbar: hsl(240, 6%, 15%);
-  --bg-contact-body: hsla(240, 6%, 15%, 1);
-  --bg-contact-body-link: #6c757d;
-  --bg-contact-body-hr: rgb(76, 117, 242);
-  --bg-textarea: hsl(240, 7%, 9%);
-}
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -33,7 +9,7 @@ body {
   height: 100vh !important;
   overflow: hidden !important;
   font-size: 2rem;
-  color: var(--color-default) !important;
+  color: white !important;
   user-select: none;
 }
 

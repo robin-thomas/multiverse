@@ -27,7 +27,6 @@ const ProfileBox = ({ url }) => {
   const [about, setAbout] = useState(null);
 
   useEffect(() => {
-    console.log(ctx.profile);
     if (ctx.profile[Box.DATASTORE_KEY_ABOUT]) {
       setAbout(ctx.profile[Box.DATASTORE_KEY_ABOUT]);
     }

@@ -8,10 +8,7 @@ const DataProvider = (props) => {
   const [provider, setProvider] = useState(null);
   const [editable, setEditable] = useState(false);
   const [encryptionKey, setEncryptionKey] = useState(null);
-  const [profileAddress, setProfileAddress] = useState(null);
   const [friendRequests, setFriendRequests] = useState([]);
-
-  // document.body.setAttribute('data-theme', theme);
 
   return (
     <DataContext.Provider
@@ -24,8 +21,6 @@ const DataProvider = (props) => {
         setProvider,
         encryptionKey,
         setEncryptionKey,
-        profileAddress,
-        setProfileAddress,
         editable,
         setEditable,
         friendRequests,

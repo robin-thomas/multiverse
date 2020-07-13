@@ -27,12 +27,11 @@ const Profile = ({ history }) => {
   const [backdropOpen, setBackdropOpen] = useState(false);
 
   useEffect(() => {
-    ctx.setProfileAddress(address);
-
     const fn = async () => {
       const data = await Box.getAllPublic({ address });
+      console.log('profile', { ...data, address });
       ctx.setEditable(ctx.address === address);
-      ctx.setProfile(data);
+      ctx.setProfile({ ...data, address });
     };
 
     fn();
