@@ -14,7 +14,12 @@ const Page = ({ text, loader, error, errorNext }) => (
         {loader && !error ? (
           <Row>
             <Col>
-              <MDBIcon icon="spinner" pulse size="2x" />
+              <MDBIcon
+                icon="spinner"
+                pulse
+                size="2x"
+                style={{ marginBottom: '15px' }}
+              />
             </Col>
           </Row>
         ) : null}

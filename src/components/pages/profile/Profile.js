@@ -46,9 +46,14 @@ const Profile = ({ history }) => {
           address,
         });
       } else {
-        // If own profile and logged in, all details already exist.
-        const data = Object.keys(Box.storage).map((e) => e.value);
-        ctx.setProfile({ ...data, address });
+        await Box.getAll(address);
+        ctx.setProfile({
+          ...Box.storage[Box.DATASTORE_KEY_PROFILE_PUBLIC].value,
+          address,
+        });
+        ctx.setProfilePrivate(
+          Box.storage[Box.DATASTORE_KEY_PROFILE_PRIVATE].value
+        );
       }
 
       ctx.setEditable(ctx.address === address);
