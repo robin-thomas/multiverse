@@ -21,9 +21,9 @@ const ShareButton = ({ url }) => {
   const [target, setTarget] = useState(null);
   const ref = useRef(null);
 
-  const handleClick = (event) => {
+  const handleClick = (e) => {
     setShow(!show);
-    setTarget(event.target);
+    setTarget(e.target);
   };
 
   return (

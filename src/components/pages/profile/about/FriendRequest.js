@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 
+import _ from 'lodash';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,7 +11,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckIcon from '@material-ui/icons/Check';
 
-import Box from '../../../../utils/3box';
+import Box from '../../../../utils/3box/index.js';
 import { DataContext } from '../../../utils/DataProvider';
 
 import styles from './FriendRequest.module.css';
@@ -28,20 +29,19 @@ const FriendRequest = () => {
   const [pending, setPending] = useState(-1);
 
   useEffect(() => {
-    if (ctx.profile[Box.DATASTORE_KEY_USERNAME]) {
-      setName(ctx.profile[Box.DATASTORE_KEY_USERNAME]);
+    if (_.has(ctx.profile, 'username')) {
+      setName(ctx.profile.username);
     }
 
     // Check and see if a friend request is already sent to this user.
-    Box.get([Box.DATASTORE_PENDING_SENT_REQUESTS], {
-      address: ctx.address,
-    }).then((_pending) => {
+    const _pending = Box.get(Box.DATASTORE_PENDING_SENT_REQUESTS, '');
+    if (_pending) {
       if (_pending[ctx.profile.address]) {
         setPending(1);
       } else {
         setPending(0);
       }
-    });
+    }
   }, [ctx.profile]);
 
   const handleClickOpen = () => setOpen(true);
@@ -51,16 +51,14 @@ const FriendRequest = () => {
     setOpen(false);
     setBackdropOpen(true);
 
-    const opts = { address: ctx.address };
-
     // create & send friend request.
-    await Box.append(
+    Box.set(
       Box.DATASTORE_PENDING_SENT_REQUESTS,
       {
         key: ctx.profile.address,
         value: 1,
       },
-      opts
+      Box.state.PUBLIC
     );
 
     await Box.message.request.post(
@@ -70,7 +68,7 @@ const FriendRequest = () => {
         address: ctx.address,
         friend: ctx.profile.address,
       },
-      opts
+      { address: ctx.address }
     );
 
     setBackdropOpen(false);

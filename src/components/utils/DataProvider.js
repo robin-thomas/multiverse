@@ -5,10 +5,9 @@ const DataContext = React.createContext();
 const DataProvider = (props) => {
   const [profile, setProfile] = useState({});
   const [address, setAddress] = useState(null);
-  const [provider, setProvider] = useState(null);
   const [editable, setEditable] = useState(false);
-  const [encryptionKey, setEncryptionKey] = useState(null);
   const [friendRequests, setFriendRequests] = useState([]);
+  const [profilePrivate, setProfilePrivate] = useState({});
 
   return (
     <DataContext.Provider
@@ -17,14 +16,12 @@ const DataProvider = (props) => {
         setProfile,
         address,
         setAddress,
-        provider,
-        setProvider,
-        encryptionKey,
-        setEncryptionKey,
         editable,
         setEditable,
         friendRequests,
         setFriendRequests,
+        profilePrivate,
+        setProfilePrivate,
       }}
     >
       {props.children}

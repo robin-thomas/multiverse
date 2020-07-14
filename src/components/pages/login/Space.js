@@ -9,7 +9,7 @@ import Link from '@material-ui/core/Link';
 import Page from './Page';
 import { DataContext } from '../../utils/DataProvider';
 
-import Box from '../../../utils/3box';
+import Box from '../../../utils/3box/index.js';
 
 import styles from './Page.module.css';
 
@@ -42,23 +42,32 @@ const Space = () => {
     const fn = async () => {
       // Setup the 3box space.
       try {
-        await Box.set(Box.DATASTORE_KEY_THEME, ctx.theme, {
-          address: ctx.address,
-        });
+        await Box.getAll(ctx.address);
 
-        // Setup an encrypting key (if not set).
-        let key = await Box.get([Box.DATASTORE_KEY_ENCRYPTION_KEY], {
-          address: ctx.address,
-        });
+        let keypair = Box.get(
+          Box.DATASTORE_KEY_PROFILE_PRIVATE,
+          'keys.keypair'
+        );
+        if (!keypair) {
+          // Create encryptionKey and keypair
+          const encryptionKey = uuidV4();
 
-        if (key === null) {
-          key = uuidV4();
+          keypair = (await Box.crypto.asymmetric.genKeypair()).toString();
 
-          await Box.set(Box.DATASTORE_KEY_ENCRYPTION_KEY, key, {
-            address: ctx.address,
-          });
+          Box.set(
+            Box.DATASTORE_KEY_PROFILE_PRIVATE,
+            {
+              keys: {
+                encryptionKeys: {
+                  [ctx.address]: encryptionKey,
+                },
+                keypair,
+              },
+            },
+            Box.state.PRIVATE,
+            ctx.setProfilePrivate
+          );
         }
-        ctx.setEncryptionKey(key);
 
         // get all pending friend requests.
         const requests = await Box.message.request.getAll(ctx.address);
@@ -68,12 +77,12 @@ const Space = () => {
       } catch (err) {
         // TODO: metamask rejections doesnt seem to be handled by 3box.
 
-        console.log(err);
+        console.log('3box error', err);
       }
     };
 
     fn();
-  }, [ctx.theme, ctx.address]);
+  }, [ctx.address]);
 
   return (
     <>

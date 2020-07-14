@@ -43,8 +43,6 @@ const Metamask = ({ setStage }) => {
         setErrorNext(<LoginPrompt />);
 
         const provider = await Ethers.getProvider();
-        ctx.setProvider(provider);
-
         const address = await Ethers.getAddress(provider);
         ctx.setAddress(address);
 

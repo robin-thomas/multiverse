@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { withRouter } from 'react-router';
 import { useParams } from 'react-router-dom';
 
+import _ from 'lodash';
 import { Row, Col } from 'react-bootstrap';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
@@ -12,7 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import FriendRequests from './FriendRequests';
-import Box from '../../../utils/3box';
+import Box from '../../../utils/3box/index.js';
 import Content from '../../app/Content';
 import ProfileBox from './about/ProfileBox';
 import EmptyRow from '../../utils/EmptyRow';
@@ -31,20 +32,30 @@ const Profile = ({ history }) => {
 
   useEffect(() => {
     const fn = async () => {
-      const data = await Box.getAllPublic({ address });
+      if (ctx.address !== address) {
+        const data = await Box.getAllPublic(address);
 
-      // if no profile found.
-      if (!data[Box.DATASTORE_KEY_USERNAME]) {
-        history.push('/profile/404');
+        // if no profile found.
+        // if (!Box.get(Box.DATASTORE_KEY_PROFILE_PUBLIC, 'username', data)) {
+        //   history.push('/profile/404');
+        // }
+
+        ctx.setProfile({ ...data, address });
+      } else {
+        // If own profile and logged in, all details already exist.
+        const data = Object.keys(Box.storage).map((e) => e.value);
+        ctx.setProfile({ ...data, address });
       }
 
-      console.log('profile', { ...data, address });
       ctx.setEditable(ctx.address === address);
-      ctx.setProfile({ ...data, address });
     };
 
     fn();
   }, [address]);
+
+  const isValidProfile = () => {
+    return _.has(ctx.profile, 'address');
+  };
 
   const redirect = () => {
     history.push('/new/post');
@@ -67,7 +78,7 @@ const Profile = ({ history }) => {
     <Content>
       <Row style={{ height: '100vh' }}>
         <Col md={{ span: 3, offset: 1 }} className="align-self-center">
-          {ctx.profile && ctx.profile.address ? (
+          {isValidProfile() ? (
             <ProfileBox url={`${app.url}/profile/${address}`} />
           ) : null}
         </Col>

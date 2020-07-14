@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 
 import { Row, Col } from 'react-bootstrap';
 
-import Box from '../../../../utils/3box';
+import Box from '../../../../utils/3box/index.js';
 import TextInput from '../../../utils/TextInput';
 import { DataContext } from '../../../utils/DataProvider';
 
@@ -14,8 +14,8 @@ const Name = () => {
   const [name, setName] = useState(null);
 
   useEffect(() => {
-    if (ctx.profile[Box.DATASTORE_KEY_USERNAME]) {
-      setName(ctx.profile[Box.DATASTORE_KEY_USERNAME]);
+    if (ctx.profile.username) {
+      setName(ctx.profile.name);
     }
   }, [ctx.profile]);
 
@@ -25,11 +25,12 @@ const Name = () => {
     }
   };
 
-  const updateName = async () => {
-    await Box.set(Box.DATASTORE_KEY_USERNAME, name, {
-      address: ctx.address,
-      state: Box.DATASTORE_STATE_PUBLIC,
-    });
+  const updateName = () => {
+    Box.set(
+      Box.DATASTORE_KEY_PROFILE_PUBLIC,
+      { username: name },
+      Box.state.PUBLIC
+    );
   };
 
   return (

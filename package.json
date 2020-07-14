@@ -19,8 +19,11 @@
     "@material-ui/lab": "^4.0.0-alpha.56",
     "crypto-js": "^4.0.0",
     "ethers": "^5.0.4",
+    "fernet": "^0.3.1",
     "ipfs-http-client": "^44.3.0",
+    "lodash": "^4.17.19",
     "mdbreact": "^4.27.0",
+    "pbkdf2": "^3.1.1",
     "react": "^16.13.1",
     "react-bootstrap": "1.0.1",
     "react-dom": "^16.13.1",
@@ -29,6 +32,8 @@
     "react-scripts": "^3.4.1",
     "react-share": "^4.2.1",
     "simplebar-react": "^2.2.1",
+    "text-encoder-lite": "^2.0.0",
+    "tweetnacl": "^1.0.3",
     "uuid": "^8.2.0"
   },
   "devDependencies": {

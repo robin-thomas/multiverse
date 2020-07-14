@@ -11,5 +11,8 @@
     "host": "ipfs.infura.io",
     "port": 5001,
     "gateway": "https://ipfs.infura.io/ipfs/"
+  },
+  "threebox": {
+    "flushInterval": 60000
   }
 }

@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Name from './Name';
 import FriendRequest from './FriendRequest';
 import ShareButton from './ShareButton';
-import Box from '../../../../utils/3box';
+import Box from '../../../../utils/3box/index.js';
 import TextInput from '../../../utils/TextInput';
 import { DataContext } from '../../../utils/DataProvider';
 
@@ -27,16 +27,13 @@ const ProfileBox = ({ url }) => {
   const [about, setAbout] = useState(null);
 
   useEffect(() => {
-    if (ctx.profile[Box.DATASTORE_KEY_ABOUT]) {
-      setAbout(ctx.profile[Box.DATASTORE_KEY_ABOUT]);
+    if (ctx.profile.about) {
+      setAbout(ctx.profile.about);
     }
   }, [ctx.profile]);
 
-  const updateAbout = async () => {
-    await Box.set(Box.DATASTORE_KEY_ABOUT, about, {
-      address: ctx.address,
-      state: Box.DATASTORE_STATE_PUBLIC,
-    });
+  const updateAbout = () => {
+    Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, { about }, Box.state.PUBLIC);
   };
 
   return (
