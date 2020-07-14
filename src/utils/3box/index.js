@@ -209,6 +209,7 @@ const Box = {
   message,
 
   crypto: {
+    ...crypto,
     asymmetric: {
       ...crypto.asymmetric,
       genKeypair: () => crypto.asymmetric.genKeypair(Box.address),

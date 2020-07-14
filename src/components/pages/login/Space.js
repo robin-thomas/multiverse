@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { v4 as uuidV4 } from 'uuid';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import Link from '@material-ui/core/Link';
@@ -49,10 +48,10 @@ const Space = ({ setStage }) => {
           Box.DATASTORE_KEY_PROFILE_PRIVATE,
           'keys.keypair'
         );
-        console.log('keypair', keypair);
+
         if (!keypair) {
           // Create encryptionKey and keypair
-          const encryptionKey = uuidV4();
+          const encryptionKey = Box.crypto.symmetric.genKey();
 
           keypair = (await Box.crypto.asymmetric.genKeypair()).toString();
 

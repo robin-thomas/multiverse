@@ -1,5 +1,6 @@
 import tweetnacl from 'tweetnacl';
 import pbkdf2 from 'pbkdf2';
+import fernet from 'fernet';
 import CryptoJS from 'crypto-js';
 import { ethers } from 'ethers';
 
@@ -9,8 +10,53 @@ import Nonce from './nonce';
 import { app } from '../../../config.json';
 
 const NONCE_LENGTH = 24;
+const FERNET_SECRET_LENGTH = 32;
+
+const randomString = () => {
+  let result = '';
+
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charsLen = chars.length;
+  for (let i = 0; i < FERNET_SECRET_LENGTH; ++i) {
+    result += chars.charAt(Math.floor(Math.random() * charsLen));
+  }
+
+  return result;
+};
 
 const Crypto = {
+  symmetric: {
+    genKey: () => {
+      let key = CryptoJS.SHA256(randomString()).toString(CryptoJS.enc.Base64);
+
+      let secret = fernet.decode64toHex(key);
+      while (secret.length !== fernet.hexBits(256)) {
+        key = CryptoJS.SHA256(randomString()).toString(CryptoJS.enc.Base64);
+        secret = fernet.decode64toHex(key);
+      }
+
+      return key;
+    },
+
+    encrypt: (secretKey, msg) => {
+      const secret = new fernet.Secret(secretKey);
+      const token = new fernet.Token({ secret, ttl: 0 });
+      return token.encode(msg);
+    },
+
+    decrypt: (secretKey, msg) => {
+      const secret = new fernet.Secret(secretKey);
+      const token = new fernet.Token({
+        secret,
+        ttl: 0,
+        token: msg,
+      });
+
+      return token.decode();
+    },
+  },
+
   asymmetric: {
     genKeypair: async (address) => {
       const salt = CryptoJS.SHA256(address).toString(CryptoJS.enc.Base64);
