@@ -56,8 +56,10 @@ const Box = {
    * @param {Object} key
    * @param {Object} value
    */
-  set: (key, value, state, setter = null) => {
+  set: (key, value, setter = null) => {
     try {
+      const state = Box.keyMap[key];
+
       if (Box.storage[key] && typeof value === 'object' && value !== null) {
         Box.storage[key] = {
           state,
@@ -81,8 +83,7 @@ const Box = {
    * Push the changes in Box.changes to 3Box.
    */
   flush: async () => {
-    if (Object.keys(Box.changes).length > 0) {
-      // Client is guaranteed to have been initialzied.
+    if (Object.keys(Box.changes).length > 0 && Box.space) {
       const client = await Box.getClient();
 
       // Split into private & public.
@@ -133,9 +134,9 @@ const Box = {
           _data.value = null;
         }
 
-        p[c] = _data.value;
+        p[c] = _data;
       } else {
-        p[c] = item.value;
+        p[c] = item;
       }
 
       return p;
@@ -195,7 +196,11 @@ const Box = {
       }
 
       // Need to store it in Box.storage also.
-      Box.storage[c] = p[c];
+      if (Box.storage[c]) {
+        Box.storage[c] = _.merge(Box.storage[c], p[c]);
+      } else {
+        Box.storage[c] = p[c];
+      }
 
       return p;
     }, {});

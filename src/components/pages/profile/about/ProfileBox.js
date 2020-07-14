@@ -33,7 +33,7 @@ const ProfileBox = ({ url }) => {
   }, [ctx.profile]);
 
   const updateAbout = () => {
-    Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, { about }, Box.state.PUBLIC);
+    Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, { about });
   };
 
   return (

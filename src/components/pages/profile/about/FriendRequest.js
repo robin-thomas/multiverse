@@ -52,14 +52,10 @@ const FriendRequest = () => {
     setBackdropOpen(true);
 
     // create & send friend request.
-    Box.set(
-      Box.DATASTORE_PENDING_SENT_REQUESTS,
-      {
-        key: ctx.profile.address,
-        value: 1,
-      },
-      Box.state.PUBLIC
-    );
+    Box.set(Box.DATASTORE_PENDING_SENT_REQUESTS, {
+      key: ctx.profile.address,
+      value: 1,
+    });
 
     await Box.message.request.post(
       {

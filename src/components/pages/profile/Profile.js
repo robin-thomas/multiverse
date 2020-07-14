@@ -34,13 +34,17 @@ const Profile = ({ history }) => {
     const fn = async () => {
       if (ctx.address !== address) {
         const data = await Box.getAllPublic(address);
+        console.log('data', data);
 
         // if no profile found.
-        // if (!Box.get(Box.DATASTORE_KEY_PROFILE_PUBLIC, 'username', data)) {
-        //   history.push('/profile/404');
-        // }
+        if (!Box.get(Box.DATASTORE_KEY_PROFILE_PUBLIC, 'username', data)) {
+          history.push('/profile/404');
+        }
 
-        ctx.setProfile({ ...data, address });
+        ctx.setProfile({
+          ...data[Box.DATASTORE_KEY_PROFILE_PUBLIC].value,
+          address,
+        });
       } else {
         // If own profile and logged in, all details already exist.
         const data = Object.keys(Box.storage).map((e) => e.value);

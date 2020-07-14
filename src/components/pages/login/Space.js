@@ -32,7 +32,7 @@ const LoginPrompt = () => (
   </Alert>
 );
 
-const Space = () => {
+const Space = ({ setStage }) => {
   const ctx = useContext(DataContext);
 
   const [redirect, setRedirect] = useState(false);
@@ -43,11 +43,13 @@ const Space = () => {
       // Setup the 3box space.
       try {
         await Box.getAll(ctx.address);
+        console.log('data', Box.storage);
 
         let keypair = Box.get(
           Box.DATASTORE_KEY_PROFILE_PRIVATE,
           'keys.keypair'
         );
+        console.log('keypair', keypair);
         if (!keypair) {
           // Create encryptionKey and keypair
           const encryptionKey = uuidV4();
@@ -64,7 +66,6 @@ const Space = () => {
                 keypair,
               },
             },
-            Box.state.PRIVATE,
             ctx.setProfilePrivate
           );
         }
@@ -73,7 +74,11 @@ const Space = () => {
         const requests = await Box.message.request.getAll(ctx.address);
         ctx.setFriendRequests(requests);
 
-        setRedirect(true);
+        if (!Box.get(Box.DATASTORE_KEY_PROFILE_PUBLIC, 'username')) {
+          setStage(2);
+        } else {
+          setRedirect(true);
+        }
       } catch (err) {
         // TODO: metamask rejections doesnt seem to be handled by 3box.
 
