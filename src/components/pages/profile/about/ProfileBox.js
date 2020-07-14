@@ -10,27 +10,39 @@ import Typography from '@material-ui/core/Typography';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import EditIcon from '@material-ui/icons/Edit';
-import IconButton from '@material-ui/core/IconButton';
+import Fab from '@material-ui/core/Fab';
 
 import Name from './Name';
 import FriendRequest from './FriendRequest';
 import ShareButton from './ShareButton';
 import Box from '../../../../utils/3box/index.js';
 import TextInput from '../../../utils/TextInput';
+import Upload from '../../../utils/upload';
 import { DataContext } from '../../../utils/DataProvider';
 
+import profileImg from '../../../../assets/profile.jpg';
 import styles from './ProfileBox.module.css';
 
 const ProfileBox = ({ url }) => {
   const ctx = useContext(DataContext);
 
+  const [image, setImage] = useState(profileImg);
   const [about, setAbout] = useState(null);
+  const [imageRows, setImageRows] = useState([]);
+  const [show, setShow] = useState(false);
+  const [imageHashes, setImageHashes] = useState(null);
 
   useEffect(() => {
     if (ctx.profile.about) {
       setAbout(ctx.profile.about);
     }
   }, [ctx.profile]);
+
+  useEffect(() => {
+    if (imageHashes) {
+      console.log('imageHashes', imageHashes);
+    }
+  }, [imageHashes]);
 
   const updateAbout = () => {
     Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, { about });
@@ -39,17 +51,19 @@ const ProfileBox = ({ url }) => {
   return (
     <Card className={styles['card']} variant="outlined">
       <GridListTile className={styles['tile']}>
-        <CardMedia
-          className={styles['media']}
-          image="https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg"
-        />
+        <CardMedia className={styles['media']} image={image} />
         {ctx.editable ? (
           <GridListTileBar
             titlePosition="top"
             actionIcon={
-              <IconButton className={styles['icon']}>
-                <EditIcon fontSize="large" />
-              </IconButton>
+              <Fab
+                size="medium"
+                color="primary"
+                className={styles['icon']}
+                onClick={() => setShow(true)}
+              >
+                <EditIcon />
+              </Fab>
             }
             actionPosition="left"
             className={styles['title-bar']}
@@ -61,6 +75,14 @@ const ProfileBox = ({ url }) => {
           className={styles['bottom-title-bar']}
         />
       </GridListTile>
+      <Upload
+        show={show}
+        toggle={() => setShow(!show)}
+        imageRows={imageRows}
+        setImageRows={setImageRows}
+        addImageHashes={(_imageHashes) => setImageHashes(_imageHashes)}
+        addImageUrl={(_imageUrl) => setImage(_imageUrl)}
+      />
       <CardContent className={styles['card-content']}>
         <Row>
           <Col md="auto">

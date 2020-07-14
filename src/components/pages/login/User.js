@@ -111,25 +111,14 @@ const User = ({ history }) => {
               <hr />
               <Row>
                 <Col md="auto">
-                  {error ? (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      startIcon={<PersonIcon />}
-                      disabled
-                    >
-                      Register
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      startIcon={<PersonIcon />}
-                      onClick={register}
-                    >
-                      Register
-                    </Button>
-                  )}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<PersonIcon />}
+                    disabled={error}
+                  >
+                    Register
+                  </Button>
                 </Col>
               </Row>
             </CardContent>

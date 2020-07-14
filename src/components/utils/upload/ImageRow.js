@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { MDBIcon } from 'mdbreact';
 import { Row, Col, ProgressBar } from 'react-bootstrap';
 
-import Uploader from '../../../../../utils/file';
-import Image from '../../../../../utils/image';
+import Uploader from '../../../utils/file';
+import Image from '../../../utils/image';
 
 import styles from './ImageRow.module.css';
 
-import { app } from '../../../../../../config.json';
+import { app } from '../../../../config.json';
 
 const ImageRow = ({
   file,
@@ -17,6 +17,7 @@ const ImageRow = ({
   setSize,
   addImageUrl,
   addImageHashes,
+  resize,
 }) => {
   const chunkSize = app.chunk.size;
 
@@ -45,8 +46,9 @@ const ImageRow = ({
         { type: file.type }
       );
       const url = URL.createObjectURL(blob);
-      const resizedUrl = await Image.resize(url, 100);
+      const resizedUrl = await Image.resize(url, resize);
       addImageUrl(resizedUrl);
+
       addImageHashes(results.map((e) => e.hash));
 
       setProgress(100);
@@ -61,7 +63,7 @@ const ImageRow = ({
       <Col md="2">
         <MDBIcon icon="file-alt" className={styles['file-upload-icon']} />
       </Col>
-      <Col md="10" className="pl-0">
+      <Col md="10" className="pl-0 align-self-center">
         <Row>
           <Col md="9">
             <div className={styles['file-upload-progress-file-name']}>

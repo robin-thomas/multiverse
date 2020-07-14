@@ -20,7 +20,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Content from '../../../app/Content';
 import ImagePreview from './ImagePreview';
 import Visibility from './Visibility';
-import Upload from './upload';
+import Upload from '../../../utils/upload';
 import { DataContext } from '../../../utils/DataProvider';
 
 import 'froala-editor/css/froala_style.min.css';
@@ -130,6 +130,8 @@ const Post = ({ history }) => {
                       addImageHashes={(_imageHashes) =>
                         setImageHashes((_hashes) => [..._hashes, _imageHashes])
                       }
+                      multiple={true}
+                      resize={100}
                     />
                   </CardActions>
                 </Col>

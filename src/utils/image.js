@@ -6,7 +6,7 @@ const Image = {
         const c = document.createElement('canvas');
         const ctx = c.getContext('2d');
 
-        const scale = maxWidth / img.width;
+        const scale = !maxWidth ? 1 : maxWidth / img.width;
         c.width = img.width * scale;
         c.height = img.height * scale;
 
