@@ -1,5 +1,5 @@
 const Image = {
-  resize: (src, maxWidth) => {
+  resize: (src, maxWidth = null) => {
     return new Promise((resolve, reject) => {
       const img = document.createElement('img');
       img.onload = () => {

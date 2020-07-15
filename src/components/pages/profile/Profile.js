@@ -33,6 +33,9 @@ const Profile = ({ history }) => {
   useEffect(() => {
     const fn = async () => {
       if (ctx.address !== address) {
+        // on backdrop.
+        setBackdropOpen(true);
+
         const data = await Box.getAllPublic(address);
         console.log('data', data);
 
@@ -88,7 +91,10 @@ const Profile = ({ history }) => {
       <Row style={{ height: '100vh' }}>
         <Col md={{ span: 3, offset: 1 }} className="align-self-center">
           {isValidProfile() ? (
-            <ProfileBox url={`${app.url}/profile/${address}`} />
+            <ProfileBox
+              url={`${app.url}/profile/${address}`}
+              offBackdrop={() => setBackdropOpen(false)}
+            />
           ) : null}
         </Col>
         <Col md="7" className="mr-auto">

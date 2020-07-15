@@ -1,18 +1,18 @@
 const uploader = async (file, chunk) => {
-  const chunker = (offset) => {
+  const chunker = (offset, index) => {
     return new Promise((resolve, reject) => {
       const _chunk = file.slice(offset, offset + chunk.size);
 
       const _reader = new window.FileReader();
       _reader.onload = (e) =>
-        chunk.callback(e.target.result, _chunk.size).then(resolve);
+        chunk.callback(e.target.result, _chunk.size, index).then(resolve);
       _reader.readAsArrayBuffer(_chunk);
     });
   };
 
   const promises = Array.from(
     Array(Math.ceil(file.size / chunk.size)),
-    (_, i) => chunker(i * chunk.size)
+    (_, i) => chunker(i * chunk.size, i)
   );
 
   return await Promise.all(promises);

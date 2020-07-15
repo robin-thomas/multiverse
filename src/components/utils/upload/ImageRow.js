@@ -5,19 +5,20 @@ import { Row, Col, ProgressBar } from 'react-bootstrap';
 
 import Uploader from '../../../utils/file';
 import Image from '../../../utils/image';
+import Bucket from '../../../utils/bucket';
 
 import styles from './ImageRow.module.css';
 
 import { app } from '../../../../config.json';
 
 const ImageRow = ({
-  file,
-  name,
-  size,
+  item,
   setSize,
   addImageUrl,
   addImageHashes,
   resize,
+  bucketKey,
+  filePath,
 }) => {
   const chunkSize = app.chunk.size;
 
@@ -29,27 +30,30 @@ const ImageRow = ({
     const fn = async () => {
       setStatus('Uploading');
 
-      const results = await Uploader(file, {
+      const results = await Uploader(item.file, {
         size: chunkSize,
-        callback: async (chunk, readSize) => {
+        callback: async (chunk, readSize, index) => {
           setSize(readSize);
-          setProgress((_progress) => _progress + 100 * (readSize / file.size));
+          setProgress(
+            (_progress) => _progress + 100 * (readSize / item.file.size)
+          );
 
-          // TODO: upload to IPFS and get the hash.
+          const key = `${filePath}_${item.file.type}_${index}`;
+          await Bucket.upload(bucketKey, key, chunk);
 
-          return { chunk, hash: Math.random().toString(36) };
+          return { chunk, path: key };
         },
       });
 
       const blob = new Blob(
         results.map((e) => e.chunk),
-        { type: file.type }
+        { type: item.file.type }
       );
       const url = URL.createObjectURL(blob);
       const resizedUrl = await Image.resize(url, resize);
       addImageUrl(resizedUrl);
 
-      addImageHashes(results.map((e) => e.hash));
+      addImageHashes(results.map((e) => e.path));
 
       setProgress(100);
       setStatus('Completed');
@@ -67,7 +71,7 @@ const ImageRow = ({
         <Row>
           <Col md="9">
             <div className={styles['file-upload-progress-file-name']}>
-              <b>{name}</b>
+              <b>{item.name}</b>
             </div>
           </Col>
           <Col md="3" className="text-right">
@@ -82,7 +86,7 @@ const ImageRow = ({
         </Row>
         <Row>
           <Col md="5">
-            <div className={styles['file-upload-size']}>{size}</div>
+            <div className={styles['file-upload-size']}>{item.size}</div>
           </Col>
           <Col md="7" className="text-right">
             <div className={styles['file-upload-status']}>{status}</div>

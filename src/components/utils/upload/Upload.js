@@ -29,6 +29,8 @@ const Upload = ({
   setUploaded,
   addImageHashes,
   resize,
+  bucketKey,
+  filePath,
 }) => {
   const hiddenFileInput = useRef(null);
   const simpleBar = useRef(null);
@@ -106,15 +108,15 @@ const Upload = ({
                     imageRows.map((item, index) => (
                       <ImageRow
                         key={item.name}
-                        file={item.file}
-                        name={item.name}
-                        size={item.size}
+                        item={item}
                         setSize={(newSize) =>
                           setReadSize((_readSize) => _readSize + newSize)
                         }
                         addImageUrl={addImageUrl}
                         addImageHashes={addImageHashes}
                         resize={resize}
+                        bucketKey={bucketKey}
+                        filePath={filePath}
                       />
                     ))
                   ) : (

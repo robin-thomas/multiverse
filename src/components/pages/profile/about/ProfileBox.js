@@ -18,15 +18,20 @@ import ShareButton from './ShareButton';
 import Box from '../../../../utils/3box/index.js';
 import TextInput from '../../../utils/TextInput';
 import Upload from '../../../utils/upload';
+import Bucket from '../../../../utils/bucket';
+import Image from '../../../../utils/image';
 import { DataContext } from '../../../utils/DataProvider';
+import { str2ab } from '../../../../utils/arraybuffer';
 
 import profileImg from '../../../../assets/profile.jpg';
 import styles from './ProfileBox.module.css';
 
-const ProfileBox = ({ url }) => {
+import { textile } from '../../../../../config.json';
+
+const ProfileBox = ({ url, offBackdrop }) => {
   const ctx = useContext(DataContext);
 
-  const [image, setImage] = useState(profileImg);
+  const [image, setImage] = useState(null);
   const [about, setAbout] = useState(null);
   const [imageRows, setImageRows] = useState([]);
   const [show, setShow] = useState(false);
@@ -35,12 +40,41 @@ const ProfileBox = ({ url }) => {
   useEffect(() => {
     if (ctx.profile.about) {
       setAbout(ctx.profile.about);
+
+      if (ctx.profile.profilePic) {
+        const matches = ctx.profile.profilePic[0].match(
+          /(.*)_image\/(.*)_[0-9]+$/
+        );
+        const type = `image/${matches[2]}`;
+
+        Promise.all(
+          ctx.profile.profilePic.map((path) =>
+            Bucket.download(textile.buckets.profile.bucket, path)
+          )
+        ).then((chunks) => {
+          const blob = new Blob(chunks, { type });
+
+          const url = URL.createObjectURL(blob);
+          Image.resize(url, null)
+            .then(setImage)
+            .catch(console.error)
+            .finally(() => offBackdrop());
+        });
+      } else {
+        setImage(profileImg);
+        offBackdrop();
+      }
     }
   }, [ctx.profile]);
 
   useEffect(() => {
     if (imageHashes) {
       console.log('imageHashes', imageHashes);
+
+      // Store it in 3box public profile.
+      Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, {
+        profilePic: imageHashes,
+      });
     }
   }, [imageHashes]);
 
@@ -82,6 +116,8 @@ const ProfileBox = ({ url }) => {
         setImageRows={setImageRows}
         addImageHashes={(_imageHashes) => setImageHashes(_imageHashes)}
         addImageUrl={(_imageUrl) => setImage(_imageUrl)}
+        bucketKey={ctx.bucketKeys.profilePic}
+        filePath={textile.buckets.profile.filePaths.profilePic}
       />
       <CardContent className={styles['card-content']}>
         <Row>

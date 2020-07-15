@@ -8,9 +8,12 @@ import Link from '@material-ui/core/Link';
 import Page from './Page';
 import { DataContext } from '../../utils/DataProvider';
 
+import Bucket from '../../../utils/bucket';
 import Box from '../../../utils/3box/index.js';
 
 import styles from './Page.module.css';
+
+import { textile } from '../../../../config.json';
 
 const LoginPrompt = () => (
   <Alert severity="info" className={styles['alert']}>
@@ -41,8 +44,15 @@ const Space = ({ setStage }) => {
     const fn = async () => {
       // Setup the 3box space.
       try {
-        await Box.getAll(ctx.address);
+        const [bucketKey] = await Promise.all([
+          Bucket.getKey(textile.buckets.profile.bucket),
+          Box.getAll(ctx.address),
+        ]);
         console.log('data', Box.storage);
+
+        ctx.setBucketKeys((_bucketKeys) => {
+          return { ..._bucketKeys, profilePic: bucketKey };
+        });
 
         let keypair = Box.get(
           Box.DATASTORE_KEY_PROFILE_PRIVATE,

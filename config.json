@@ -14,5 +14,16 @@
   },
   "threebox": {
     "flushInterval": 60000
+  },
+  "textile": {
+    "key": "bhdqume4leb73sw5qantvstvpme",
+    "buckets": {
+      "profile": {
+        "bucket": "multiverse-public",
+        "filePaths": {
+          "profilePic": "profile-pic"
+        }
+      }
+    }
   }
 }

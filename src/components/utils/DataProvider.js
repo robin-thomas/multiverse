@@ -6,6 +6,7 @@ const DataProvider = (props) => {
   const [profile, setProfile] = useState({});
   const [address, setAddress] = useState(null);
   const [editable, setEditable] = useState(false);
+  const [bucketKeys, setBucketKeys] = useState({});
   const [friendRequests, setFriendRequests] = useState([]);
   const [profilePrivate, setProfilePrivate] = useState({});
 
@@ -18,6 +19,8 @@ const DataProvider = (props) => {
         setAddress,
         editable,
         setEditable,
+        bucketKeys,
+        setBucketKeys,
         friendRequests,
         setFriendRequests,
         profilePrivate,
