@@ -21,7 +21,6 @@ import Upload from '../../../utils/upload';
 import Bucket from '../../../../utils/bucket';
 import Image from '../../../../utils/image';
 import { DataContext } from '../../../utils/DataProvider';
-import { str2ab } from '../../../../utils/arraybuffer';
 
 import profileImg from '../../../../assets/profile.jpg';
 import styles from './ProfileBox.module.css';

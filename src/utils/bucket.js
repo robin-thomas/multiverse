@@ -1,4 +1,4 @@
-import { Buckets, withKeyInfo } from '@textile/hub';
+import { Buckets } from '@textile/hub';
 import { Libp2pCryptoIdentity } from '@textile/threads-core';
 
 import { textile } from '../../config.json';

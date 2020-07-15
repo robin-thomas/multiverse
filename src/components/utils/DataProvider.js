@@ -9,6 +9,7 @@ const DataProvider = (props) => {
   const [bucketKeys, setBucketKeys] = useState({});
   const [friendRequests, setFriendRequests] = useState([]);
   const [profilePrivate, setProfilePrivate] = useState({});
+  const [friendRequestsSent, setFriendRequestsSent] = useState([]);
 
   return (
     <DataContext.Provider
@@ -25,6 +26,8 @@ const DataProvider = (props) => {
         setFriendRequests,
         profilePrivate,
         setProfilePrivate,
+        friendRequestsSent,
+        setFriendRequestsSent,
       }}
     >
       {props.children}

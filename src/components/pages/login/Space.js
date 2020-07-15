@@ -79,9 +79,17 @@ const Space = ({ setStage }) => {
           );
         }
 
-        // get all pending friend requests.
-        const requests = await Box.message.request.getAll(ctx.address);
+        const blocked = Box.get(Box.DATASTORE_KEY_PROFILE_PRIVATE, 'blocked');
+
+        // get all pending friend requests (the ones sent to me)
+        // get all completed friend requests (the ones I sent)
+        const [requests, responses] = await Promise.all([
+          Box.message.request.getAll(ctx.address, blocked ? blocked : []),
+          Box.message.response.getAll(ctx.address),
+        ]);
+
         ctx.setFriendRequests(requests);
+        ctx.setFriendRequestsSent(responses);
 
         if (!Box.get(Box.DATASTORE_KEY_PROFILE_PUBLIC, 'username')) {
           setStage(2);

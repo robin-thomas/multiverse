@@ -1,33 +1,33 @@
 import React, { useEffect, useState, useContext } from 'react';
 
 import { Row, Col, ListGroupItem } from 'react-bootstrap';
-import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import { DataContext } from '../../utils/DataProvider';
-import FriendRequest from './FriendRequest';
+import Notification from './Notification';
 import Alert from './Alert';
 
-const FriendRequests = ({ setBackdropOpen }) => {
+const Notifications = ({ setBackdropOpen }) => {
   const ctx = useContext(DataContext);
 
   const [count, setCount] = useState(0);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setCount(ctx.friendRequests.length);
+    setCount(ctx.friendRequestsSent.length);
   });
 
   return (
     <Alert
-      title="Friend Requests"
+      title="Notifications"
       count={count}
       open={open}
       setOpen={setOpen}
-      icon={<PermContactCalendarIcon fontSize="large" />}
+      icon={<NotificationsIcon fontSize="large" />}
     >
-      {ctx.friendRequests.length > 0 ? (
-        ctx.friendRequests.map((item, index) => (
-          <FriendRequest
+      {ctx.friendRequestsSent.length > 0 ? (
+        ctx.friendRequestsSent.map((item, index) => (
+          <Notification
             key={index}
             message={item}
             setOpen={setOpen}
@@ -45,4 +45,4 @@ const FriendRequests = ({ setBackdropOpen }) => {
   );
 };
 
-export default FriendRequests;
+export default Notifications;

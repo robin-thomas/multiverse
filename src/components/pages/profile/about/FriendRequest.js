@@ -53,19 +53,34 @@ const FriendRequest = () => {
 
     // create & send friend request.
     Box.set(Box.DATASTORE_PENDING_SENT_REQUESTS, {
-      key: ctx.profile.address,
-      value: 1,
+      [ctx.profile.address]: 1,
     });
 
-    await Box.message.request.post(
-      {
-        pubKey: '', // TODO.
-        username: ctx.profile[Box.DATASTORE_KEY_USERNAME],
-        address: ctx.address,
-        friend: ctx.profile.address,
-      },
-      { address: ctx.address }
-    );
+    const message = {
+      username: ctx.profile.username,
+      address: ctx.address,
+      friend: ctx.profile.address,
+    };
+
+    // Add it to notifications.
+    ctx.setFriendRequestsSent((_sent) => {
+      return [
+        ..._sent,
+        {
+          ...message,
+          status: 'pending',
+          timestamp: new Date().getTime(),
+        },
+      ];
+    });
+
+    await Box.message.request.post({
+      pubKey: Box.get(
+        Box.DATASTORE_KEY_PROFILE_PRIVATE,
+        'keys.keypair.publicKey'
+      ),
+      ...message,
+    });
 
     setBackdropOpen(false);
   };

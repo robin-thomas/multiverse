@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import FriendRequests from './FriendRequests';
+import Notifications from './Notifications';
 import Box from '../../../utils/3box/index.js';
 import Content from '../../app/Content';
 import ProfileBox from './about/ProfileBox';
@@ -99,9 +100,12 @@ const Profile = ({ history }) => {
         </Col>
         <Col md="7" className="mr-auto">
           <EmptyRow rows={2} />
-          {ctx.editable ? (
+          {ctx.address ? (
             <Row>
-              <Col className="ml-auto" md="auto">
+              <Col md="auto" className="ml-auto">
+                <Notifications setBackdropOpen={setBackdropOpen} />
+              </Col>
+              <Col md="auto" className="pl-0">
                 <FriendRequests setBackdropOpen={setBackdropOpen} />
               </Col>
               <Col md="auto" className="pl-0">
@@ -114,7 +118,7 @@ const Profile = ({ history }) => {
             </Row>
           ) : null}
           <EmptyRow rows={1} />
-          {ctx.editable ? (
+          {ctx.address ? (
             <Row>
               <Col md="auto" className="ml-auto">
                 <Button

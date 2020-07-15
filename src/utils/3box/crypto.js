@@ -83,15 +83,18 @@ const Crypto = {
       const encoder = new TextEncoder();
       const encoded = encoder.encode(msg);
 
-      return tweetnacl.box(
+      const encrypted = tweetnacl.box(
         encoded,
         nonce,
         keypair.publicKey,
         keypair.secretKey
       );
+
+      return new Nonce(encrypted).toString();
     },
 
     decrypt: (msg, nonce, keypair) => {
+      msg = Nonce.fromString(msg);
       nonce = Nonce.fromString(nonce);
       keypair = Keypair.fromString(keypair);
 

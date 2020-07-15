@@ -116,6 +116,7 @@ const User = ({ history }) => {
                     color="primary"
                     startIcon={<PersonIcon />}
                     disabled={error}
+                    onClick={register}
                   >
                     Register
                   </Button>
