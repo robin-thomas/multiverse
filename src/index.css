@@ -23,6 +23,10 @@ body {
   width: 100%;
 }
 
+#audio .progress > .progress-bar {
+  background-color: #3f51b5 !important;
+}
+
 ::-webkit-scrollbar {
   width: 0px;
   background: transparent;
