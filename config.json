@@ -1,7 +1,6 @@
 {
   "app": {
     "name": "multiverse",
-    "url": "https://localhost:3000",
     "chunk": {
       "size": 262144
     }
@@ -13,7 +12,7 @@
     "gateway": "https://ipfs.infura.io/ipfs/"
   },
   "threebox": {
-    "flushInterval": 60000
+    "flushInterval": 30000
   },
   "textile": {
     "key": "bhdqume4leb73sw5qantvstvpme",

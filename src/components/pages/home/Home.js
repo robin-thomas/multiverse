@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 
 import { MDBBtn, MDBIcon } from 'mdbreact';
 import { Row, Col } from 'react-bootstrap';
@@ -7,8 +8,10 @@ import ReactFullpage from '@fullpage/react-fullpage';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 
+import queryString from 'query-string';
+
 import Circle from './Circle';
-import Header from './Header';
+import { HomeHeader } from './Header';
 import EmptyRow from '../../utils/EmptyRow';
 
 import styles from './Home.module.css';
@@ -16,8 +19,9 @@ import styles from './Home.module.css';
 const Home = () => (
   <div className="section">
     <Row>
-      <Col md={{ span: 4, offset: 2 }} className={styles['home-first-text']}>
-        Decentralized Social Network.
+      <Col md={{ span: 5, offset: 2 }} className={styles['home-first-text']}>
+        Decentralized <br />
+        Social Network.
       </Col>
       <Divider light orientation="vertical" flexItem />
       <Col className={styles['home-desc']}>
@@ -94,12 +98,17 @@ const Finish = () => (
   </div>
 );
 
-const Page = () => {
+const Page = ({ history, location }) => {
   const [button, setButton] = useState('primary');
+
+  const query = queryString.parse(location.search);
+  if (query.profile) {
+    history.push(`/profile/${query.profile}`);
+  }
 
   return (
     <>
-      <Header button={button} />
+      <HomeHeader button={button} />
       <ReactFullpage
         navigation
         sectionsColor={['#191A1E', '#8e24aa', '#0798ec']}
@@ -129,4 +138,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default withRouter(Page);

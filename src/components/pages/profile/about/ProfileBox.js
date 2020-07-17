@@ -39,30 +39,30 @@ const ProfileBox = ({ url, offBackdrop }) => {
   useEffect(() => {
     if (ctx.profile.about) {
       setAbout(ctx.profile.about);
+    }
 
-      if (ctx.profile.profilePic) {
-        const matches = ctx.profile.profilePic[0].match(
-          /(.*)_image\/(.*)_[0-9]+$/
-        );
-        const type = `image/${matches[2]}`;
+    if (ctx.profile.profilePic) {
+      const matches = ctx.profile.profilePic[0].match(
+        /(.*)_image\/(.*)_[0-9]+$/
+      );
+      const type = `image/${matches[2]}`;
 
-        Promise.all(
-          ctx.profile.profilePic.map((path) =>
-            Bucket.download(textile.buckets.profile.bucket, path)
-          )
-        ).then((chunks) => {
-          const blob = new Blob(chunks, { type });
+      Promise.all(
+        ctx.profile.profilePic.map((path) =>
+          Bucket.download(textile.buckets.profile.bucket, path)
+        )
+      ).then((chunks) => {
+        const blob = new Blob(chunks, { type });
 
-          const url = URL.createObjectURL(blob);
-          Image.resize(url, null)
-            .then(setImage)
-            .catch(console.error)
-            .finally(() => offBackdrop());
-        });
-      } else {
-        setImage(profileImg);
-        offBackdrop();
-      }
+        const url = URL.createObjectURL(blob);
+        Image.resize(url, null)
+          .then(setImage)
+          .catch(console.error)
+          .finally(() => offBackdrop());
+      });
+    } else {
+      setImage(profileImg);
+      offBackdrop();
     }
   }, [ctx.profile]);
 

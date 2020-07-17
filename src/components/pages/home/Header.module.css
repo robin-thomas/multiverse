@@ -4,6 +4,10 @@
   z-index: 2;
 }
 
+.header {
+  background: #191a1e !important;
+}
+
 .home-logo {
   font-family: 'Grand Hotel', cursive;
   color: white !important;

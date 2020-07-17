@@ -24,10 +24,16 @@ const LoginPrompt = () => (
       continue (if first time). If you don't have a 3Box account, one shall be
       created for you.
     </p>
+    <p>You uploaded files shall be stored on Textile buckets.</p>
     <hr />
     <p>
       Learn more about 3Box{' '}
       <Link href="https://3box.io/" target="_blank" color="inherit">
+        <strong>here</strong>
+      </Link>
+      <br />
+      Learn more about Textile{' '}
+      <Link href="https://textile.io/" target="_blank" color="inherit">
         <strong>here</strong>
       </Link>
     </p>
