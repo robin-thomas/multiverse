@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { withRouter } from 'react-router';
 import { useParams } from 'react-router-dom';
 
@@ -102,7 +102,7 @@ const Profile = ({ history }) => {
 
   return (
     <Content>
-      <EmptyRow rows={3} />
+      <EmptyRow rows={2} />
       <Row style={{ height: '100vh' }}>
         <Col md={{ span: 3, offset: 1 }} className="">
           {isValidProfile() ? (

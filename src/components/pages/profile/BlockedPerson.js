@@ -1,22 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Row, Col, ListGroupItem } from 'react-bootstrap';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Avatar from '@material-ui/core/Avatar';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import { green } from '@material-ui/core/colors';
 
-import { DataContext } from '../../utils/DataProvider';
 import Box from '../../../utils/3box/index.js';
 
 import styles from './Alert.module.css';
 
 const BlockedPerson = ({ message, setOpen, onClick }) => {
-  const ctx = useContext(DataContext);
-
   const remove = async () => {
     if (window.confirm('Are you sure you want to remoove the block?')) {
       Box.message.response.deleteById(message.id);

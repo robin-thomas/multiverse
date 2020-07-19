@@ -3,9 +3,10 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Row, Col, ListGroupItem } from 'react-bootstrap';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
-import { DataContext } from '../../utils/DataProvider';
-import Notification from './Notification';
 import Alert from './Alert';
+import Notification from './Notification';
+import Bucket from '../../../utils/bucket';
+import { DataContext } from '../../utils/DataProvider';
 
 const Notifications = () => {
   const ctx = useContext(DataContext);
@@ -14,6 +15,7 @@ const Notifications = () => {
 
   const [head, setHead] = useState(null);
   const [count, setCount] = useState(0);
+  const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -25,8 +27,31 @@ const Notifications = () => {
       setHead(ctx.friendRequestsSent[index].id);
     }
 
+    setItems(ctx.friendRequestsSent);
+
     if (simpleBar.current) {
       simpleBar.current.recalculate();
+    }
+
+    const load = async () => {
+      let _items = [];
+      for (const item of ctx.friendRequestsSent) {
+        let imgUrl = null;
+        if (item.friend.profilePic) {
+          const type = item.friend.profilePic[0].match(
+            /(.*)_image\/(.*)_[0-9]+$/
+          )[2];
+          imgUrl = await Bucket.loadImage(item.friend.profilePic, type, 100);
+        }
+
+        _items.push({ ...item, imgUrl });
+      }
+
+      setItems(_items);
+    };
+
+    if (ctx.friendRequestsSent.length > 0) {
+      load();
     }
   }, [ctx.friendRequestsSent]);
 
@@ -40,8 +65,8 @@ const Notifications = () => {
       simpleBar={simpleBar}
       icon={<NotificationsIcon fontSize="large" />}
     >
-      {ctx.friendRequestsSent.length > 0 ? (
-        ctx.friendRequestsSent.map((item, index) => (
+      {items.length > 0 ? (
+        items.map((item, index) => (
           <Notification key={index} message={item} setOpen={setOpen} />
         ))
       ) : (

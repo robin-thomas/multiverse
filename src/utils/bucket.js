@@ -1,6 +1,8 @@
 import { Buckets } from '@textile/hub';
 import { Libp2pCryptoIdentity } from '@textile/threads-core';
 
+import Image from './image';
+
 import { textile } from '../../config.json';
 
 const Bucket = {
@@ -66,6 +68,15 @@ const Bucket = {
     }
 
     return result;
+  },
+
+  loadImage: async (paths, type, resize = null) => {
+    const promises = paths.map((path) =>
+      Bucket.download(textile.buckets.profile.bucket, path)
+    );
+    const chunks = await Promise.all(promises);
+    const url = URL.createObjectURL(new Blob(chunks, { type }));
+    return await Image.resize(url, resize);
   },
 };
 

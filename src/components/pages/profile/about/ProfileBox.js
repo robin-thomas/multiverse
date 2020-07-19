@@ -19,7 +19,6 @@ import Box from '../../../../utils/3box/index.js';
 import TextInput from '../../../utils/TextInput';
 import Upload from '../../../utils/upload';
 import Bucket from '../../../../utils/bucket';
-import Image from '../../../../utils/image';
 import { DataContext } from '../../../utils/DataProvider';
 
 import profileImg from '../../../../assets/profile.jpg';
@@ -37,9 +36,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
   const [imageHashes, setImageHashes] = useState(null);
 
   useEffect(() => {
-    if (ctx.profile.about) {
-      setAbout(ctx.profile.about);
-    }
+    setAbout(ctx.profile.about ? ctx.profile.about : '');
 
     if (ctx.profile.profilePic) {
       const matches = ctx.profile.profilePic[0].match(
@@ -47,19 +44,10 @@ const ProfileBox = ({ url, offBackdrop }) => {
       );
       const type = `image/${matches[2]}`;
 
-      Promise.all(
-        ctx.profile.profilePic.map((path) =>
-          Bucket.download(textile.buckets.profile.bucket, path)
-        )
-      ).then((chunks) => {
-        const blob = new Blob(chunks, { type });
-
-        const url = URL.createObjectURL(blob);
-        Image.resize(url, null)
-          .then(setImage)
-          .catch(console.error)
-          .finally(() => offBackdrop());
-      });
+      Bucket.loadImage(ctx.profile.profilePic, type, null)
+        .then(setImage)
+        .catch(console.error)
+        .finally(() => offBackdrop());
     } else {
       setImage(profileImg);
       offBackdrop();

@@ -15,7 +15,7 @@ const Notification = ({ message, setOpen }) => {
         <Col md="auto" className="pr-0">
           <Avatar
             alt={message.friend.username}
-            src="/static/images/avatar/1.jpg"
+            src={message.friend.imgUrl ? message.friend.imgUrl : null}
           />
         </Col>
         <Col className="align-self-center">

@@ -7,8 +7,10 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Box from '../../../../utils/3box';
+import Bucket from '../../../../utils/bucket';
 import Ethers from '../../../../utils/ethers';
 import SearchBox from './Box';
 import SearchItems from '../FriendRequest';
@@ -61,12 +63,24 @@ const Search = ({ history }) => {
         'username',
         data
       );
+      const profilePic = Box.get(
+        Box.DATASTORE_KEY_PROFILE_PUBLIC,
+        'profilePic',
+        data
+      );
 
       if (username) {
+        let imgUrl = null;
+        if (profilePic) {
+          const type = profilePic[0].match(/(.*)_image\/(.*)_[0-9]+$/)[2];
+          imgUrl = await Bucket.loadImage(profilePic, type, 100);
+        }
+
         setItems([
           {
             username,
             address: value,
+            imgUrl,
           },
         ]);
 
@@ -93,12 +107,7 @@ const Search = ({ history }) => {
             <SearchItems
               key={index}
               search={true}
-              message={{
-                me: {
-                  username: item.username,
-                  address: item.address,
-                },
-              }}
+              message={{ me: item }}
               onClick={() => {
                 history.push(`/profile/${item.address}`);
               }}
@@ -118,7 +127,11 @@ const Search = ({ history }) => {
         onClick={search}
         disabled={disabled}
       >
-        <SearchIcon />
+        {disabled && value ? (
+          <CircularProgress style={{ color: 'white' }} size={15} />
+        ) : (
+          <SearchIcon />
+        )}
       </IconButton>
     </Paper>
   );

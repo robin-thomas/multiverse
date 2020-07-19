@@ -74,7 +74,10 @@ const FriendRequest = ({ search, message, setOpen, onClick }) => {
     <ListGroupItem onClick={onClick ? onClick : () => {}}>
       <Row>
         <Col md="auto" className="pr-0">
-          <Avatar alt={message.me.username} src="/static/images/avatar/1.jpg" />
+          <Avatar
+            alt={message.me.username}
+            src={message.me.imgUrl ? message.me.imgUrl : null}
+          />
         </Col>
         <Col md="6" className="align-self-center pr-0">
           <Row noGutters={true}>
