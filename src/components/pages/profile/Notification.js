@@ -4,23 +4,28 @@ import { Link } from 'react-router-dom';
 import { Row, Col, ListGroupItem } from 'react-bootstrap';
 import Avatar from '@material-ui/core/Avatar';
 
+import Timer from '../../utils/Timer';
+
 import styles from './Alert.module.css';
 
-const Notification = ({ message, setOpen, setBackdropOpen }) => {
+const Notification = ({ message, setOpen }) => {
   return (
     <ListGroupItem>
       <Row>
         <Col md="auto" className="pr-0">
-          <Avatar alt={message.username} src="/static/images/avatar/1.jpg" />
+          <Avatar
+            alt={message.friend.username}
+            src="/static/images/avatar/1.jpg"
+          />
         </Col>
         <Col className="align-self-center">
           <Row noGutters={true}>
             <Col>
               <Link
-                to={`/profile/${message.address}`}
+                to={`/profile/${message.friend.address}`}
                 className={styles['name']}
               >
-                @{message.username}
+                @{message.friend.username}
               </Link>
             </Col>
           </Row>
@@ -38,6 +43,11 @@ const Notification = ({ message, setOpen, setBackdropOpen }) => {
             )}
           </Row>
         </Col>
+        <Row>
+          <Col className={styles['send-request']}>
+            <Timer time={message.timestamp} />
+          </Col>
+        </Row>
       </Row>
     </ListGroupItem>
   );

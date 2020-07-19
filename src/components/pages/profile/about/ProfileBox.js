@@ -123,7 +123,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
           <Col md="auto">
             <Avatar alt="username" src="/static/images/avatar/1.jpg" />
           </Col>
-          <Col md="8">
+          <Col md="7">
             <Typography variant="button" display="block" gutterBottom>
               About
             </Typography>
@@ -137,10 +137,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
               />
             </Typography>
           </Col>
-        </Row>
-        <hr />
-        <Row>
-          <Col>
+          <Col md="auto" className="ml-auto">
             <ShareButton url={url} />
           </Col>
         </Row>

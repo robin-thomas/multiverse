@@ -8,8 +8,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 
+import EmptyRow from '../../utils/EmptyRow';
 import Search from '../profile/search';
 import FriendRequests from '../profile/FriendRequests';
+import BlockedPersons from '../profile/BlockedPersons';
 import Notifications from '../profile/Notifications';
 import { DataContext } from '../../utils/DataProvider';
 
@@ -17,7 +19,7 @@ import { app } from '../../../../config.json';
 
 import styles from './Header.module.css';
 
-const Header = ({ history, setBackdropOpen }) => {
+const Header = ({ history }) => {
   const ctx = useContext(DataContext);
 
   const logout = () => {
@@ -35,20 +37,29 @@ const Header = ({ history, setBackdropOpen }) => {
 
   return (
     <div className={styles['header']}>
+      <EmptyRow />
       <Row>
-        <Col md={{ span: 2, offset: 1 }} className={styles['home-logo']}>
-          {app.name}
-        </Col>
-        {!ctx.address ? (
+        {ctx.address ? (
           <>
+            <Col md={{ span: 2, offset: 1 }}>
+              <Link
+                to={`/profile/${ctx.address}`}
+                className={styles['home-logo']}
+              >
+                {app.name}
+              </Link>
+            </Col>
             <Col md="5" className="ml-auto align-self-center">
               <Search />
             </Col>
             <Col md="auto" className="ml-auto align-self-center">
-              <Notifications setBackdropOpen={setBackdropOpen} />
+              <Notifications />
             </Col>
             <Col md="auto" className="pl-0 align-self-center">
-              <FriendRequests setBackdropOpen={setBackdropOpen} />
+              <FriendRequests />
+            </Col>
+            <Col md="auto" className="pl-0 align-self-center">
+              <BlockedPersons />
             </Col>
             <Col md="auto" className="pl-0 align-self-center">
               <Tooltip title="Logout">
@@ -58,7 +69,13 @@ const Header = ({ history, setBackdropOpen }) => {
               </Tooltip>
             </Col>
           </>
-        ) : null}
+        ) : (
+          <Col md={{ span: 2, offset: 1 }}>
+            <Link to="/" className={styles['home-logo']}>
+              {app.name}
+            </Link>
+          </Col>
+        )}
         <Col md="1">&nbsp;</Col>
       </Row>
     </div>
@@ -68,8 +85,10 @@ const Header = ({ history, setBackdropOpen }) => {
 const HomeHeader = ({ button }) => (
   <Container fluid={true} className={styles['home']}>
     <Row>
-      <Col md={{ span: 2, offset: 1 }} className={styles['home-logo']}>
-        {app.name}
+      <Col md={{ span: 2, offset: 1 }}>
+        <Link to="/" className={styles['home-logo']}>
+          {app.name}
+        </Link>
       </Col>
       <Col md="auto" className="ml-auto align-self-center">
         <Link to="/login">

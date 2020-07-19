@@ -10,6 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckIcon from '@material-ui/icons/Check';
+import BlockIcon from '@material-ui/icons/Block';
 
 import Box from '../../../../utils/3box/index.js';
 import { DataContext } from '../../../utils/DataProvider';
@@ -26,6 +27,8 @@ const FriendRequest = () => {
   // -1 => loading
   //  0 => no pending
   //  1 => pending
+  //  2 => approved
+  //  3 => blocked
   const [pending, setPending] = useState(-1);
 
   useEffect(() => {
@@ -33,16 +36,39 @@ const FriendRequest = () => {
       setName(ctx.profile.username);
     }
 
-    // Check and see if a friend request is already sent to this user.
-    const _pending = Box.get(Box.DATASTORE_PENDING_SENT_REQUESTS, '');
-    if (_pending) {
-      if (_pending[ctx.profile.address]) {
-        setPending(1);
+    if (ctx.profile.address === ctx.address) {
+      setPending(0);
+    } else {
+      const isFriend = _.has(
+        ctx.profilePrivate,
+        `keys.encryptionKeys.${ctx.profile.address}`
+      );
+      if (isFriend) {
+        setPending(2);
       } else {
-        setPending(0);
+        const isSent = _.has(
+          ctx.profilePrivate,
+          `friendRequests.${ctx.profile.address}`
+        );
+        if (isSent) {
+          console.log(ctx.friendRequestsSent);
+          const response = ctx.friendRequestsSent.find(
+            (e) => e.friend.address === ctx.profile.address
+          );
+
+          if (!response) {
+            setPending(0);
+          } else if (response.status !== 'pending') {
+            setPending(response.status === 'ok' ? 2 : 3);
+          } else {
+            setPending(1);
+          }
+        } else {
+          setPending(0);
+        }
       }
     }
-  }, [ctx.profile]);
+  }, [ctx.profile, ctx.friendRequestsSent, ctx.profilePrivate]);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -52,27 +78,22 @@ const FriendRequest = () => {
     setBackdropOpen(true);
 
     // create & send friend request.
-    Box.set(Box.DATASTORE_PENDING_SENT_REQUESTS, {
-      [ctx.profile.address]: 1,
+    Box.set(Box.DATASTORE_KEY_PROFILE_PRIVATE, {
+      friendRequests: {
+        [ctx.profile.address]: 1,
+      },
     });
 
     const message = {
-      username: ctx.profile.username,
-      address: ctx.address,
-      friend: ctx.profile.address,
+      me: {
+        username: ctx.profilePrivate.username,
+        address: ctx.address,
+      },
+      friend: {
+        username: ctx.profile.username,
+        address: ctx.profile.address,
+      },
     };
-
-    // Add it to notifications.
-    ctx.setFriendRequestsSent((_sent) => {
-      return [
-        ..._sent,
-        {
-          ...message,
-          status: 'pending',
-          timestamp: new Date().getTime(),
-        },
-      ];
-    });
 
     await Box.message.request.post({
       pubKey: Box.get(
@@ -82,6 +103,7 @@ const FriendRequest = () => {
       ...message,
     });
 
+    setPending(1);
     setBackdropOpen(false);
   };
 
@@ -102,16 +124,40 @@ const FriendRequest = () => {
           color="primary"
           className={styles['icon-bottom']}
           disableElevation
-          startIcon={<CheckIcon />}
+          style={{ cursor: 'not-allowed' }}
+          startIcon={<CircularProgress color="inherit" size={15} />}
         >
           Pending Friend
+        </Button>
+      ) : pending === 2 ? (
+        <Button
+          variant="contained"
+          color="primary"
+          className={styles['icon-bottom']}
+          disableElevation
+          startIcon={<CheckIcon />}
+          style={{ cursor: 'not-allowed' }}
+        >
+          Friend
+        </Button>
+      ) : pending === 3 ? (
+        <Button
+          variant="contained"
+          color="primary"
+          className={styles['icon-bottom']}
+          disableElevation
+          startIcon={<BlockIcon />}
+          style={{ cursor: 'not-allowed' }}
+        >
+          Blocked
         </Button>
       ) : null}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Send a friend request?</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {name} will need to confirm that you are friends.
+            <strong>@{name}</strong> will need to confirm that you are friends.
+            Okay?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

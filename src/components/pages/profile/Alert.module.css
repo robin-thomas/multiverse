@@ -10,6 +10,12 @@
   padding: 0 !important;
 }
 
+.simplebar {
+  max-height: 250px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 .name {
   color: black !important;
   font-weight: 600 !important;

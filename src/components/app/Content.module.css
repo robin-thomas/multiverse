@@ -3,3 +3,8 @@
   background: #191a1e !important;
   padding: 0 !important;
 }
+
+.backdrop {
+  z-index: 10000 !important;
+  color: #fff;
+}

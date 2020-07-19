@@ -6,8 +6,6 @@ import _ from 'lodash';
 import { Row, Col } from 'react-bootstrap';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Box from '../../../utils/3box/index.js';
 import Content from '../../app/Content';
@@ -15,21 +13,17 @@ import ProfileBox from './about/ProfileBox';
 import EmptyRow from '../../utils/EmptyRow';
 import { DataContext } from '../../utils/DataProvider';
 
-import styles from './Profile.module.css';
-
 const Profile = ({ history }) => {
   const ctx = useContext(DataContext);
 
   const { address } = useParams();
   const _url = `${window.location.protocol}//${window.location.host}`;
 
-  const [backdropOpen, setBackdropOpen] = useState(false);
-
   useEffect(() => {
     const fn = async () => {
       if (ctx.address !== address) {
         // on backdrop.
-        setBackdropOpen(true);
+        ctx.setBackdropOpen(true);
 
         const data = await Box.getAllPublic(address);
         console.log('data', data);
@@ -49,9 +43,10 @@ const Profile = ({ history }) => {
           ...Box.storage[Box.DATASTORE_KEY_PROFILE_PUBLIC].value,
           address,
         });
-        ctx.setProfilePrivate(
-          Box.storage[Box.DATASTORE_KEY_PROFILE_PRIVATE].value
-        );
+        ctx.setProfilePrivate({
+          ...Box.storage[Box.DATASTORE_KEY_PROFILE_PRIVATE].value,
+          ...Box.storage[Box.DATASTORE_KEY_PROFILE_PUBLIC].value,
+        });
       }
 
       ctx.setEditable(ctx.address === address);
@@ -59,6 +54,43 @@ const Profile = ({ history }) => {
 
     fn();
   }, [address]);
+
+  useEffect(() => {
+    for (const request of ctx.friendRequestsSent) {
+      if (request.status === 'ok') {
+        const encryptionKey = Box.crypto.asymmetric.decrypt(
+          request.encryptedKey,
+          request.nonce,
+          {
+            publicKey: request.pubKey,
+            secretKey: Box.get(
+              Box.DATASTORE_KEY_PROFILE_PRIVATE,
+              'keys.keypair.secretKey'
+            ),
+          }
+        );
+
+        Box.set(Box.DATASTORE_KEY_PROFILE_PRIVATE, {
+          keys: {
+            encryptionKeys: {
+              [request.friend]: encryptionKey,
+            },
+          },
+        });
+      }
+    }
+  }, [ctx.friendRequestsSent]);
+
+  useEffect(() => {
+    console.log('Box.message got modified');
+    if (Box.message && Box.message.setRequestCallback) {
+      Box.message.setRequestCallback(ctx.setFriendRequests);
+    }
+
+    if (Box.message && Box.message.setResponseCallback) {
+      Box.message.setResponseCallback(ctx.setFriendRequestsSent);
+    }
+  }, [ctx.setFriendRequests, ctx.setFriendRequestsSent]);
 
   const isValidProfile = () => {
     return _.has(ctx.profile, 'address');
@@ -70,17 +102,17 @@ const Profile = ({ history }) => {
 
   return (
     <Content>
+      <EmptyRow rows={3} />
       <Row style={{ height: '100vh' }}>
-        <Col md={{ span: 3, offset: 1 }} className="align-self-center">
+        <Col md={{ span: 3, offset: 1 }} className="">
           {isValidProfile() ? (
             <ProfileBox
               url={`${_url}?profile=${address}`}
-              offBackdrop={() => setBackdropOpen(false)}
+              offBackdrop={() => ctx.setBackdropOpen(false)}
             />
           ) : null}
         </Col>
         <Col md="7" className="mr-auto">
-          <EmptyRow rows={3} />
           {ctx.address ? (
             <Row>
               <Col md="auto" className="ml-auto">
@@ -97,9 +129,6 @@ const Profile = ({ history }) => {
           ) : null}
         </Col>
       </Row>
-      <Backdrop className={styles['backdrop']} open={backdropOpen}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
     </Content>
   );
 };

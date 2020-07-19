@@ -12,7 +12,11 @@
     "gateway": "https://ipfs.infura.io/ipfs/"
   },
   "threebox": {
-    "flushInterval": 30000
+    "flushInterval": 30000,
+    "address": {
+      "threadRequest": "/orbitdb/zdpuB2QUWsu1Vv5vr7GfpVNGYZ9FtkHrA6S1HsUAwYpxYv65A/3box.thread.multiverse.multiverse-threadRequest",
+      "threadResponse": "/orbitdb/zdpuAyqPGDWRiGantBqw5FdEe11Mh4M9R45N6Fcapd26VWnV1/3box.thread.multiverse.multiverse-threadResponse"
+    }
   },
   "textile": {
     "key": "bhdqume4leb73sw5qantvstvpme",

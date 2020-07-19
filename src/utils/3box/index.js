@@ -2,8 +2,8 @@ import { openBox, getSpace } from '3box';
 import CryptoJS from 'crypto-js';
 import _ from 'lodash';
 
+import Message from './message';
 import crypto from './crypto';
-import message from './message';
 
 import { app, threebox } from '../../../config.json';
 
@@ -12,6 +12,7 @@ const Box = {
   address: null,
   storage: {},
   changes: {},
+  message: {},
 
   state: {
     PRIVATE: 'private',
@@ -23,8 +24,6 @@ const Box = {
 
   DATASTORE_KEY_PROFILE_PUBLIC: `${app.name}-profilePublic`,
   DATASTORE_KEY_PROFILE_PRIVATE: `${app.name}-profilePrivate`,
-
-  DATASTORE_KEY_PENDING_SENT_REQUESTS: `${app.name}-pendingSentRequests`,
 
   /**
    * create a new 3Box space client
@@ -38,11 +37,10 @@ const Box = {
 
       Box.address = address;
       Box.space = await box.openSpace(app.name);
-      await Box.message.init(Box.space);
+      Box.message = new Message(Box.space, address);
 
       Box.keyMap[Box.DATASTORE_KEY_PROFILE_PUBLIC] = Box.state.PUBLIC;
       Box.keyMap[Box.DATASTORE_KEY_PROFILE_PRIVATE] = Box.state.PRIVATE;
-      Box.keyMap[Box.DATASTORE_KEY_PENDING_SENT_REQUESTS] = Box.state.PUBLIC;
 
       setInterval(Box.flush, threebox.flushInterval);
     }
@@ -175,6 +173,16 @@ const Box = {
       data
     );
 
+    Object.keys(privateData[Box.DATASTORE_KEY_PROFILE_PRIVATE]).forEach(
+      (key) =>
+        key === undefined &&
+        delete privateData[Box.DATASTORE_KEY_PROFILE_PRIVATE][key]
+    );
+    client.private.set(
+      Box.DATASTORE_KEY_PROFILE_PRIVATE,
+      privateData[Box.DATASTORE_KEY_PROFILE_PRIVATE]
+    );
+
     return Object.keys(data).reduce((p, c) => {
       const item = data[c];
 
@@ -205,8 +213,6 @@ const Box = {
       return p;
     }, {});
   },
-
-  message,
 
   crypto: {
     ...crypto,

@@ -1,6 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
-import { Row, Col, Overlay, Popover } from 'react-bootstrap';
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -14,63 +13,49 @@ import {
   RedditShareButton,
 } from 'react-share';
 import ShareIcon from '@material-ui/icons/Share';
-import IconButton from '@material-ui/core/IconButton';
+
+import { Row, Col } from 'react-bootstrap';
+
+import Alert from '../Alert';
 
 const ShareButton = ({ url }) => {
-  const [show, setShow] = useState(false);
-  const [target, setTarget] = useState(null);
-  const ref = useRef(null);
-
-  const handleClick = (e) => {
-    setShow(!show);
-    setTarget(e.target);
-  };
+  const [open, setOpen] = useState(false);
 
   return (
-    <>
-      <IconButton onClick={handleClick}>
-        <ShareIcon fontSize="large" />
-      </IconButton>
-      <Overlay
-        show={show}
-        target={target}
-        placement="bottom"
-        container={ref.current}
-        containerPadding={20}
-      >
-        <Popover>
-          <Popover.Content>
-            <Row>
-              <Col className="pr-0">
-                <FacebookShareButton url={url}>
-                  <FacebookIcon size={32} round />
-                </FacebookShareButton>
-              </Col>
-              <Col className="pr-0">
-                <TwitterShareButton url={url}>
-                  <TwitterIcon size={32} round />
-                </TwitterShareButton>
-              </Col>
-              <Col className="pr-0">
-                <RedditShareButton url={url}>
-                  <RedditIcon size={32} round />
-                </RedditShareButton>
-              </Col>
-              <Col className="pr-0">
-                <PinterestShareButton url={url}>
-                  <PinterestIcon size={32} round />
-                </PinterestShareButton>
-              </Col>
-              <Col>
-                <LinkedinShareButton url={url}>
-                  <LinkedinIcon size={32} round />
-                </LinkedinShareButton>
-              </Col>
-            </Row>
-          </Popover.Content>
-        </Popover>
-      </Overlay>
-    </>
+    <Alert
+      count={0}
+      open={open}
+      setOpen={setOpen}
+      icon={<ShareIcon fontSize="large" />}
+    >
+      <Row style={{ height: '60px' }}>
+        <Col className="pr-0 text-center align-self-center">
+          <FacebookShareButton url={url}>
+            <FacebookIcon size={32} round />
+          </FacebookShareButton>
+        </Col>
+        <Col className="pr-0 text-center align-self-center">
+          <TwitterShareButton url={url}>
+            <TwitterIcon size={32} round />
+          </TwitterShareButton>
+        </Col>
+        <Col className="pr-0 text-center align-self-center">
+          <RedditShareButton url={url}>
+            <RedditIcon size={32} round />
+          </RedditShareButton>
+        </Col>
+        <Col className="pr-0 text-center align-self-center">
+          <PinterestShareButton url={url}>
+            <PinterestIcon size={32} round />
+          </PinterestShareButton>
+        </Col>
+        <Col className="text-center align-self-center">
+          <LinkedinShareButton url={url}>
+            <LinkedinIcon size={32} round />
+          </LinkedinShareButton>
+        </Col>
+      </Row>
+    </Alert>
   );
 };
 

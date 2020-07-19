@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+
+import Box from '../../../../utils/3box';
+import Ethers from '../../../../utils/ethers';
+import SearchBox from './Box';
+import SearchItems from '../FriendRequest';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,20 +31,97 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Search = () => {
+const Search = ({ history }) => {
   const classes = useStyles();
 
+  const [open, setOpen] = useState(false);
+  const [items, setItems] = useState([]);
+  const [value, setValue] = useState('');
+  const [disabled, setDisabled] = useState(true);
+
+  const onChange = (_value) => {
+    setDisabled(!_value || _value === '');
+    setValue(_value);
+  };
+
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter' && !disabled) {
+      search();
+    }
+  };
+
+  const search = async () => {
+    setDisabled(true);
+
+    // Verify that the username exists.
+    if (Ethers.isAddress(value)) {
+      const data = await Box.getAllPublic(value);
+      const username = Box.get(
+        Box.DATASTORE_KEY_PROFILE_PUBLIC,
+        'username',
+        data
+      );
+
+      if (username) {
+        setItems([
+          {
+            username,
+            address: value,
+          },
+        ]);
+
+        setOpen(true);
+      }
+    }
+
+    setDisabled(false);
+  };
+
   return (
-    <Paper component="form" className={classes.root}>
-      <IconButton className={classes.iconButton}>
-        <MenuIcon />
-      </IconButton>
-      <InputBase className={classes.input} placeholder="Search Multiverse" />
-      <IconButton type="submit" className={classes.iconButton}>
+    <Paper className={classes.root}>
+      <SearchBox
+        open={open}
+        setOpen={setOpen}
+        icon={
+          <IconButton className={classes.iconButton}>
+            <MenuIcon />
+          </IconButton>
+        }
+      >
+        <div style={{ cursor: 'pointer' }}>
+          {items.map((item, index) => (
+            <SearchItems
+              key={index}
+              search={true}
+              message={{
+                me: {
+                  username: item.username,
+                  address: item.address,
+                },
+              }}
+              onClick={() => {
+                history.push(`/profile/${item.address}`);
+              }}
+            />
+          ))}
+        </div>
+      </SearchBox>
+      <InputBase
+        className={classes.input}
+        placeholder="Search Multiverse"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={onKeyDown}
+      />
+      <IconButton
+        className={classes.iconButton}
+        onClick={search}
+        disabled={disabled}
+      >
         <SearchIcon />
       </IconButton>
     </Paper>
   );
 };
 
-export default Search;
+export default withRouter(Search);

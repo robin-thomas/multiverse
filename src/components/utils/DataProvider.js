@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const DataContext = React.createContext();
 
 const DataProvider = (props) => {
+  const [denied, setDenied] = useState(false);
   const [profile, setProfile] = useState({});
   const [address, setAddress] = useState(null);
   const [editable, setEditable] = useState(false);
@@ -10,10 +11,13 @@ const DataProvider = (props) => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [profilePrivate, setProfilePrivate] = useState({});
   const [friendRequestsSent, setFriendRequestsSent] = useState([]);
+  const [backdropOpen, setBackdropOpen] = useState(false);
 
   return (
     <DataContext.Provider
       value={{
+        denied,
+        setDenied,
         profile,
         setProfile,
         address,
@@ -28,6 +32,8 @@ const DataProvider = (props) => {
         setProfilePrivate,
         friendRequestsSent,
         setFriendRequestsSent,
+        backdropOpen,
+        setBackdropOpen,
       }}
     >
       {props.children}

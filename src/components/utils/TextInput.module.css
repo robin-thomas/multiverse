@@ -16,6 +16,7 @@
 .input-area {
   color: var(--color-default) !important;
   font-size: 0.9rem !important;
+  resize: none !important;
 }
 
 .input:hover,

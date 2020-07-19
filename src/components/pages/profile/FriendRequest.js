@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Row, Col, ListGroupItem } from 'react-bootstrap';
@@ -9,100 +9,119 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { green } from '@material-ui/core/colors';
 
+import { DataContext } from '../../utils/DataProvider';
 import Box from '../../../utils/3box/index.js';
 
 import styles from './Alert.module.css';
 
-const FriendRequest = ({ message, setOpen, setBackdropOpen }) => {
+const FriendRequest = ({ search, message, setOpen, onClick }) => {
+  const ctx = useContext(DataContext);
+
   const accept = async () => {
-    setBackdropOpen((_open) => !_open);
+    if (window.confirm('Are you sure you want to accept?')) {
+      ctx.setBackdropOpen((_open) => !_open);
 
-    // Encrypt the encryptionKey using the pubKey.
-    const encryptionKey = Box.get(
-      Box.DATASTORE_KEY_PROFILE_PRIVATE,
-      `keys.encryptionKeys.${message.friend}`
-    );
-
-    const nonce = Box.asymmetric.genNonce().toString();
-    const encryptedKey = Box.crypto.asymmetric.encrypt(encryptionKey, nonce, {
-      publicKey: message.pubKey,
-      secretKey: Box.get(
+      // Encrypt the encryptionKey using the pubKey.
+      const encryptionKey = Box.get(
         Box.DATASTORE_KEY_PROFILE_PRIVATE,
-        'keys.keypair.secretKey'
-      ),
-    });
+        `keys.encryptionKeys.${message.friend}`
+      );
 
-    await Box.message.response.post({
-      encryptedKey,
-      pubKey: Box.get(
-        Box.DATASTORE_KEY_PROFILE_PRIVATE,
-        'keys.keypair.publicKey'
-      ),
-      nonce,
-      username: Box.get(Box.DATASTORE_KEY_PROFILE_PUBLIC, 'username'),
-      address: message.friend,
-      friend: message.address,
-    });
+      const nonce = Box.crypto.asymmetric.genNonce().toString();
+      const encryptedKey = Box.crypto.asymmetric.encrypt(encryptionKey, nonce, {
+        publicKey: message.pubKey,
+        secretKey: Box.get(
+          Box.DATASTORE_KEY_PROFILE_PRIVATE,
+          'keys.keypair.secretKey'
+        ),
+      });
 
-    setOpen((_open) => !_open);
-    setBackdropOpen((_open) => !_open);
+      await Box.message.response.post({
+        encryptedKey,
+        pubKey: Box.get(
+          Box.DATASTORE_KEY_PROFILE_PRIVATE,
+          'keys.keypair.publicKey'
+        ),
+        nonce,
+        me: message.friend,
+        friend: message.me,
+      });
+
+      setOpen((_open) => !_open);
+      ctx.setBackdropOpen((_open) => !_open);
+    }
   };
 
   const reject = async () => {
-    setBackdropOpen((_open) => !_open);
+    if (window.confirm('Are you sure you want to reject?')) {
+      ctx.setBackdropOpen((_open) => !_open);
 
-    await Box.message.response.post({
-      denied: true,
-      address: message.friend,
-      friend: message.address,
-    });
+      console.log('reject', message);
 
-    setOpen((_open) => !_open);
-    setBackdropOpen((_open) => !_open);
+      await Box.message.response.post({
+        denied: true,
+        me: message.friend,
+        friend: message.me,
+      });
+
+      setOpen((_open) => !_open);
+      ctx.setDenied((_denied) => !_denied);
+      ctx.setBackdropOpen((_open) => !_open);
+    }
   };
 
   return (
-    <ListGroupItem>
+    <ListGroupItem onClick={onClick ? onClick : () => {}}>
       <Row>
         <Col md="auto" className="pr-0">
-          <Avatar alt={message.username} src="/static/images/avatar/1.jpg" />
+          <Avatar alt={message.me.username} src="/static/images/avatar/1.jpg" />
         </Col>
         <Col md="6" className="align-self-center pr-0">
           <Row noGutters={true}>
             <Col>
               <Link
-                to={`/profile/${message.address}`}
+                to={`/profile/${message.me.address}`}
                 className={styles['name']}
               >
-                @{message.username}
+                @{message.me.username}
               </Link>
             </Col>
           </Row>
           <Row noGutters={true}>
-            <Col className={styles['send-request']}>sent a friend request</Col>
-          </Row>
-        </Col>
-        <Col md="auto" className="px-0">
-          <Row noGutters={true}>
-            <Col md="auto">
-              <Tooltip title="Accept">
-                <IconButton className={styles['request-btn']} onClick={accept}>
-                  <CheckCircleOutlineIcon
-                    fontSize="large"
-                    style={{ color: green[500] }}
-                  />
-                </IconButton>
-              </Tooltip>
-            </Col>
-            <Col md="auto">
-              <Tooltip title="Reject">
-                <IconButton className={styles['request-btn']} onClick={reject}>
-                  <HighlightOffIcon fontSize="large" color="secondary" />
-                </IconButton>
-              </Tooltip>
+            <Col className={styles['send-request']}>
+              {search ? message.me.address : 'sent a friend request'}
             </Col>
           </Row>
         </Col>
+        {!search ? (
+          <Col md="auto" className="px-0">
+            <Row noGutters={true}>
+              <Col md="auto">
+                <Tooltip title="Accept">
+                  <IconButton
+                    className={styles['request-btn']}
+                    onClick={accept}
+                  >
+                    <CheckCircleOutlineIcon
+                      fontSize="large"
+                      style={{ color: green[500] }}
+                    />
+                  </IconButton>
+                </Tooltip>
+              </Col>
+              <Col md="auto">
+                <Tooltip title="Reject">
+                  <IconButton
+                    className={styles['request-btn']}
+                    onClick={reject}
+                  >
+                    <HighlightOffIcon fontSize="large" color="secondary" />
+                  </IconButton>
+                </Tooltip>
+              </Col>
+            </Row>
+          </Col>
+        ) : null}
       </Row>
     </ListGroupItem>
   );

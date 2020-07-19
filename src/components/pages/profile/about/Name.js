@@ -7,11 +7,11 @@ import { DataContext } from '../../../utils/DataProvider';
 const Name = () => {
   const ctx = useContext(DataContext);
 
-  const [name, setName] = useState(null);
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
     if (ctx.profile.username) {
-      setName(ctx.profile.username);
+      setUsername(ctx.profile.username);
     }
   }, [ctx.profile]);
 
@@ -20,7 +20,7 @@ const Name = () => {
       <Col md="auto" className="pr-0 align-self-justify">
         @
       </Col>
-      <Col className="pl-0 align-self-justify">{name}</Col>
+      <Col className="pl-0 align-self-justify">{username}</Col>
     </Row>
   );
 };

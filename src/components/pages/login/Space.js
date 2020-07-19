@@ -24,7 +24,7 @@ const LoginPrompt = () => (
       continue (if first time). If you don't have a 3Box account, one shall be
       created for you.
     </p>
-    <p>You uploaded files shall be stored on Textile buckets.</p>
+    <p>Your uploaded files shall be stored on Textile buckets.</p>
     <hr />
     <p>
       Learn more about 3Box{' '}
@@ -85,17 +85,9 @@ const Space = ({ setStage }) => {
           );
         }
 
-        const blocked = Box.get(Box.DATASTORE_KEY_PROFILE_PRIVATE, 'blocked');
-
-        // get all pending friend requests (the ones sent to me)
-        // get all completed friend requests (the ones I sent)
-        const [requests, responses] = await Promise.all([
-          Box.message.request.getAll(ctx.address, blocked ? blocked : []),
-          Box.message.response.getAll(ctx.address),
-        ]);
-
-        ctx.setFriendRequests(requests);
-        ctx.setFriendRequestsSent(responses);
+        await Box.message.load(ctx.address);
+        Box.message.setRequestCallback(ctx.setFriendRequests).pending();
+        Box.message.setResponseCallback(ctx.setFriendRequestsSent).completed();
 
         if (!Box.get(Box.DATASTORE_KEY_PROFILE_PUBLIC, 'username')) {
           setStage(2);
@@ -111,6 +103,35 @@ const Space = ({ setStage }) => {
 
     fn();
   }, [ctx.address]);
+
+  // useEffect(() => {
+  //   console.log('triggering deletion', ctx.friendRequestsSent);
+  //   for (const request of ctx.friendRequestsSent) {
+  //     if (request.status === 'ok') {
+  //       // decrypt the encryptionKey.
+  //       const encryptionKey = Box.crypto.asymmetric.decrypt(
+  //         request.encryptedKey,
+  //         request.nonce, {
+  //         publicKey: request.pubKey,
+  //         secretKey: Box.get(
+  //           Box.DATASTORE_KEY_PROFILE_PRIVATE,
+  //           'keys.keypair.secretKey'
+  //         ),
+  //       });
+  //       console.log('encryptionKey', encryptionKey);
+  //
+  //       Box.set(Box.DATASTORE_KEY_PROFILE_PRIVATE, {
+  //         keys: {
+  //           encryptionKeys: {
+  //             [request.friend]: encryptionKey,
+  //           }
+  //         }
+  //       });
+  //     }
+  //
+  //     Box.message.request.deleteById(request.id);
+  //   }
+  // }, [ctx.friendRequestsSent]);
 
   return (
     <>

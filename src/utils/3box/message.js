@@ -1,94 +1,120 @@
-import { app } from '../../../config.json';
+import Request from './request';
+import Response from './response';
 
-const Message = {
-  threadRequest: null,
-  threadResponse: null,
+class Message {
+  constructor(box, address) {
+    this.address = address;
+    this.requestCallback = () => {};
+    this.responseCallback = () => {};
 
-  init: async (box) => {
-    Message.threadRequest = await box.joinThread(`${app.name}-threadRequest`);
-    Message.threadResponse = await box.joinThread(`${app.name}-threadResponse`);
-  },
+    this.request = new Request(box);
+    this.response = new Response(box);
+  }
 
-  request: {
-    /*
-     * Read by the friend to see all pending requests.
-     */
-    getAll: async (address, blocked = []) => {
-      try {
-        const [requests, responses] = await Promise.all([
-          Message.threadRequest.getPosts(),
-          Message.threadResponse.getPosts(),
-        ]);
+  setRequestCallback(callback) {
+    this.requestCallback = callback;
+    return this;
+  }
 
-        const pendingRequests = requests
-          .map((e) => e.message)
-          .filter((e) => e.friend === address);
-        const completed = responses
-          .map((e) => e.message)
-          .filter((e) => e.address === address)
-          .map((e) => e.friend);
+  setResponseCallback(callback) {
+    this.responseCallback = callback;
+    return this;
+  }
 
-        return pendingRequests
-          .filter((e) => !blocked.includes(e.address))
-          .filter((e) => !completed.includes(e.address));
-      } catch (err) {
-        throw err;
-      }
-    },
+  async load(address) {
+    const filter = { address, friend: address };
 
-    /*
-     * Create a new friendship request.
-     */
-    post: async (data) => {
-      try {
-        await Message.threadRequest.post(data);
-      } catch (err) {
-        throw err;
-      }
-    },
-  },
+    await Promise.all([
+      this.request.getAll(filter, this.callback.bind(this)),
+      this.response.getAll(filter, this.callback.bind(this)),
+    ]);
+  }
 
-  response: {
-    /*
-     * Read by user to see all completed requests.
-     */
-    getAll: async (address) => {
-      try {
-        const [requests, responses] = await Promise.all([
-          Message.threadRequest.getPosts(),
-          Message.threadResponse.getPosts(),
-        ]);
+  callback() {
+    this.pending();
+    this.completed();
+  }
 
-        const pendingRequests = requests
-          .map((e) => e.message)
-          .filter((e) => e.address === address)
-          .map((e) => e.friend);
-        const completedResponses = responses.filter(
-          (e) => e.message.friend === address
+  pending() {
+    if (this.request && this.response) {
+      const requests = this.request.items.filter(
+        (e) => e.message.friend.address === this.address
+      );
+      const completed = this.response.items
+        .filter((e) => e.message.me.address === this.address)
+        .map((e) => e.message.friend.address);
+
+      const results = requests
+        .filter((e) => !completed.includes(e.message.me.address))
+        .map((e) => {
+          return {
+            id: e.postId,
+            ...e.message,
+            timestamp: e.timestamp,
+          };
+        })
+        .reverse();
+
+      this.requestCallback(results);
+    }
+  }
+
+  completed() {
+    if (this.request && this.response) {
+      const requests = this.request.items.filter(
+        (e) => e.message.me.address === this.address
+      );
+      const responses = this.response.items.filter(
+        (e) => e.message.friend.address === this.address
+      );
+
+      console.log('requests', requests);
+      console.log('responses', responses);
+
+      const results = requests.reduce((p, c) => {
+        const completed = responses.find(
+          (e) => e.message.me.address === c.message.friend.address
         );
 
-        return completedResponses.reduce((p, c) => {
-          const completed = pendingRequests.includes(c.address);
-
-          let status = 'pending';
-          if (completed) {
-            if (c.message.denied) {
-              status = 'denied';
-              delete c.message.denied;
-            } else {
-              status = 'ok';
-            }
+        let status = 'pending';
+        if (completed) {
+          if (completed.message.denied) {
+            status = 'denied';
+          } else {
+            status = 'ok';
           }
+        }
 
-          p.push({ ...c.message, status, timestamp: c.timestamp });
+        p.unshift({
+          id: c.postId,
+          ...c.message,
+          ...(status === 'ok'
+            ? {
+                nonce: completed.message.nonce,
+                pubKey: completed.message.pubKey,
+                encryptedKey: completed.message.encryptedKey,
+              }
+            : {}),
+          ...(status === 'pending'
+            ? {
+                timestamp: c.timestamp,
+              }
+            : {
+                timestamp: completed.timestamp,
+                me: completed.message.friend,
+                friend: completed.message.me,
+              }),
+          status,
+        });
 
-          return p;
-        }, []);
-      } catch (err) {
-        throw err;
-      }
-    },
-  },
-};
+        return p;
+      }, []);
+
+      console.log('results', results);
+
+      this.responseCallback(results);
+    }
+  }
+}
 
 export default Message;
