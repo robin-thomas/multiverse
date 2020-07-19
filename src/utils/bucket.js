@@ -70,7 +70,9 @@ const Bucket = {
     return result;
   },
 
-  loadImage: async (paths, type, resize = null) => {
+  loadImage: async (paths, resize = null) => {
+    const type = `image/${paths[0].match(/(.*)_image\/(.*)_[0-9]+$/)[2]}`;
+
     const promises = paths.map((path) =>
       Bucket.download(textile.buckets.profile.bucket, path)
     );

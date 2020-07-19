@@ -38,10 +38,7 @@ const Notifications = () => {
       for (const item of ctx.friendRequestsSent) {
         let imgUrl = null;
         if (item.friend.profilePic) {
-          const type = item.friend.profilePic[0].match(
-            /(.*)_image\/(.*)_[0-9]+$/
-          )[2];
-          imgUrl = await Bucket.loadImage(item.friend.profilePic, type, 100);
+          imgUrl = await Bucket.loadImage(item.friend.profilePic, 100);
         }
 
         _items.push({ ...item, imgUrl });

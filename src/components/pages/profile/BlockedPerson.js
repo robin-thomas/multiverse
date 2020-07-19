@@ -13,7 +13,7 @@ import styles from './Alert.module.css';
 
 const BlockedPerson = ({ message, setOpen, onClick }) => {
   const remove = async () => {
-    if (window.confirm('Are you sure you want to remoove the block?')) {
+    if (window.confirm('Are you sure you want to remove the block?')) {
       Box.message.response.deleteById(message.id);
 
       setOpen((_open) => !_open);

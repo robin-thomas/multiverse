@@ -5,6 +5,7 @@ import BlockIcon from '@material-ui/icons/Block';
 
 import Alert from './Alert';
 import Box from '../../../utils/3box';
+import Bucket from '../../../utils/bucket';
 import { DataContext } from '../../utils/DataProvider';
 import BlockedPerson from './BlockedPerson';
 
@@ -44,6 +45,24 @@ const BlockedPersons = () => {
 
     if (simpleBar.current) {
       simpleBar.current.recalculate();
+    }
+
+    const load = async () => {
+      let _items = [];
+      for (const item of ctx.friendRequests) {
+        let imgUrl = null;
+        if (item.me.profilePic) {
+          imgUrl = await Bucket.loadImage(item.me.profilePic, 100);
+        }
+
+        _items.push({ ...item, imgUrl });
+      }
+
+      setDenied(_items);
+    };
+
+    if (results > 0) {
+      load();
     }
   }, [ctx.friendRequests]);
 

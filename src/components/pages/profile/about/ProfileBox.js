@@ -37,19 +37,14 @@ const ProfileBox = ({ url, offBackdrop }) => {
 
   useEffect(() => {
     setAbout(ctx.profile.about ? ctx.profile.about : '');
+    setImage(profileImg);
 
     if (ctx.profile.profilePic) {
-      const matches = ctx.profile.profilePic[0].match(
-        /(.*)_image\/(.*)_[0-9]+$/
-      );
-      const type = `image/${matches[2]}`;
-
-      Bucket.loadImage(ctx.profile.profilePic, type, null)
+      Bucket.loadImage(ctx.profile.profilePic, null)
         .then(setImage)
         .catch(console.error)
         .finally(() => offBackdrop());
     } else {
-      setImage(profileImg);
       offBackdrop();
     }
   }, [ctx.profile]);
@@ -109,7 +104,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
       <CardContent className={styles['card-content']}>
         <Row>
           <Col md="auto">
-            <Avatar alt="username" src="/static/images/avatar/1.jpg" />
+            <Avatar alt={ctx.profile.username} src={image} />
           </Col>
           <Col md="7">
             <Typography variant="button" display="block" gutterBottom>

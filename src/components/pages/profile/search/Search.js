@@ -72,8 +72,7 @@ const Search = ({ history }) => {
       if (username) {
         let imgUrl = null;
         if (profilePic) {
-          const type = profilePic[0].match(/(.*)_image\/(.*)_[0-9]+$/)[2];
-          imgUrl = await Bucket.loadImage(profilePic, type, 100);
+          imgUrl = await Bucket.loadImage(profilePic, 100);
         }
 
         setItems([
