@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 import Empty from './Empty';
 import Footer from './Footer';
 import ImageRow from './ImageRow';
-import Uploader from '../../../utils/file';
+import File from '../../../utils/file';
 
 import styles from './Upload.module.css';
 
@@ -27,10 +27,11 @@ const Upload = ({
   setImageRows,
   uploaded,
   setUploaded,
-  addImageHashes,
+  addFileNames,
   resize,
   bucketKey,
   filePath,
+  encryptionKey,
 }) => {
   const hiddenFileInput = useRef(null);
   const simpleBar = useRef(null);
@@ -46,7 +47,7 @@ const Upload = ({
     const files = e.target.files;
     for (const file of files) {
       if (!uploaded || !uploaded.includes(file.name)) {
-        const [name, size] = Uploader.File.props(file.name, file.size);
+        const [name, size] = File.props(file.name, file.size);
         newSize += file.size;
 
         setImageRows((_rows) => [..._rows, { file, name, size }]);
@@ -64,7 +65,7 @@ const Upload = ({
     if (processedFiles.length > 0) {
       setTotalSize(newSize);
 
-      const [, _sizeH] = Uploader.File.props(null, newSize);
+      const [, _sizeH] = File.props(null, newSize);
       setSizeH(_sizeH);
     }
 
@@ -113,10 +114,10 @@ const Upload = ({
                           setReadSize((_readSize) => _readSize + newSize)
                         }
                         addImageUrl={addImageUrl}
-                        addImageHashes={addImageHashes}
+                        addFileNames={addFileNames}
                         resize={resize}
                         bucketKey={bucketKey}
-                        filePath={filePath}
+                        encryptionKey={encryptionKey}
                       />
                     ))
                   ) : (
@@ -142,4 +143,4 @@ const Upload = ({
   );
 };
 
-export default Upload;
+export default React.memo(Upload);

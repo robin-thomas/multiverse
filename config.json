@@ -19,13 +19,10 @@
     }
   },
   "textile": {
-    "key": "bhdqume4leb73sw5qantvstvpme",
+    "key": "bd44nhdyg6heed35l6j2bdmrpbe",
     "buckets": {
       "profile": {
-        "bucket": "multiverse-public",
-        "filePaths": {
-          "profilePic": "profile-pic"
-        }
+        "bucket": "multiverse-public"
       }
     }
   }

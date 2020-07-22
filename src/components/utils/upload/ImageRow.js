@@ -3,60 +3,52 @@ import React, { useState, useEffect } from 'react';
 import { MDBIcon } from 'mdbreact';
 import { Row, Col, ProgressBar } from 'react-bootstrap';
 
-import Uploader from '../../../utils/file';
-import Image from '../../../utils/image';
-import Bucket from '../../../utils/bucket';
+import File from '../../../utils/file';
 
 import styles from './ImageRow.module.css';
-
-import { app } from '../../../../config.json';
 
 const ImageRow = ({
   item,
   setSize,
   addImageUrl,
-  addImageHashes,
+  addFileNames,
   resize,
   bucketKey,
-  filePath,
+  encryptionKey,
 }) => {
-  const chunkSize = app.chunk.size;
-
   const [error, setError] = useState('');
   const [status, setStatus] = useState('Queued');
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const fn = async () => {
-      setStatus('Uploading');
+      try {
+        setStatus('Uploading');
 
-      const results = await Uploader(item.file, {
-        size: chunkSize,
-        callback: async (chunk, readSize, index) => {
-          setSize(readSize);
-          setProgress(
-            (_progress) => _progress + 100 * (readSize / item.file.size)
-          );
+        const { resizedUrl, paths } = await File.imageUpload(
+          item.file,
+          bucketKey,
+          (_size) => {
+            setSize(_size);
+            setProgress(
+              (_progress) => _progress + 100 * (_size / item.file.size)
+            );
+          },
+          resize,
+          encryptionKey
+        );
 
-          const key = `${filePath}_${item.file.type}_${index}`;
-          await Bucket.upload(bucketKey, key, chunk);
+        console.log('resizedUrl', resizedUrl);
+        console.log('paths', paths);
 
-          return { chunk, path: key };
-        },
-      });
+        addImageUrl(resizedUrl);
+        addFileNames(paths);
 
-      const blob = new Blob(
-        results.map((e) => e.chunk),
-        { type: item.file.type }
-      );
-      const url = URL.createObjectURL(blob);
-      const resizedUrl = await Image.resize(url, resize);
-      addImageUrl(resizedUrl);
-
-      addImageHashes(results.map((e) => e.path));
-
-      setProgress(100);
-      setStatus('Completed');
+        setProgress(100);
+        setStatus('Completed');
+      } catch (err) {
+        console.error(err);
+      }
     };
 
     fn();

@@ -18,7 +18,6 @@ import ShareButton from './ShareButton';
 import Box from '../../../../utils/3box/index.js';
 import TextInput from '../../../utils/TextInput';
 import Upload from '../../../utils/upload';
-import Bucket from '../../../../utils/bucket';
 import { DataContext } from '../../../utils/DataProvider';
 
 import profileImg from '../../../../assets/profile.jpg';
@@ -40,7 +39,11 @@ const ProfileBox = ({ url, offBackdrop }) => {
     setImage(profileImg);
 
     if (ctx.profile.profilePic) {
-      Bucket.loadImage(ctx.profile.profilePic, null)
+      File.loadImage(
+        textile.buckets.profile.bucket,
+        ctx.profile.profilePic,
+        null
+      )
         .then(setImage)
         .catch(console.error)
         .finally(() => offBackdrop());
@@ -99,7 +102,6 @@ const ProfileBox = ({ url, offBackdrop }) => {
         addImageHashes={(_imageHashes) => setImageHashes(_imageHashes)}
         addImageUrl={(_imageUrl) => setImage(_imageUrl)}
         bucketKey={ctx.bucketKeys.profilePic}
-        filePath={textile.buckets.profile.filePaths.profilePic}
       />
       <CardContent className={styles['card-content']}>
         <Row>

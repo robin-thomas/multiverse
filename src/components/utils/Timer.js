@@ -13,7 +13,7 @@ const Timer = (props) => {
   useEffect(() => {
     const timer = setInterval(() => setTimeStr(formatTime(time)), 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [time]);
 
   return <span>{timeStr}</span>;
 };

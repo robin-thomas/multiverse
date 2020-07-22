@@ -1,24 +1,13 @@
-const uploader = async (file, chunk) => {
-  const chunker = (offset, index) => {
-    return new Promise((resolve, reject) => {
-      const _chunk = file.slice(offset, offset + chunk.size);
+import { Buffer } from 'buffer';
 
-      const _reader = new window.FileReader();
-      _reader.onload = (e) =>
-        chunk.callback(e.target.result, _chunk.size, index).then(resolve);
-      _reader.readAsArrayBuffer(_chunk);
-    });
-  };
+import Box from './3box';
+import Image from './image';
+import Bucket from './bucket';
+import { str2ab, ab2str } from './arraybuffer';
 
-  const promises = Array.from(
-    Array(Math.ceil(file.size / chunk.size)),
-    (_, i) => chunker(i * chunk.size, i)
-  );
+import { app } from '../../config.json';
 
-  return await Promise.all(promises);
-};
-
-uploader.File = {
+const File = {
   props: (fileName, size) => {
     if (fileName) {
       const index = fileName.lastIndexOf('.');
@@ -37,6 +26,92 @@ uploader.File = {
 
     return [fileName, fileSize];
   },
+
+  upload: async (file, callback) => {
+    const chunker = (offset, index) => {
+      return new Promise((resolve, reject) => {
+        const _chunk = file.slice(offset, offset + app.chunk.size);
+
+        const _reader = new window.FileReader();
+        _reader.onload = (e) =>
+          callback(e.target.result, _chunk.size, index).then(resolve);
+        _reader.readAsArrayBuffer(_chunk);
+      });
+    };
+
+    const promises = Array.from(
+      Array(Math.ceil(file.size / app.chunk.size)),
+      (_, i) => chunker(i * app.chunk.size, i)
+    );
+
+    return await Promise.all(promises);
+  },
+
+  imageUpload: async (
+    file,
+    bucketKey,
+    progress,
+    resize = null,
+    encryptionKey = null
+  ) => {
+    const path = Math.random().toString(36).substr(2);
+
+    const results = await File.upload(file, async (chunk, size, index) => {
+      let data = chunk;
+      if (encryptionKey) {
+        const hex = Buffer.from(chunk).toString('hex');
+        const encrypted = Box.crypto.symmetric.encrypt(encryptionKey, hex);
+        data = str2ab(encrypted);
+      }
+
+      const key = `${path}_${file.type.replace('/', '---')}_${index}`;
+      await Bucket.upload(bucketKey, key, data);
+
+      progress(size);
+
+      return { chunk, path: key };
+    });
+
+    const paths = results.map((e) => e.path);
+
+    if (resize) {
+      const blob = new Blob(
+        results.map((e) => e.chunk),
+        { type: file.type }
+      );
+      const url = URL.createObjectURL(blob);
+      const resizedUrl = await Image.resize(url, resize);
+      return { resizedUrl, paths };
+    }
+
+    return { paths };
+  },
+
+  loadImage: async (bucketKey, paths, resize = null, decryptionKey = null) => {
+    const type = `image/${paths[0].match(/(.*)_image---(.*)_[0-9]+$/)[2]}`;
+
+    const promises = paths.map((path) => Bucket.download(bucketKey, path));
+    const chunks = await Promise.all(promises);
+
+    if (decryptionKey) {
+      chunks.forEach((chunk, index) => {
+        const hex = Buffer.from(chunk).toString();
+        const decrypted = Box.crypto.symmetric.decrypt(decryptionKey, hex);
+        const data = Buffer.from(decrypted, 'hex');
+
+        const ab = new ArrayBuffer(data.length);
+        const view = new Uint8Array(ab);
+        for (let i = 0; i < data.length; ++i) {
+          view[i] = data[i];
+        }
+
+        chunks[index] = ab;
+      });
+    }
+
+    const url = URL.createObjectURL(new Blob(chunks, { type }));
+    return await Image.resize(url, resize);
+  },
 };
 
-export default uploader;
+export default File;

@@ -5,8 +5,10 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import Alert from './Alert';
 import Notification from './Notification';
-import Bucket from '../../../utils/bucket';
+import File from '../../../utils/file';
 import { DataContext } from '../../utils/DataProvider';
+
+import { textile } from '../../../../config.json';
 
 const Notifications = () => {
   const ctx = useContext(DataContext);
@@ -38,7 +40,11 @@ const Notifications = () => {
       for (const item of ctx.friendRequestsSent) {
         let imgUrl = null;
         if (item.friend.profilePic) {
-          imgUrl = await Bucket.loadImage(item.friend.profilePic, 100);
+          imgUrl = await File.loadImage(
+            textile.buckets.profile.bucket,
+            item.friend.profilePic,
+            100
+          );
         }
 
         _items.push({ ...item, imgUrl });

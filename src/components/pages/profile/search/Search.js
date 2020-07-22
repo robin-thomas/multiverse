@@ -9,8 +9,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import { textile } from '../../../../../config.json';
+
 import Box from '../../../../utils/3box';
-import Bucket from '../../../../utils/bucket';
+import File from '../../../../utils/file';
 import Ethers from '../../../../utils/ethers';
 import SearchBox from './Box';
 import SearchItems from '../FriendRequest';
@@ -72,7 +74,11 @@ const Search = ({ history }) => {
       if (username) {
         let imgUrl = null;
         if (profilePic) {
-          imgUrl = await Bucket.loadImage(profilePic, 100);
+          imgUrl = await File.loadImage(
+            textile.buckets.profile.bucket,
+            profilePic,
+            100
+          );
         }
 
         setItems([

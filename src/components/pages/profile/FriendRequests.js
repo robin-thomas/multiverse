@@ -4,9 +4,11 @@ import { Row, Col, ListGroupItem } from 'react-bootstrap';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 
 import Alert from './Alert';
-import Bucket from '../../../utils/bucket';
+import File from '../../../utils/file';
 import { DataContext } from '../../utils/DataProvider';
 import FriendRequest from './FriendRequest';
+
+import { textile } from '../../../../config.json';
 
 const FriendRequests = () => {
   const ctx = useContext(DataContext);
@@ -38,7 +40,11 @@ const FriendRequests = () => {
       for (const item of ctx.friendRequests) {
         let imgUrl = null;
         if (item.me.profilePic) {
-          imgUrl = await Bucket.loadImage(item.me.profilePic, 100);
+          imgUrl = await File.loadImage(
+            textile.buckets.profile.bucket,
+            item.me.profilePic,
+            100
+          );
         }
 
         _items.push({ ...item, imgUrl });

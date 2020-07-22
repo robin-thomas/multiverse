@@ -5,9 +5,11 @@ import BlockIcon from '@material-ui/icons/Block';
 
 import Alert from './Alert';
 import Box from '../../../utils/3box';
-import Bucket from '../../../utils/bucket';
+import File from '../../../utils/file';
 import { DataContext } from '../../utils/DataProvider';
 import BlockedPerson from './BlockedPerson';
+
+import { textile } from '../../../../config.json';
 
 const BlockedPersons = () => {
   const ctx = useContext(DataContext);
@@ -52,7 +54,11 @@ const BlockedPersons = () => {
       for (const item of ctx.friendRequests) {
         let imgUrl = null;
         if (item.me.profilePic) {
-          imgUrl = await Bucket.loadImage(item.me.profilePic, 100);
+          imgUrl = await File.loadImage(
+            textile.buckets.profile.bucket,
+            item.me.profilePic,
+            100
+          );
         }
 
         _items.push({ ...item, imgUrl });

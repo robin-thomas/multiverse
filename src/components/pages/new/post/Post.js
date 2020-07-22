@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { Redirect } from 'react-router-dom';
 
@@ -18,6 +18,9 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import File from '../../../../utils/file';
+import Box from '../../../../utils/3box';
+import Bucket from '../../../../utils/bucket';
 import Content from '../../../app/Content';
 import ImagePreview from './ImagePreview';
 import Visibility from './Visibility';
@@ -56,6 +59,9 @@ const Post = ({ history }) => {
 
   const classes = useStyles();
 
+  const [postId, setPostId] = useState(null);
+  const [encryptionKey, setEncryptionKey] = useState(null);
+  const [bucketKey, setBucketKey] = useState(null);
   const [open, setOpen] = React.useState(false);
   const [images, setImages] = useState([]);
   const [imageRows, setImageRows] = useState([]);
@@ -63,7 +69,19 @@ const Post = ({ history }) => {
   const [show, setShow] = useState(false);
   const [input, setInput] = useState('');
   const [visibility, setVisibility] = useState(0);
-  const [imageHashes, setImageHashes] = useState([]);
+  const [imageFileNames, setImageFileNames] = useState([]);
+
+  useEffect(() => {
+    const now = new Date().getTime();
+    setPostId(now.toString());
+
+    const key = Box.crypto.symmetric.genKey();
+    setEncryptionKey(key);
+
+    setBucketKey('bafzbeig5aym3h75bdo2ycblesyozee57kxohymbidbeorlil65tjr7lgaq');
+
+    // Bucket.getKey(now.toString()).then(setBucketKey);
+  }, []);
 
   const createPost = () => {
     setOpen(true);
@@ -73,24 +91,51 @@ const Post = ({ history }) => {
       history.push(`/profile/${ctx.address}`);
     };
 
-    const post = {
-      text: input,
-      images: imageHashes,
-      visibility,
-    };
+    console.log(imageFileNames);
 
-    // TODO: store the post.
+    File.loadImage(bucketKey, imageFileNames[0], 100, encryptionKey)
+      .then((img) => {
+        setImages((_images) => [..._images, img]);
+      })
+      .catch(console.error);
 
-    // fake delay.
-    const sleep = (ms) => {
-      return new Promise((resolve) => setTimeout(resolve, 1000 * ms));
-    };
-    sleep(5).then(redirect);
+    // const post = JSON.stringify({
+    //   id: postId,
+    //   content: input,
+    //   attachments: {
+    //     image: imageFileNames,
+    //     audio: '',
+    //   }
+    // });
+    // const encryptedPost = Box.crypto.symmetric.encrypt(encryptionKey, post);
+    //
+    // // private or friends.
+    // let key = encryptionKey;
+    // if (visibility < 2) {
+    //   key = Box.crypto.symmetric.encrypt(ctx.profilePrivate.keys.encryptionKey[ctx.address], encryptionKey);
+    // }
+    //
+    // Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, {
+    //   posts: {
+    //     [postId]: {
+    //       key,
+    //       post: encryptedPost,
+    //       timestamp: new Date().getTime(),
+    //       visibility,
+    //     },
+    //   },
+    // });
+
+    // // fake delay.
+    // const sleep = (ms) => {
+    //   return new Promise((resolve) => setTimeout(resolve, 1000 * ms));
+    // };
+    // sleep(5).then(redirect);
   };
 
   return (
     <Content>
-      {ctx.address ? (
+      {!ctx.address ? (
         <>
           <Row style={{ height: '100vh' }}>
             <Col md="auto" className="mx-auto align-self-center">
@@ -112,33 +157,49 @@ const Post = ({ history }) => {
                   <Row>
                     <Col>
                       <CardActions className={classes.cardAction}>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          color="primary"
-                          onClick={() => setShow(true)}
-                        >
-                          Upload images
-                        </Button>
-                        <Upload
-                          show={show}
-                          toggle={() => setShow(!show)}
-                          imageRows={imageRows}
-                          setImageRows={setImageRows}
-                          uploaded={uploaded}
-                          setUploaded={setUploaded}
-                          addImageUrl={(_imageUrl) =>
-                            setImages((_images) => [..._images, _imageUrl])
-                          }
-                          addImageHashes={(_imageHashes) =>
-                            setImageHashes((_hashes) => [
-                              ..._hashes,
-                              _imageHashes,
-                            ])
-                          }
-                          multiple={true}
-                          resize={100}
-                        />
+                        {bucketKey ? (
+                          <>
+                            <Button
+                              size="small"
+                              variant="outlined"
+                              color="primary"
+                              onClick={() => setShow(true)}
+                            >
+                              Upload images
+                            </Button>
+                            <Upload
+                              show={show}
+                              toggle={() => setShow(!show)}
+                              imageRows={imageRows}
+                              setImageRows={setImageRows}
+                              bucketKey={bucketKey}
+                              uploaded={uploaded}
+                              setUploaded={setUploaded}
+                              addImageUrl={(_imageUrl) =>
+                                setImages((_images) => [..._images, _imageUrl])
+                              }
+                              addFileNames={(_fileNames) => {
+                                console.log('_fileNames', _fileNames);
+                                setImageFileNames((_names) => [
+                                  ..._names,
+                                  _fileNames,
+                                ]);
+                              }}
+                              multiple={true}
+                              resize={100}
+                              encryptionKey={encryptionKey}
+                            />
+                          </>
+                        ) : (
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            color="primary"
+                            disabled
+                          >
+                            Upload images
+                          </Button>
+                        )}
                       </CardActions>
                     </Col>
                   </Row>
@@ -182,9 +243,9 @@ const Post = ({ history }) => {
                             ..._uploaded.slice(0, index),
                             ..._uploaded.slice(index + 1),
                           ]);
-                          setImageHashes((_hashes) => [
-                            ..._hashes.slice(0, index),
-                            ..._hashes.slice(index + 1),
+                          setImageFileNames((_names) => [
+                            ..._names.slice(0, index),
+                            ..._names.slice(index + 1),
                           ]);
                         }}
                       />
@@ -218,4 +279,4 @@ const Post = ({ history }) => {
   );
 };
 
-export default withRouter(Post);
+export default withRouter(React.memo(Post));

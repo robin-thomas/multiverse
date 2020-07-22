@@ -15,6 +15,7 @@ const ImagePreview = ({ images, removeImage }) => {
     <SimpleBar ref={ref} style={{ maxHeight: '130px' }}>
       {images.map((url, index) => (
         <Image
+          key={index}
           url={url}
           removeImage={() => {
             removeImage(index);
