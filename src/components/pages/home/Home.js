@@ -140,6 +140,7 @@ const Page = ({ history, location }) => {
               break;
 
             case 2:
+            case 3:
               break;
 
             case 0:

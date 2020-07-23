@@ -10,6 +10,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Box from '../../../utils/3box/index.js';
 import Content from '../../app/Content';
 import ProfileBox from './about/ProfileBox';
+import ProfileContents from './ProfileContents';
 import EmptyRow from '../../utils/EmptyRow';
 import { DataContext } from '../../utils/DataProvider';
 
@@ -104,7 +105,7 @@ const Profile = ({ history }) => {
     <Content>
       <EmptyRow rows={2} />
       <Row style={{ height: '100vh' }}>
-        <Col md={{ span: 3, offset: 1 }} className="">
+        <Col md={{ span: 3, offset: 1 }}>
           {isValidProfile() ? (
             <ProfileBox
               url={`${_url}?profile=${address}`}
@@ -127,6 +128,11 @@ const Profile = ({ history }) => {
               </Col>
             </Row>
           ) : null}
+          <Row>
+            <Col md={{ span: 7, offset: 2 }}>
+              <ProfileContents />
+            </Col>
+          </Row>
         </Col>
       </Row>
     </Content>

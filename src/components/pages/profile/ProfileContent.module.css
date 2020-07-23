@@ -1,0 +1,10 @@
+.card {
+  transition: 0.3s;
+  box-shadow: 0 8px 40px -12px rgba(0, 0, 0, 0.3);
+  border: 0;
+  background-color: black !important;
+}
+
+.card-content {
+  background-color: white !important;
+}
