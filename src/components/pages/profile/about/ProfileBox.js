@@ -18,6 +18,7 @@ import ShareButton from './ShareButton';
 import Box from '../../../../utils/3box/index.js';
 import TextInput from '../../../utils/TextInput';
 import Upload from '../../../utils/upload';
+import File from '../../../../utils/file';
 import { DataContext } from '../../../utils/DataProvider';
 
 import profileImg from '../../../../assets/profile.jpg';
@@ -39,10 +40,9 @@ const ProfileBox = ({ url, offBackdrop }) => {
     setImage(profileImg);
 
     if (ctx.profile.profilePic) {
-      File.loadImage(
+      File.loadImageByName(
         textile.buckets.profile.bucket,
-        ctx.profile.profilePic,
-        null
+        ctx.profile.profilePic
       )
         .then(setImage)
         .catch(console.error)
@@ -99,7 +99,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
         toggle={() => setShow(!show)}
         imageRows={imageRows}
         setImageRows={setImageRows}
-        addImageHashes={(_imageHashes) => setImageHashes(_imageHashes)}
+        addFileNames={(_imageHashes) => setImageHashes(_imageHashes)}
         addImageUrl={(_imageUrl) => setImage(_imageUrl)}
         bucketKey={ctx.bucketKeys.profilePic}
       />

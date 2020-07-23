@@ -18,7 +18,6 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import File from '../../../../utils/file';
 import Box from '../../../../utils/3box';
 import Bucket from '../../../../utils/bucket';
 import Content from '../../../app/Content';
@@ -78,64 +77,56 @@ const Post = ({ history }) => {
     const key = Box.crypto.symmetric.genKey();
     setEncryptionKey(key);
 
-    setBucketKey('bafzbeig5aym3h75bdo2ycblesyozee57kxohymbidbeorlil65tjr7lgaq');
-
-    // Bucket.getKey(now.toString()).then(setBucketKey);
+    Bucket.getKey(now.toString()).then(setBucketKey);
   }, []);
 
   const createPost = () => {
     setOpen(true);
 
-    const redirect = () => {
-      setOpen(false);
-      history.push(`/profile/${ctx.address}`);
+    const post = JSON.stringify({
+      id: postId,
+      bucket: bucketKey,
+      content: input,
+      attachments: {
+        image: imageFileNames,
+        audio: '',
+      },
+    });
+    const encryptedPost = Box.crypto.symmetric.encrypt(encryptionKey, post);
+
+    // private or friends.
+    let key = encryptionKey;
+    if (visibility < 2) {
+      key = Box.crypto.symmetric.encrypt(
+        ctx.profilePrivate.keys.encryptionKeys[ctx.address],
+        encryptionKey
+      );
+    }
+
+    const arg = {
+      posts: {
+        [postId]: {
+          key,
+          post: encryptedPost,
+          timestamp: new Date().getTime(),
+          visibility,
+        },
+      },
     };
 
-    console.log(imageFileNames);
+    if (visibility > 0) {
+      Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, arg);
+    } else {
+      Box.set(Box.DATASTORE_KEY_PROFILE_PRIVATE, arg);
+    }
 
-    File.loadImage(bucketKey, imageFileNames[0], 100, encryptionKey)
-      .then((img) => {
-        setImages((_images) => [..._images, img]);
-      })
-      .catch(console.error);
-
-    // const post = JSON.stringify({
-    //   id: postId,
-    //   content: input,
-    //   attachments: {
-    //     image: imageFileNames,
-    //     audio: '',
-    //   }
-    // });
-    // const encryptedPost = Box.crypto.symmetric.encrypt(encryptionKey, post);
-    //
-    // // private or friends.
-    // let key = encryptionKey;
-    // if (visibility < 2) {
-    //   key = Box.crypto.symmetric.encrypt(ctx.profilePrivate.keys.encryptionKey[ctx.address], encryptionKey);
-    // }
-    //
-    // Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, {
-    //   posts: {
-    //     [postId]: {
-    //       key,
-    //       post: encryptedPost,
-    //       timestamp: new Date().getTime(),
-    //       visibility,
-    //     },
-    //   },
-    // });
-
-    // // fake delay.
-    // const sleep = (ms) => {
-    //   return new Promise((resolve) => setTimeout(resolve, 1000 * ms));
-    // };
-    // sleep(5).then(redirect);
+    setOpen(false);
+    history.push(`/profile/${ctx.address}`);
   };
 
   return (
     <Content>
-      {!ctx.address ? (
+      {ctx.address ? (
         <>
           <Row style={{ height: '100vh' }}>
             <Col md="auto" className="mx-auto align-self-center">

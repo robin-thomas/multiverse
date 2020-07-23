@@ -3,7 +3,7 @@ import { Buffer } from 'buffer';
 import Box from './3box';
 import Image from './image';
 import Bucket from './bucket';
-import { str2ab, ab2str } from './arraybuffer';
+import { str2ab } from './arraybuffer';
 
 import { app } from '../../config.json';
 
@@ -111,6 +111,11 @@ const File = {
 
     const url = URL.createObjectURL(new Blob(chunks, { type }));
     return await Image.resize(url, resize);
+  },
+
+  loadImageByName: async (bucketName, paths) => {
+    const bucketKey = await Bucket.getKey(bucketName);
+    return await File.loadImage(bucketKey, paths);
   },
 };
 
