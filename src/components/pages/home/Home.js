@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 
 import { MDBBtn, MDBIcon } from 'mdbreact';
-import { Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import ReactFullpage from '@fullpage/react-fullpage';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
@@ -13,6 +13,8 @@ import queryString from 'query-string';
 import Circle from './Circle';
 import { HomeHeader } from './Header';
 import EmptyRow from '../../utils/EmptyRow';
+
+import FriendshipImage from '../../../assets/how_friend_request.jpg';
 
 import styles from './Home.module.css';
 
@@ -86,6 +88,25 @@ const Which = () => (
   </div>
 );
 
+const FriendshipRequest = () => (
+  <div className="section">
+    <Container>
+      <Row>
+        <Col md="10" className="mx-auto">
+          <img src={FriendshipImage} width="90%" />
+        </Col>
+        <Col md="2" className="align-self-center">
+          <Row>
+            <Col className={styles['home-first-text']}>
+              How friendship request works
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Container>
+  </div>
+);
+
 const Finish = () => (
   <div className="section">
     <div className={styles['section-finish']}>
@@ -111,7 +132,7 @@ const Page = ({ history, location }) => {
       <HomeHeader button={button} />
       <ReactFullpage
         navigation
-        sectionsColor={['#191A1E', '#8e24aa', '#0798ec']}
+        sectionsColor={['#191A1E', '#8e24aa', '#191A1E', '#0798ec']}
         onLeave={(_, destination) => {
           switch (destination.index) {
             case 1:
@@ -130,6 +151,7 @@ const Page = ({ history, location }) => {
           <div>
             <Home />
             <Which />
+            <FriendshipRequest />
             <Finish />
           </div>
         )}
