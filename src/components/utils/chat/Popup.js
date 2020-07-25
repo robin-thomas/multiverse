@@ -35,6 +35,7 @@ const Header = ({ title, state, onBack, onClose, username, profilePic }) => (
           color="default"
           component="span"
           className={styles['close']}
+          onClick={onClose}
         >
           <CloseIcon />
         </IconButton>

@@ -13,7 +13,6 @@ const Ethers = {
 
     if (typeof window !== 'undefined' && window.ethereum !== undefined) {
       // TODO: enable only on mainnet network.
-      window.ethereum.autoRefreshOnNetworkChange = false;
       await window.ethereum.enable();
       ethersProvider = new ethers.providers.Web3Provider(window.ethereum);
     } else {

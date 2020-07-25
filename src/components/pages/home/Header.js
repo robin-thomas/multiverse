@@ -49,9 +49,15 @@ const Header = ({ history }) => {
                 {app.name}
               </Link>
             </Col>
-            <Col md="5" className="ml-auto align-self-center">
-              <Search />
-            </Col>
+            {app.features.search ? (
+              <Col md="5" className="ml-auto align-self-center">
+                <Search />
+              </Col>
+            ) : (
+              <Col md="5" className="ml-auto">
+                &nbsp;
+              </Col>
+            )}
             <Col md="auto" className="ml-auto align-self-center">
               <Notifications />
             </Col>

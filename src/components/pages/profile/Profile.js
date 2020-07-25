@@ -7,12 +7,16 @@ import { Row, Col } from 'react-bootstrap';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
-import Box from '../../../utils/3box/index.js';
+import Box from '../../../utils/3box';
+import Bucket from '../../../utils/bucket';
 import Content from '../../app/Content';
 import ProfileBox from './about/ProfileBox';
 import ProfileContents from './ProfileContents';
 import EmptyRow from '../../utils/EmptyRow';
+import Chat from '../../utils/chat';
 import { DataContext } from '../../utils/DataProvider';
+
+import { app } from '../../../../config.json';
 
 const Profile = ({ history }) => {
   const ctx = useContext(DataContext);
@@ -22,6 +26,8 @@ const Profile = ({ history }) => {
 
   useEffect(() => {
     const fn = async () => {
+      await Bucket.getClient();
+
       if (ctx.address !== address) {
         // on backdrop.
         ctx.setBackdropOpen(true);
@@ -83,7 +89,6 @@ const Profile = ({ history }) => {
   }, [ctx.friendRequestsSent]);
 
   useEffect(() => {
-    console.log('Box.message got modified');
     if (Box.message && Box.message.setRequestCallback) {
       Box.message.setRequestCallback(ctx.setFriendRequests);
     }
@@ -106,7 +111,7 @@ const Profile = ({ history }) => {
       <EmptyRow rows={2} />
       <Row style={{ height: '100vh' }}>
         <Col md={{ span: 3, offset: 1 }}>
-          {isValidProfile() ? (
+          {app.features.profileBox && isValidProfile() ? (
             <ProfileBox
               url={`${_url}?profile=${address}`}
               offBackdrop={() => ctx.setBackdropOpen(false)}
@@ -135,6 +140,7 @@ const Profile = ({ history }) => {
           </Row>
         </Col>
       </Row>
+      {ctx.address ? <Chat /> : null}
     </Content>
   );
 };

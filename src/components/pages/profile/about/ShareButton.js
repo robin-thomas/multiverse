@@ -22,7 +22,13 @@ const ShareButton = ({ url }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <Alert count={0} open={open} setOpen={setOpen} icon={<ShareIcon />}>
+    <Alert
+      count={0}
+      setCount={() => {}}
+      open={open}
+      setOpen={setOpen}
+      icon={<ShareIcon />}
+    >
       <Row style={{ height: '60px' }}>
         <Col className="pr-0 text-center align-self-center">
           <FacebookShareButton url={url}>

@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 
-import Box from './3box';
+import Crypto from './3box/crypto';
 import Image from './image';
 import Bucket from './bucket';
 import { str2ab } from './arraybuffer';
@@ -60,7 +60,7 @@ const File = {
       let data = chunk;
       if (encryptionKey) {
         const hex = Buffer.from(chunk).toString('hex');
-        const encrypted = Box.crypto.symmetric.encrypt(encryptionKey, hex);
+        const encrypted = Crypto.symmetric.encrypt(encryptionKey, hex);
         data = str2ab(encrypted);
       }
 
@@ -96,7 +96,7 @@ const File = {
     if (decryptionKey) {
       chunks.forEach((chunk, index) => {
         const hex = Buffer.from(chunk).toString();
-        const decrypted = Box.crypto.symmetric.decrypt(decryptionKey, hex);
+        const decrypted = Crypto.symmetric.decrypt(decryptionKey, hex);
         const data = Buffer.from(decrypted, 'hex');
 
         const ab = new ArrayBuffer(data.length);
@@ -108,14 +108,20 @@ const File = {
         chunks[index] = ab;
       });
     }
+    console.log(bucketKey, paths, chunks, type);
 
     const url = URL.createObjectURL(new Blob(chunks, { type }));
     return await Image.resize(url, resize);
   },
 
-  loadImageByName: async (bucketName, paths) => {
+  loadImageByName: async (
+    bucketName,
+    paths,
+    resize = null,
+    decryptionKey = null
+  ) => {
     const bucketKey = await Bucket.getKey(bucketName);
-    return await File.loadImage(bucketKey, paths);
+    return await File.loadImage(bucketKey, paths, resize, decryptionKey);
   },
 };
 

@@ -2,9 +2,22 @@
   transition: 0.3s;
   box-shadow: 0 8px 40px -12px rgba(0, 0, 0, 0.3);
   border: 0;
-  background-color: black !important;
+  background-color: white !important;
+  margin-bottom: 15px;
 }
 
-.card-content {
-  background-color: white !important;
+.media {
+  height: 0;
+  border: 0 !important;
+  padding-top: 56.25%;
+}
+
+.avatar {
+  background-color: #f44336;
+}
+
+.content {
+  height: 700px;
+  max-width: 100%;
+  overflow-x: hidden;
 }

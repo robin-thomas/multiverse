@@ -3,6 +3,11 @@
     "name": "multiverse",
     "chunk": {
       "size": 262144
+    },
+    "features": {
+      "chat": false,
+      "profileBox": true,
+      "search": false
     }
   },
   "ipfs": {
@@ -19,7 +24,7 @@
     }
   },
   "textile": {
-    "key": "bd44nhdyg6heed35l6j2bdmrpbe",
+    "key": "bhdqume4leb73sw5qantvstvpme",
     "buckets": {
       "profile": {
         "bucket": "multiverse-public"

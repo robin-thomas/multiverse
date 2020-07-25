@@ -8,6 +8,7 @@ const Bucket = {
 
   getClient: async () => {
     if (Bucket.client === null) {
+      console.log('bucket client init');
       // This is bad practice.
       // Shouldn't be shared in frontend.
       // But for hackathon purposes, sticking it here.
@@ -29,11 +30,11 @@ const Bucket = {
     const root = await client.open(bucketName);
 
     if (root) {
-      console.log(root);
+      console.debug('root bucket', root, bucketName);
       return root.key;
     } else {
       const created = await client.init(bucketName);
-      console.log('bucket', created);
+      console.debug('bucket', created);
       return created.root ? created.root.key : null;
     }
   },
