@@ -53,7 +53,14 @@ const ProfileBox = ({ url, offBackdrop }) => {
   return (
     <Card className={styles['card']} variant="outlined">
       <GridListTile className={styles['tile']}>
-        <CardMedia className={styles['media']} image={ctx.profilePic} />
+        <CardMedia
+          className={styles['media']}
+          image={
+            ctx.profilePic
+              ? ctx.profilePic
+              : 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='
+          }
+        />
         {ctx.editable ? (
           <GridListTileBar
             titlePosition="top"

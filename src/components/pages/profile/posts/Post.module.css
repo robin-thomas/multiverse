@@ -4,6 +4,7 @@
   border: 0;
   background-color: white !important;
   margin-bottom: 15px;
+  border: 1px solid rgba(0, 0, 0, 0.9) !important;
 }
 
 .media {
@@ -14,10 +15,4 @@
 
 .avatar {
   background-color: #f44336;
-}
-
-.content {
-  height: 700px;
-  max-width: 100%;
-  overflow-x: hidden;
 }

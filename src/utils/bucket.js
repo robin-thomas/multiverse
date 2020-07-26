@@ -66,6 +66,12 @@ const Bucket = {
 
     return result;
   },
+
+  removeByName: async (bucketName) => {
+    const client = await Bucket.getClient();
+    const key = await Bucket.getKey(bucketName);
+    await client.remove(key);
+  },
 };
 
 export default Bucket;

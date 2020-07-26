@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 
+import _ from 'lodash';
 import { Row, Col, ListGroupItem } from 'react-bootstrap';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
@@ -34,7 +35,10 @@ const Notifications = () => {
 
     const load = async () => {
       for (const item of ctx.friendRequestsSent) {
-        if (!ctx.profilePics[item.friend.address]) {
+        if (
+          !ctx.profilePics[item.friend.address] &&
+          _.has(item.friend, 'profilePic')
+        ) {
           const imgUrl = await File.loadImageByName(
             textile.buckets.profile.bucket,
             item.friend.profilePic,
@@ -44,7 +48,7 @@ const Notifications = () => {
           ctx.setProfilePics((_pics) => {
             return {
               ..._pics,
-              [item.me.address]: imgUrl,
+              [item.friend.address]: imgUrl,
             };
           });
         }

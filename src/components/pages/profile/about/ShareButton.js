@@ -25,6 +25,7 @@ const ShareButton = ({ url }) => {
     <Alert
       count={0}
       setCount={() => {}}
+      title="Share Profile"
       open={open}
       setOpen={setOpen}
       icon={<ShareIcon />}

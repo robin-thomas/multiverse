@@ -7,13 +7,13 @@ import { Row, Col } from 'react-bootstrap';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
+import Posts from './posts';
 import Box from '../../../utils/3box';
 import File from '../../../utils/file';
 import Image from '../../../utils/image';
 import Bucket from '../../../utils/bucket';
 import Content from '../../app/Content';
 import ProfileBox from './about/ProfileBox';
-import ProfileContents from './ProfileContents';
 import EmptyRow from '../../utils/EmptyRow';
 import Chat from '../../utils/chat';
 import { DataContext } from '../../utils/DataProvider';
@@ -162,13 +162,13 @@ const Profile = ({ history }) => {
             </Row>
           ) : null}
           <Row>
-            <Col md={{ span: 7, offset: 2 }}>
-              <ProfileContents />
+            <Col md={{ span: 10, offset: 2 }}>
+              <Posts />
             </Col>
           </Row>
         </Col>
       </Row>
-      {ctx.address ? <Chat /> : null}
+      {app.features.chat && ctx.address ? <Chat /> : null}
     </Content>
   );
 };
