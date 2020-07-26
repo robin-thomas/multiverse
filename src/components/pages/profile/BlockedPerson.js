@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Row, Col, ListGroupItem } from 'react-bootstrap';
@@ -7,11 +7,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Avatar from '@material-ui/core/Avatar';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
-import Box from '../../../utils/3box/index.js';
+import Box from '../../../utils/3box';
+import { DataContext } from '../../utils/DataProvider';
 
 import styles from './Alert.module.css';
 
 const BlockedPerson = ({ message, setOpen, onClick }) => {
+  const ctx = useContext(DataContext);
+
   const remove = async () => {
     if (window.confirm('Are you sure you want to remove the block?')) {
       Box.message.response.deleteById(message.id);
@@ -26,7 +29,7 @@ const BlockedPerson = ({ message, setOpen, onClick }) => {
         <Col md="auto" className="pr-0">
           <Avatar
             alt={message.friend.username}
-            src="/static/images/avatar/1.jpg"
+            src={ctx.profilePics[message.friend.address]}
           />
         </Col>
         <Col md="6" className="align-self-center pr-0">

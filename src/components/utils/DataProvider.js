@@ -8,6 +8,8 @@ const DataProvider = (props) => {
   const [address, setAddress] = useState(null);
   const [editable, setEditable] = useState(false);
   const [bucketKeys, setBucketKeys] = useState({});
+  const [profilePic, setProfilePic] = useState(null);
+  const [profilePics, setProfilePics] = useState({});
   const [friendRequests, setFriendRequests] = useState([]);
   const [profilePrivate, setProfilePrivate] = useState({});
   const [friendRequestsSent, setFriendRequestsSent] = useState([]);
@@ -26,6 +28,10 @@ const DataProvider = (props) => {
         setEditable,
         bucketKeys,
         setBucketKeys,
+        profilePic,
+        setProfilePic,
+        profilePics,
+        setProfilePics,
         friendRequests,
         setFriendRequests,
         profilePrivate,

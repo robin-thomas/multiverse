@@ -1,21 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Row, Col, ListGroupItem } from 'react-bootstrap';
 import Avatar from '@material-ui/core/Avatar';
 
 import Timer from '../../utils/Timer';
+import { DataContext } from '../../utils/DataProvider';
 
 import styles from './Alert.module.css';
 
 const Notification = ({ message, setOpen }) => {
+  const ctx = useContext(DataContext);
+
   return (
     <ListGroupItem>
       <Row>
         <Col md="auto" className="pr-0">
           <Avatar
             alt={message.friend.username}
-            src={message.friend.imgUrl ? message.friend.imgUrl : null}
+            src={ctx.profilePics[message.friend.address]}
           />
         </Col>
         <Col className="align-self-center">

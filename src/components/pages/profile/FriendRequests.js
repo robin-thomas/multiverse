@@ -17,7 +17,6 @@ const FriendRequests = () => {
 
   const [head, setHead] = useState(null);
   const [count, setCount] = useState(0);
-  const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -29,28 +28,27 @@ const FriendRequests = () => {
       setHead(ctx.friendRequests[index].id);
     }
 
-    setItems(ctx.friendRequests);
-
     if (simpleBar.current) {
       simpleBar.current.recalculate();
     }
 
     const load = async () => {
-      let _items = [];
       for (const item of ctx.friendRequests) {
-        let imgUrl = null;
-        if (item.me.profilePic) {
-          imgUrl = await File.loadImage(
+        if (!ctx.profilePics[item.me.address]) {
+          const imgUrl = await File.loadImageByName(
             textile.buckets.profile.bucket,
             item.me.profilePic,
-            100
+            50
           );
+
+          ctx.setProfilePics((_pics) => {
+            return {
+              ..._pics,
+              [item.me.address]: imgUrl,
+            };
+          });
         }
-
-        _items.push({ ...item, imgUrl });
       }
-
-      setItems(_items);
     };
 
     if (ctx.friendRequests.length > 0) {
@@ -68,8 +66,8 @@ const FriendRequests = () => {
       simplebar={simpleBar}
       icon={<PermContactCalendarIcon fontSize="large" />}
     >
-      {items.length > 0 ? (
-        items.map((item, index) => (
+      {ctx.friendRequests.length > 0 ? (
+        ctx.friendRequests.map((item, index) => (
           <FriendRequest key={index} message={item} setOpen={setOpen} />
         ))
       ) : (

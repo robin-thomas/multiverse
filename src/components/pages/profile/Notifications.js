@@ -17,7 +17,6 @@ const Notifications = () => {
 
   const [head, setHead] = useState(null);
   const [count, setCount] = useState(0);
-  const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -29,28 +28,27 @@ const Notifications = () => {
       setHead(ctx.friendRequestsSent[index].id);
     }
 
-    setItems(ctx.friendRequestsSent);
-
     if (simpleBar.current) {
       simpleBar.current.recalculate();
     }
 
     const load = async () => {
-      let _items = [];
       for (const item of ctx.friendRequestsSent) {
-        let imgUrl = null;
-        if (item.friend.profilePic) {
-          imgUrl = await File.loadImage(
+        if (!ctx.profilePics[item.friend.address]) {
+          const imgUrl = await File.loadImageByName(
             textile.buckets.profile.bucket,
             item.friend.profilePic,
-            100
+            50
           );
+
+          ctx.setProfilePics((_pics) => {
+            return {
+              ..._pics,
+              [item.me.address]: imgUrl,
+            };
+          });
         }
-
-        _items.push({ ...item, imgUrl });
       }
-
-      setItems(_items);
     };
 
     if (ctx.friendRequestsSent.length > 0) {
@@ -68,8 +66,8 @@ const Notifications = () => {
       simpleBar={simpleBar}
       icon={<NotificationsIcon fontSize="large" />}
     >
-      {items.length > 0 ? (
-        items.map((item, index) => (
+      {ctx.friendRequestsSent > 0 ? (
+        ctx.friendRequestsSent.map((item, index) => (
           <Notification key={index} message={item} setOpen={setOpen} />
         ))
       ) : (

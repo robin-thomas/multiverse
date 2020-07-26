@@ -76,7 +76,7 @@ const FriendRequest = ({ search, message, setOpen, onClick }) => {
         <Col md="auto" className="pr-0">
           <Avatar
             alt={message.me.username}
-            src={message.me.imgUrl ? message.me.imgUrl : null}
+            src={ctx.profilePics[message.me.address]}
           />
         </Col>
         <Col md="6" className="align-self-center pr-0">

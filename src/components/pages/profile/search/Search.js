@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,6 +16,7 @@ import File from '../../../../utils/file';
 import Ethers from '../../../../utils/ethers';
 import SearchBox from './Box';
 import SearchItems from '../FriendRequest';
+import { DataContext } from '../../../utils/DataProvider';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Search = ({ history }) => {
+  const ctx = useContext(DataContext);
+
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -72,20 +75,27 @@ const Search = ({ history }) => {
       );
 
       if (username) {
-        let imgUrl = null;
         if (profilePic) {
-          imgUrl = await File.loadImage(
-            textile.buckets.profile.bucket,
-            profilePic,
-            100
-          );
+          if (!ctx.profilePics[value]) {
+            const imgUrl = await File.loadImageByName(
+              textile.buckets.profile.bucket,
+              profilePic,
+              50
+            );
+
+            ctx.setProfilePics((_pics) => {
+              return {
+                ..._pics,
+                [value]: imgUrl,
+              };
+            });
+          }
         }
 
         setItems([
           {
             username,
             address: value,
-            imgUrl,
           },
         ]);
 

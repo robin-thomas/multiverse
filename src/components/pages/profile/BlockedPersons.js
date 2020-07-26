@@ -50,21 +50,22 @@ const BlockedPersons = () => {
     }
 
     const load = async () => {
-      let _items = [];
       for (const item of ctx.friendRequests) {
-        let imgUrl = null;
-        if (item.me.profilePic) {
-          imgUrl = await File.loadImage(
+        if (!ctx.profilePics[item.me.address]) {
+          const imgUrl = await File.loadImageByName(
             textile.buckets.profile.bucket,
             item.me.profilePic,
-            100
+            50
           );
+
+          ctx.setProfilePics((_pics) => {
+            return {
+              ..._pics,
+              [item.me.address]: imgUrl,
+            };
+          });
         }
-
-        _items.push({ ...item, imgUrl });
       }
-
-      setDenied(_items);
     };
 
     if (results > 0) {

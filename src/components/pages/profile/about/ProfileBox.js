@@ -18,18 +18,13 @@ import ShareButton from './ShareButton';
 import Box from '../../../../utils/3box/index.js';
 import TextInput from '../../../utils/TextInput';
 import Upload from '../../../utils/upload';
-import File from '../../../../utils/file';
 import { DataContext } from '../../../utils/DataProvider';
 
-import profileImg from '../../../../assets/profile.jpg';
 import styles from './ProfileBox.module.css';
-
-import { textile } from '../../../../../config.json';
 
 const ProfileBox = ({ url, offBackdrop }) => {
   const ctx = useContext(DataContext);
 
-  const [image, setImage] = useState(null);
   const [about, setAbout] = useState(null);
   const [imageRows, setImageRows] = useState([]);
   const [show, setShow] = useState(false);
@@ -37,19 +32,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
 
   useEffect(() => {
     setAbout(ctx.profile.about ? ctx.profile.about : '');
-    setImage(profileImg);
-
-    if (ctx.profile.profilePic) {
-      File.loadImageByName(
-        textile.buckets.profile.bucket,
-        ctx.profile.profilePic
-      )
-        .then(setImage)
-        .catch(console.error)
-        .finally(() => offBackdrop());
-    } else {
-      offBackdrop();
-    }
+    offBackdrop();
   }, [ctx.profile]);
 
   useEffect(() => {
@@ -70,7 +53,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
   return (
     <Card className={styles['card']} variant="outlined">
       <GridListTile className={styles['tile']}>
-        <CardMedia className={styles['media']} image={image} />
+        <CardMedia className={styles['media']} image={ctx.profilePic} />
         {ctx.editable ? (
           <GridListTileBar
             titlePosition="top"
@@ -100,13 +83,16 @@ const ProfileBox = ({ url, offBackdrop }) => {
         imageRows={imageRows}
         setImageRows={setImageRows}
         addFileNames={(_imageHashes) => setImageHashes(_imageHashes)}
-        addImageUrl={(_imageUrl) => setImage(_imageUrl)}
+        addImageUrl={(_imageUrl) => ctx.setProfilePic(_imageUrl)}
         bucketKey={ctx.bucketKeys.profilePic}
       />
       <CardContent className={styles['card-content']}>
         <Row>
           <Col md="auto">
-            <Avatar alt={ctx.profile.username} src={image} />
+            <Avatar
+              alt={ctx.profile.username}
+              src={ctx.profilePics[ctx.profile.address]}
+            />
           </Col>
           <Col md="7">
             <Typography variant="button" display="block" gutterBottom>

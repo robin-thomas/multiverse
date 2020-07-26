@@ -8,6 +8,15 @@ import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardHeader from '@material-ui/core/CardHeader';
 import SimpleBar from 'simplebar-react';
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import { withStyles } from '@material-ui/core/styles';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import EditIcon from '@material-ui/icons/Edit';
 
 import Crypto from '../../../utils/3box/crypto';
 import Timer from '../../utils/Timer';
@@ -16,9 +25,40 @@ import { DataContext } from '../../utils/DataProvider';
 
 import styles from './ProfileContent.module.css';
 
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+  },
+  list: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'left',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
+  />
+));
+
+const StyledMenuItem = withStyles((theme) => ({
+  root: {
+    width: '170px',
+  },
+}))(MenuItem);
+
 const ProfileContent = React.memo(
   ({ username, profilePic, post, decryptionKey }) => {
     const [images, setImages] = useState([]);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
       const fn = async () => {
@@ -62,6 +102,32 @@ const ProfileContent = React.memo(
               className={styles['avatar']}
             />
           }
+          action={
+            <>
+              <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
+                <MoreVertIcon />
+              </IconButton>
+              <StyledMenu
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
+              >
+                <StyledMenuItem>
+                  <ListItemIcon>
+                    <EditIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Edit" />
+                </StyledMenuItem>
+                <StyledMenuItem>
+                  <ListItemIcon>
+                    <DeleteOutlineIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Delete" />
+                </StyledMenuItem>
+              </StyledMenu>
+            </>
+          }
           title={username}
           subheader={
             <>
@@ -94,19 +160,9 @@ const ProfileContents = () => {
   const simpleBar = useRef(null);
 
   const [posts, setPosts] = useState([]);
-  const [profilePic, setProfilePic] = useState(null);
   const [decryptionKey, setDecryptionKey] = useState(null);
 
   useEffect(() => {
-    // if (ctx.profile.profilePic) {
-    //   File.loadImageByName(
-    //     textile.buckets.profile.bucket,
-    //     ctx.profile.profilePic
-    //   )
-    //     .then(setProfilePic)
-    //     .catch(console.error);
-    // }
-
     if (
       _.has(ctx.profile, 'posts') &&
       Object.keys(ctx.profile.posts).length > 0
@@ -165,7 +221,7 @@ const ProfileContents = () => {
       {posts.map((post, index) => (
         <ProfileContent
           key={index}
-          profilePic={profilePic}
+          profilePic={ctx.profilePics[ctx.profile.address]}
           username={ctx.profile.username}
           post={post}
           decryptionKey={decryptionKey}

@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import Box from '../../../utils/3box';
+import File from '../../../utils/file';
+import Image from '../../../utils/image';
 import Bucket from '../../../utils/bucket';
 import Content from '../../app/Content';
 import ProfileBox from './about/ProfileBox';
@@ -16,7 +18,7 @@ import EmptyRow from '../../utils/EmptyRow';
 import Chat from '../../utils/chat';
 import { DataContext } from '../../utils/DataProvider';
 
-import { app } from '../../../../config.json';
+import { app, textile } from '../../../../config.json';
 
 const Profile = ({ history }) => {
   const ctx = useContext(DataContext);
@@ -26,6 +28,7 @@ const Profile = ({ history }) => {
 
   useEffect(() => {
     const fn = async () => {
+      ctx.setProfilePic(null);
       await Bucket.getClient();
 
       if (ctx.address !== address) {
@@ -61,6 +64,31 @@ const Profile = ({ history }) => {
 
     fn();
   }, [address]);
+
+  useEffect(() => {
+    const fn = async () => {
+      try {
+        if (_.has(ctx.profile, 'profilePic')) {
+          const buck = textile.buckets.profile.bucket;
+          const img = await File.loadImageByName(buck, ctx.profile.profilePic);
+          ctx.setProfilePic(img);
+
+          // Resize the image for avatar purposes.
+          const resizedImg = await Image.resize(img, 50);
+          ctx.setProfilePics((_pics) => {
+            return {
+              ..._pics,
+              [ctx.profile.address]: resizedImg,
+            };
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fn();
+  }, [ctx.profile]);
 
   useEffect(() => {
     for (const request of ctx.friendRequestsSent) {
