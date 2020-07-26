@@ -15,9 +15,13 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
+import Button from '@material-ui/core/Button';
 
+import Box from '../../../../utils/3box';
+import Crypto from '../../../../utils/3box/crypto';
 import Timer from '../../../utils/Timer';
 import File from '../../../../utils/file';
+import Editor from '../../../utils/Editor';
 import { DataContext } from '../../../utils/DataProvider';
 
 import styles from './Post.module.css';
@@ -56,7 +60,9 @@ const Post = React.memo(({ username, profilePic, post, onDelete }) => {
   const ctx = useContext(DataContext);
 
   const [images, setImages] = useState([]);
+  const [editable, setEditable] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [postContent, setPostContent] = useState(post.content);
 
   useEffect(() => {
     const fn = async () => {
@@ -90,9 +96,42 @@ const Post = React.memo(({ username, profilePic, post, onDelete }) => {
     }
   }, [post.decryptionKey]);
 
+  const _edit = () => {
+    setEditable(true);
+    setAnchorEl(null);
+  };
+
   const _delete = () => {
     onDelete(post.id, post.visibility);
     setAnchorEl(null);
+  };
+
+  const updatePostContent = () => {
+    // Re-encrypt.
+    const _post = JSON.stringify({
+      id: post.id,
+      bucket: post.bucket,
+      content: postContent,
+      attachments: post.attachments,
+    });
+    const encryptedPost = Crypto.symmetric.encrypt(post.decryptionKey, _post);
+
+    // Update it in 3Box.
+    const arg = {
+      posts: {
+        [post.id]: {
+          post: encryptedPost,
+        },
+      },
+    };
+
+    if (post.visibility > 0) {
+      Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, arg);
+    } else {
+      Box.set(Box.DATASTORE_KEY_PROFILE_PRIVATE, arg);
+    }
+
+    setEditable(false);
   };
 
   return (
@@ -117,14 +156,14 @@ const Post = React.memo(({ username, profilePic, post, onDelete }) => {
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
               >
-                <StyledMenuItem>
-                  <ListItemIcon style={{ minWidth: '35px' }}>
+                <StyledMenuItem onClick={_edit}>
+                  <ListItemIcon className={styles['list-item']}>
                     <EditIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText primary="Edit" />
                 </StyledMenuItem>
                 <StyledMenuItem onClick={_delete}>
-                  <ListItemIcon style={{ minWidth: '35px' }}>
+                  <ListItemIcon className={styles['list-item']}>
                     <DeleteOutlineIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText primary="Delete" />
@@ -150,7 +189,21 @@ const Post = React.memo(({ username, profilePic, post, onDelete }) => {
         <CardMedia className={styles['media']} image={images[0]} />
       ) : null}
       <CardContent>
-        <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        {editable ? (
+          <>
+            <Editor input={postContent} setInput={setPostContent} />
+            <Button
+              variant="contained"
+              color="primary"
+              className={styles['editor-btn']}
+              onClick={updatePostContent}
+            >
+              Save
+            </Button>
+          </>
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: postContent }} />
+        )}
       </CardContent>
     </Card>
   );

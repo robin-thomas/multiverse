@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import Editor from 'react-froala-wysiwyg';
 import { Row, Col } from 'react-bootstrap';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
@@ -24,10 +23,8 @@ import Content from '../../../app/Content';
 import ImagePreview from './ImagePreview';
 import Visibility from './Visibility';
 import Upload from '../../../utils/upload';
+import Editor from '../../../utils/Editor';
 import { DataContext } from '../../../utils/DataProvider';
-
-import 'froala-editor/css/froala_style.min.css';
-import 'froala-editor/css/froala_editor.pkgd.min.css';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -196,20 +193,7 @@ const Post = ({ history }) => {
                   </Row>
                   <Row>
                     <Col>
-                      <Editor
-                        tag="textarea"
-                        model={input}
-                        onModelChange={setInput}
-                        config={{
-                          toolbarButtons: [
-                            'bold',
-                            'italic',
-                            'underline',
-                            'undo',
-                            'redo',
-                          ],
-                        }}
-                      />
+                      <Editor input={input} setInput={setInput} />
                     </Col>
                   </Row>
                   <Row>

@@ -108,7 +108,6 @@ const File = {
         chunks[index] = ab;
       });
     }
-    console.log(bucketKey, paths, chunks, type);
 
     const url = URL.createObjectURL(new Blob(chunks, { type }));
     return await Image.resize(url, resize);

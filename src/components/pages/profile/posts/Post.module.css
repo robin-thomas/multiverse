@@ -3,7 +3,7 @@
   box-shadow: 0 8px 40px -12px rgba(0, 0, 0, 0.3);
   border: 0;
   background-color: white !important;
-  margin-bottom: 15px;
+  margin-bottom: 50px;
   border: 1px solid rgba(0, 0, 0, 0.9) !important;
 }
 
@@ -15,4 +15,12 @@
 
 .avatar {
   background-color: #f44336;
+}
+
+.list-item {
+  min-width: 35px !important;
+}
+
+.editor-btn {
+  margin-top: 15px !important;
 }
