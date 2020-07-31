@@ -1,8 +1,11 @@
 import Request from './request';
 import Response from './response';
 
+import { app } from '../../../config.json';
+
 class Message {
   constructor(box, address) {
+    this.box = box;
     this.address = address;
     this.requestCallback = () => {};
     this.responseCallback = () => {};
@@ -68,8 +71,8 @@ class Message {
         (e) => e.message.friend.address === this.address
       );
 
-      console.log('requests', requests);
-      console.log('responses', responses);
+      console.debug('requests', requests);
+      console.debug('responses', responses);
 
       const results = requests.reduce((p, c) => {
         const completed = responses.find(
@@ -90,6 +93,7 @@ class Message {
           ...c.message,
           ...(status === 'ok'
             ? {
+                thread: completed.message.thread,
                 nonce: completed.message.nonce,
                 pubKey: completed.message.pubKey,
                 encryptedKey: completed.message.encryptedKey,
@@ -110,10 +114,21 @@ class Message {
         return p;
       }, []);
 
-      console.log('results', results);
+      console.info('results', results);
 
       this.responseCallback(results);
     }
+  }
+
+  async createChatThread(address, username, friendUsername) {
+    const name = `${app.name}_chats_${username}_${friendUsername}`;
+    const thread = await this.box.joinThread(name, { members: true });
+
+    try {
+      await thread.addMember(address);
+    } catch (err) {}
+
+    return thread._address;
   }
 }
 

@@ -12,7 +12,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckIcon from '@material-ui/icons/Check';
 import BlockIcon from '@material-ui/icons/Block';
 
-import Box from '../../../../utils/3box/index.js';
+import Box from '../../../../utils/3box';
+import Crypto from '../../../../utils/crypto';
 import { DataContext } from '../../../utils/DataProvider';
 
 import styles from './FriendRequest.module.css';
@@ -98,10 +99,7 @@ const FriendRequest = () => {
     };
 
     await Box.message.request.post({
-      pubKey: Box.get(
-        Box.DATASTORE_KEY_PROFILE_PRIVATE,
-        'keys.keypair.publicKey'
-      ),
+      pubKey: Crypto.box.publicKey(),
       ...message,
     });
 

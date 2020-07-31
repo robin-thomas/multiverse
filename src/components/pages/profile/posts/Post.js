@@ -18,7 +18,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 
 import Box from '../../../../utils/3box';
-import Crypto from '../../../../utils/3box/crypto';
+import Crypto from '../../../../utils/crypto';
 import Timer from '../../../utils/Timer';
 import File from '../../../../utils/file';
 import Editor from '../../../utils/Editor';

@@ -9,6 +9,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import Posts from './posts';
 import Box from '../../../utils/3box';
+import Crypto from '../../../utils/crypto';
 import File from '../../../utils/file';
 import Image from '../../../utils/image';
 import Bucket from '../../../utils/bucket';
@@ -93,22 +94,23 @@ const Profile = ({ history }) => {
   useEffect(() => {
     for (const request of ctx.friendRequestsSent) {
       if (request.status === 'ok') {
-        const encryptionKey = Box.crypto.asymmetric.decrypt(
+        const encryptionKey = Crypto.asymmetric.decrypt(
           request.encryptedKey,
           request.nonce,
           {
             publicKey: request.pubKey,
-            secretKey: Box.get(
-              Box.DATASTORE_KEY_PROFILE_PRIVATE,
-              'keys.keypair.secretKey'
-            ),
+            secretKey: Crypto.box.secretKey(),
           }
         );
+        console.debug('encryptionKey', encryptionKey);
 
         Box.set(Box.DATASTORE_KEY_PROFILE_PRIVATE, {
+          chats: {
+            [request.friend.address]: request.thread,
+          },
           keys: {
             encryptionKeys: {
-              [request.friend]: encryptionKey,
+              [request.friend.address]: encryptionKey,
             },
           },
         });
@@ -117,6 +119,7 @@ const Profile = ({ history }) => {
   }, [ctx.friendRequestsSent]);
 
   useEffect(() => {
+    console.debug('Box.message triggered');
     if (Box.message && Box.message.setRequestCallback) {
       Box.message.setRequestCallback(ctx.setFriendRequests);
     }

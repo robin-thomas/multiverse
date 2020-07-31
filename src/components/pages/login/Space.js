@@ -9,7 +9,8 @@ import Page from './Page';
 import { DataContext } from '../../utils/DataProvider';
 
 import Bucket from '../../../utils/bucket';
-import Box from '../../../utils/3box/index.js';
+import Box from '../../../utils/3box';
+import Crypto from '../../../utils/crypto';
 
 import styles from './Page.module.css';
 
@@ -60,16 +61,13 @@ const Space = ({ setStage }) => {
           return { ..._bucketKeys, profilePic: bucketKey };
         });
 
-        let keypair = Box.get(
-          Box.DATASTORE_KEY_PROFILE_PRIVATE,
-          'keys.keypair'
-        );
-
+        let keypair = Crypto.box.keypair();
         if (!keypair) {
           // Create encryptionKey and keypair
-          const encryptionKey = Box.crypto.symmetric.genKey();
-
-          keypair = (await Box.crypto.asymmetric.genKeypair()).toString();
+          const encryptionKey = Crypto.symmetric.genKey();
+          keypair = (
+            await Crypto.asymmetric.genKeypair(ctx.address)
+          ).toString();
 
           Box.set(
             Box.DATASTORE_KEY_PROFILE_PRIVATE,
@@ -109,14 +107,11 @@ const Space = ({ setStage }) => {
   //   for (const request of ctx.friendRequestsSent) {
   //     if (request.status === 'ok') {
   //       // decrypt the encryptionKey.
-  //       const encryptionKey = Box.crypto.asymmetric.decrypt(
+  //       const encryptionKey = Crypto.asymmetric.decrypt(
   //         request.encryptedKey,
   //         request.nonce, {
   //         publicKey: request.pubKey,
-  //         secretKey: Box.get(
-  //           Box.DATASTORE_KEY_PROFILE_PRIVATE,
-  //           'keys.keypair.secretKey'
-  //         ),
+  //         secretKey: Crypto.box.secretKey(),
   //       });
   //       console.log('encryptionKey', encryptionKey);
   //

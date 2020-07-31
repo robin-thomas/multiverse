@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 
-import Crypto from './3box/crypto';
+import Crypto from './crypto';
 import Image from './image';
 import Bucket from './bucket';
 import { str2ab } from './arraybuffer';

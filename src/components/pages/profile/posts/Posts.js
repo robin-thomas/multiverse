@@ -7,7 +7,7 @@ import SimpleBar from 'simplebar-react';
 import Post from './Post';
 import Box from '../../../../utils/3box';
 import Bucket from '../../../../utils/bucket';
-import Crypto from '../../../../utils/3box/crypto';
+import Crypto from '../../../../utils/crypto';
 import { DataContext } from '../../../utils/DataProvider';
 
 import styles from './Posts.module.css';

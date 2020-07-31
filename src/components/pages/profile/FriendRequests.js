@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 
+import _ from 'lodash';
 import { Row, Col, ListGroupItem } from 'react-bootstrap';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 
@@ -34,7 +35,7 @@ const FriendRequests = () => {
 
     const load = async () => {
       for (const item of ctx.friendRequests) {
-        if (!ctx.profilePics[item.me.address]) {
+        if (!ctx.profilePics[item.me.address] && _.has(item.me, 'profilePic')) {
           const imgUrl = await File.loadImageByName(
             textile.buckets.profile.bucket,
             item.me.profilePic,

@@ -18,6 +18,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Box from '../../../../utils/3box';
+import Crypto from '../../../../utils/crypto';
 import Bucket from '../../../../utils/bucket';
 import Content from '../../../app/Content';
 import ImagePreview from './ImagePreview';
@@ -71,7 +72,7 @@ const Post = ({ history }) => {
     const now = new Date().getTime();
     setPostId(now.toString());
 
-    const key = Box.crypto.symmetric.genKey();
+    const key = Crypto.symmetric.genKey();
     setEncryptionKey(key);
 
     Bucket.getKey(now.toString()).then(setBucketKey);
@@ -89,12 +90,12 @@ const Post = ({ history }) => {
         audio: '',
       },
     });
-    const encryptedPost = Box.crypto.symmetric.encrypt(encryptionKey, post);
+    const encryptedPost = Crypto.symmetric.encrypt(encryptionKey, post);
 
     // private or friends.
     let key = encryptionKey;
     if (visibility < 2) {
-      key = Box.crypto.symmetric.encrypt(
+      key = Crypto.symmetric.encrypt(
         ctx.profilePrivate.keys.encryptionKeys[ctx.address],
         encryptionKey
       );

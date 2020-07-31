@@ -10,7 +10,8 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { green } from '@material-ui/core/colors';
 
 import { DataContext } from '../../utils/DataProvider';
-import Box from '../../../utils/3box/index.js';
+import Box from '../../../utils/3box';
+import Crypto from '../../../utils/crypto';
 
 import styles from './Alert.module.css';
 
@@ -22,26 +23,32 @@ const FriendRequest = ({ search, message, setOpen, onClick }) => {
       ctx.setBackdropOpen((_open) => !_open);
 
       // Encrypt the encryptionKey using the pubKey.
-      const encryptionKey = Box.get(
-        Box.DATASTORE_KEY_PROFILE_PRIVATE,
-        `keys.encryptionKeys.${message.friend}`
+      const encryptionKey = Crypto.box.encryptionKey(ctx.address);
+      console.debug('encryptionKey', encryptionKey);
+
+      const nonce = Crypto.asymmetric.genNonce().toString();
+      const encryptedKey = Crypto.asymmetric.encrypt(encryptionKey, nonce, {
+        publicKey: message.pubKey,
+        secretKey: Crypto.box.secretKey(),
+      });
+
+      // Create a chat thread.
+      const thread = await Box.message.createChatThread(
+        message.me.address,
+        message.me.username,
+        message.friend.username
       );
 
-      const nonce = Box.crypto.asymmetric.genNonce().toString();
-      const encryptedKey = Box.crypto.asymmetric.encrypt(encryptionKey, nonce, {
-        publicKey: message.pubKey,
-        secretKey: Box.get(
-          Box.DATASTORE_KEY_PROFILE_PRIVATE,
-          'keys.keypair.secretKey'
-        ),
+      Box.set(Box.DATASTORE_KEY_PROFILE_PRIVATE, {
+        chats: {
+          [message.me.address]: thread,
+        },
       });
 
       await Box.message.response.post({
+        thread,
         encryptedKey,
-        pubKey: Box.get(
-          Box.DATASTORE_KEY_PROFILE_PRIVATE,
-          'keys.keypair.publicKey'
-        ),
+        pubKey: Crypto.box.publicKey(),
         nonce,
         me: message.friend,
         friend: message.me,

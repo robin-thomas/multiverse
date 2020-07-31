@@ -3,7 +3,6 @@ import CryptoJS from 'crypto-js';
 import _ from 'lodash';
 
 import Message from './message';
-import crypto from './crypto';
 
 import { app, threebox } from '../../../config.json';
 
@@ -212,14 +211,6 @@ const Box = {
 
       return p;
     }, {});
-  },
-
-  crypto: {
-    ...crypto,
-    asymmetric: {
-      ...crypto.asymmetric,
-      genKeypair: () => crypto.asymmetric.genKeypair(Box.address),
-    },
   },
 };
 

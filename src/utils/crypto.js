@@ -4,10 +4,11 @@ import fernet from 'fernet';
 import CryptoJS from 'crypto-js';
 import { ethers } from 'ethers';
 
-import Keypair from './keypair';
-import Nonce from './nonce';
+import Box from './3box';
+import Keypair from './3box/keypair';
+import Nonce from './3box/nonce';
 
-import { app } from '../../../config.json';
+import { app } from '../../config.json';
 
 const NONCE_LENGTH = 24;
 const FERNET_SECRET_LENGTH = 32;
@@ -26,6 +27,22 @@ const randomString = () => {
 };
 
 const Crypto = {
+  box: {
+    keypair: () => Box.get(Box.DATASTORE_KEY_PROFILE_PRIVATE, 'keys.keypair'),
+
+    publicKey: () =>
+      Box.get(Box.DATASTORE_KEY_PROFILE_PRIVATE, 'keys.keypair.publicKey'),
+
+    secretKey: () =>
+      Box.get(Box.DATASTORE_KEY_PROFILE_PRIVATE, 'keys.keypair.secretKey'),
+
+    encryptionKey: (address) =>
+      Box.get(
+        Box.DATASTORE_KEY_PROFILE_PRIVATE,
+        `keys.encryptionKeys.${address}`
+      ),
+  },
+
   symmetric: {
     genKey: () => {
       let key = CryptoJS.SHA256(randomString()).toString(CryptoJS.enc.Base64);
