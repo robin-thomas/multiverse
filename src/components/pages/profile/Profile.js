@@ -70,7 +70,7 @@ const Profile = ({ history }) => {
     const fn = async () => {
       try {
         if (_.has(ctx.profile, 'profilePic')) {
-          const buck = textile.buckets.profile.bucket;
+          const buck = textile.buckets.profile;
           const img = await File.loadImageByName(buck, ctx.profile.profilePic);
           ctx.setProfilePic(img);
 

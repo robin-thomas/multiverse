@@ -1,66 +1,81 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 
-import { Row, Col } from 'react-bootstrap';
 import SimpleBar from 'simplebar-react';
-import Avatar from '@material-ui/core/Avatar';
-import Tooltip from '@material-ui/core/Tooltip';
-import Chip from '@material-ui/core/Chip';
-import FaceIcon from '@material-ui/icons/Face';
 
+import Friend from './Friend';
 import Messages from './Messages';
+import Box from '../../../utils/3box';
+import File from '../../../utils/file';
+import { DataContext } from '../DataProvider';
 
 import styles from './Content.module.css';
 
-const Friend = ({ address, username, profilePic, onClick, hasNewMessages }) => (
-  <div className={styles['friend']} onClick={onClick}>
-    <Row>
-      <Col md="auto" className="align-self-center">
-        <Tooltip title={address}>
-          <Avatar alt={username} src={profilePic} />
-        </Tooltip>
-      </Col>
-      <Col className="align-self-center">
-        {hasNewMessages ? (
-          <div className={styles['bold-user']}>{username}</div>
-        ) : (
-          username
-        )}
-      </Col>
-      {hasNewMessages ? (
-        <Col md="auto" className="align-self-center">
-          <Chip
-            icon={<FaceIcon />}
-            label="new"
-            color="secondary"
-            variant="outlined"
-          />
-        </Col>
-      ) : null}
-    </Row>
-  </div>
-);
-
 const Content = ({ state, onClick }) => {
+  const ctx = useContext(DataContext);
+
   const simpleBar = useRef(null);
 
   const [friends, setFriends] = useState([]);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    const _f = [];
-    for (let i = 0; i < 15; ++i) {
-      _f.push({ username: 'robin', profilePic: '', address: '0x' });
+    const _friends = Object.keys(ctx.profilePrivate.chats).map((_address) => {
+      let _friend = Box.message.request.items.find(
+        (e) => e.message.me.address === _address
+      );
+      if (!_friend) {
+        _friend = Box.message.response.items.find(
+          (e) => e.message.me.address === _address
+        );
+      }
+
+      return {
+        address: _address,
+        username: _friend.message.me.username,
+        profilePic: _friend.message.me.profilePic,
+      };
+    });
+
+    setFriends(_friends);
+  }, [ctx.profilePrivate.chats]);
+
+  useEffect(() => {
+    const load = async () => {
+      for (const friend of friends) {
+        if (!ctx.profilePics[friend.address]) {
+          if (friend.profilePic) {
+            const imgUrl = await File.avatar(friend.profilePic);
+
+            ctx.setProfilePics((_pics) => {
+              return {
+                ..._pics,
+                [friend.address]: imgUrl,
+              };
+            });
+          }
+        }
+      }
+    };
+
+    if (friends.length > 0) {
+      load();
     }
-    setFriends(_f);
-  }, []);
+  }, [friends]);
 
   return (
     <SimpleBar ref={simpleBar} className={styles['content']}>
       {state === 0 ? (
         friends.map((friend, index) => (
-          <Friend key={index} {...friend} onClick={() => onClick(friend)} />
+          <Friend
+            key={index}
+            {...friend}
+            setMessages={setMessages}
+            onClick={onClick}
+            profilePic={ctx.profilePics[friend.address]}
+          />
         ))
       ) : (
-        <Messages />
+        <Messages messages={messages} />
       )}
     </SimpleBar>
   );

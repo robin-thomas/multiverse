@@ -9,8 +9,6 @@ import Notification from './Notification';
 import File from '../../../utils/file';
 import { DataContext } from '../../utils/DataProvider';
 
-import { textile } from '../../../../config.json';
-
 const Notifications = () => {
   const ctx = useContext(DataContext);
 
@@ -39,11 +37,7 @@ const Notifications = () => {
           !ctx.profilePics[item.friend.address] &&
           _.has(item.friend, 'profilePic')
         ) {
-          const imgUrl = await File.loadImageByName(
-            textile.buckets.profile.bucket,
-            item.friend.profilePic,
-            50
-          );
+          const imgUrl = await File.avatar(item.friend.profilePic);
 
           ctx.setProfilePics((_pics) => {
             return {

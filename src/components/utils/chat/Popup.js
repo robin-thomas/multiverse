@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import { Row, Col } from 'react-bootstrap';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Avatar from '@material-ui/core/Avatar';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import InputBase from '@material-ui/core/InputBase';
 
 import Content from './Content';
+import { DataContext } from '../DataProvider';
 
 import styles from './Popup.module.css';
 
@@ -44,20 +46,26 @@ const Header = ({ title, state, onBack, onClose, username, profilePic }) => (
   </div>
 );
 
-const Footer = ({ state }) => {
+const Footer = ({ state, thread, address }) => {
   const [message, setMessage] = useState('');
   const [active, setActive] = useState(false);
 
-  const submitMessage = (e) => {};
+  const submitMessage = async () => {
+    await thread.post({ address, message });
+    setMessage('');
+  };
 
-  const onKeyDown = (e) => {
-    if (e.keyCode === 13 && !e.shiftKey) {
-      submitMessage(e);
+  const typeMessage = (e) => {
+    if (message.length === 100 && e.keyCode !== 8) {
+      return;
     }
 
-    // set char limit.
-    if (e.target.innerHTML.length === 100 && e.keyCode != 8) {
-      e.preventDefault();
+    setMessage(e.target.value);
+  };
+
+  const onKeyDown = async (e) => {
+    if (e.keyCode === 13 && !e.shiftKey) {
+      await submitMessage();
     }
   };
 
@@ -65,16 +73,19 @@ const Footer = ({ state }) => {
     <div className={styles['footer']}>You can chat only with your friends</div>
   ) : (
     <div className={styles['footer']}>
-      <div className={styles[`${active ? 'input-form-active' : ''}`]}>
-        <div
-          role="button"
-          tabIndex="0"
-          contentEditable="true"
+      <div
+        className={styles[`${active ? 'input-form-active' : ''}`]}
+        style={{ padding: '0 20px' }}
+      >
+        <InputBase
+          fullWidth
+          autoFocus={true}
+          value={message}
+          onChange={typeMessage}
+          onKeyDown={onKeyDown}
           placeholder="Write a reply..."
-          className={styles['input']}
           onFocus={() => setActive(true)}
           onBlur={() => setActive(false)}
-          onKeyDown={onKeyDown}
         />
       </div>
     </div>
@@ -82,12 +93,16 @@ const Footer = ({ state }) => {
 };
 
 const Popup = ({ onClose, username, profilePic }) => {
+  const ctx = useContext(DataContext);
+
   const [state, setState] = useState(0);
+  const [thread, setThread] = useState(null);
   const [title, setTitle] = useState('Chat');
 
-  const onClick = ({ address, username }) => {
+  const onClick = ({ address, username, chatThread }) => {
     setTitle(username);
     setState(1);
+    setThread(chatThread);
   };
 
   const onBack = () => {
@@ -106,7 +121,7 @@ const Popup = ({ onClose, username, profilePic }) => {
         onBack={onBack}
       />
       <Content onClick={onClick} state={state} />
-      <Footer state={state} />
+      <Footer state={state} thread={thread} address={ctx.address} />
     </div>
   );
 };

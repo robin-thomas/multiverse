@@ -26,9 +26,7 @@
   "textile": {
     "key": "bhdqume4leb73sw5qantvstvpme",
     "buckets": {
-      "profile": {
-        "bucket": "multiverse-public"
-      }
+      "profile": "multiverse-public"
     }
   }
 }

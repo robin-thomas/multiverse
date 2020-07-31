@@ -1,0 +1,22 @@
+.row {
+  padding: 10px 20px;
+}
+
+.message-sent,
+.message-received {
+  word-wrap: break-word;
+  border-radius: 6px;
+  padding: 17px 20px;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.message-sent {
+  color: white;
+  background-color: #3f51b5;
+}
+
+.message-received {
+  color: #263238;
+  background-color: #f4f7f9;
+}

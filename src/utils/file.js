@@ -5,7 +5,7 @@ import Image from './image';
 import Bucket from './bucket';
 import { str2ab } from './arraybuffer';
 
-import { app } from '../../config.json';
+import { app, textile } from '../../config.json';
 
 const File = {
   props: (fileName, size) => {
@@ -121,6 +121,10 @@ const File = {
   ) => {
     const bucketKey = await Bucket.getKey(bucketName);
     return await File.loadImage(bucketKey, paths, resize, decryptionKey);
+  },
+
+  avatar: async (pic) => {
+    return await File.loadImageByName(textile.buckets.profile, pic, 50);
   },
 };
 

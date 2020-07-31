@@ -130,6 +130,10 @@ class Message {
 
     return thread._address;
   }
+
+  async joinThreadByAddress(address) {
+    return await this.box.joinThreadByAddress(address);
+  }
 }
 
 export default Message;

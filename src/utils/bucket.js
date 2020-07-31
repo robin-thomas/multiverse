@@ -8,7 +8,7 @@ const Bucket = {
 
   getClient: async () => {
     if (Bucket.client === null) {
-      console.log('bucket client init');
+      console.debug('bucket client init');
       // This is bad practice.
       // Shouldn't be shared in frontend.
       // But for hackathon purposes, sticking it here.

@@ -52,7 +52,7 @@ const Space = ({ setStage }) => {
       // Setup the 3box space.
       try {
         const [bucketKey] = await Promise.all([
-          Bucket.getKey(textile.buckets.profile.bucket),
+          Bucket.getKey(textile.buckets.profile),
           Box.getAll(ctx.address),
         ]);
         console.log('data', Box.storage);

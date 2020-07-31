@@ -9,8 +9,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { textile } from '../../../../../config.json';
-
 import Box from '../../../../utils/3box';
 import File from '../../../../utils/file';
 import Ethers from '../../../../utils/ethers';
@@ -77,11 +75,7 @@ const Search = ({ history }) => {
       if (username) {
         if (profilePic) {
           if (!ctx.profilePics[value]) {
-            const imgUrl = await File.loadImageByName(
-              textile.buckets.profile.bucket,
-              profilePic,
-              50
-            );
+            const imgUrl = await File.avatar(profilePic);
 
             ctx.setProfilePics((_pics) => {
               return {

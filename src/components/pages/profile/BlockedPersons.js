@@ -10,8 +10,6 @@ import File from '../../../utils/file';
 import { DataContext } from '../../utils/DataProvider';
 import BlockedPerson from './BlockedPerson';
 
-import { textile } from '../../../../config.json';
-
 const BlockedPersons = () => {
   const ctx = useContext(DataContext);
 
@@ -53,11 +51,7 @@ const BlockedPersons = () => {
     const load = async () => {
       for (const item of ctx.friendRequests) {
         if (!ctx.profilePics[item.me.address] && _.has(item.me, 'profilePic')) {
-          const imgUrl = await File.loadImageByName(
-            textile.buckets.profile.bucket,
-            item.me.profilePic,
-            50
-          );
+          const imgUrl = await File.avatar(item.me.profilePic);
 
           ctx.setProfilePics((_pics) => {
             return {
