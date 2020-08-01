@@ -5,35 +5,52 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Row, Col } from 'react-bootstrap';
 
+import Like from './Like';
+import Social from './Social';
 import Box from '../../../../utils/3box';
 import { DataContext } from '../../../utils/DataProvider';
-
-import styles from './PostFooter.module.css';
 
 const PostFooter = ({ address }) => {
   const ctx = useContext(DataContext);
 
+  const [likes, setLikes] = useState([]);
   const [liked, setLiked] = useState(-1);
   const [likeId, setLikeId] = useState(null);
   const [likeCount, setLikeCount] = useState(null);
+  const [commentCount, setCommentCount] = useState(null);
+
+  const init = (posts) => {
+    const _likes = posts.filter((e) => e.message.like);
+    const _comments = posts.filter((e) => e.message.comment);
+
+    setLikeCount(_likes.length);
+    setCommentCount(_comments.length);
+
+    const like = _likes.find((e) => e.message.address === ctx.address);
+    if (like) {
+      setLiked(1);
+      setLikeId(like.postId);
+    } else {
+      setLiked(0);
+    }
+
+    setLikes(_likes);
+  };
 
   useEffect(() => {
     const fn = async () => {
-      // Search through the post thread, and find all the comments, likes.
-      // Store the count.
-      // Get the likeId, commentId (if any).
-      const thread = await Box.message.joinThreadByAddress(address);
-      const posts = await thread.getPosts();
-      const likes = posts.filter((e) => e.like);
+      console.debug('post thread', address);
 
-      setLikeCount(likes.length);
-
-      const like = likes.find((e) => e.address === ctx.address);
-      if (like) {
-        setLiked(1);
+      let posts;
+      if (Box.message.box) {
+        const thread = await Box.message.joinThreadByAddress(address);
+        posts = await thread.getPosts();
+        thread.onUpdate(() => thread.getPosts().then(init));
       } else {
-        setLiked(0);
+        posts = await Box.getPostsByAddress(address);
       }
+
+      init(posts);
     };
 
     if (address) {
@@ -43,20 +60,19 @@ const PostFooter = ({ address }) => {
 
   const toggleLike = async () => {
     const currentLike = liked;
-    setLiked(0);
+    setLiked(-1);
 
     const thread = await Box.message.joinThreadByAddress(address);
     if (currentLike === 0) {
-      const _postId = await thread.post({ like: true, address: ctx.address });
-      setLikeId(_postId);
-      setLikeCount((_count) => _count + 1);
+      await thread.post({
+        like: true,
+        address: ctx.address,
+        username: ctx.profilePrivate.username,
+        profilePic: ctx.profilePrivate.profilePic,
+      });
     } else {
       await thread.deletePost(likeId);
-      setLikeId(null);
-      setLikeCount((_count) => _count - 1);
     }
-
-    setLiked((_liked) => (_liked + 1) % 2);
   };
 
   return (
@@ -78,10 +94,19 @@ const PostFooter = ({ address }) => {
             </IconButton>
           </Col>
         ) : null}
-        <Col className="pl-0 align-self-center">
-          {likeCount !== null ? (
-            <span className={styles['likes']}>{likeCount} likes</span>
-          ) : null}
+        <Col className={`align-self-center ${ctx.address ? 'pl-0' : ''}`}>
+          <Social count={likeCount} text="likes">
+            {likes.map((like, index) => (
+              <Like
+                key={like.postId}
+                like={like}
+                profilePic={ctx.profilePics[like.message.address]}
+              />
+            ))}
+          </Social>
+          <Social count={commentCount} text="comments">
+            (...)
+          </Social>
         </Col>
       </Row>
     </>

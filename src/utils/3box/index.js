@@ -1,4 +1,4 @@
-import { openBox, getSpace } from '3box';
+import { openBox, getSpace, getThreadByAddress } from '3box';
 import CryptoJS from 'crypto-js';
 import _ from 'lodash';
 
@@ -212,6 +212,8 @@ const Box = {
       return p;
     }, {});
   },
+
+  getPostsByAddress: async (address) => getThreadByAddress(address),
 };
 
 export default Box;

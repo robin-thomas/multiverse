@@ -2,3 +2,12 @@
   color: rgba(0, 0, 0, 0.54);
   font-size: 0.8rem;
 }
+
+.timestamp {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 0.65rem;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}

@@ -7,7 +7,7 @@
     "features": {
       "chat": true,
       "profileBox": true,
-      "search": false
+      "search": true
     }
   },
   "ipfs": {
