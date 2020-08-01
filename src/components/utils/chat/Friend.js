@@ -11,10 +11,14 @@ import { DataContext } from '../DataProvider';
 
 import styles from './Content.module.css';
 
-const Friend = (
-  { address, username, profilePic, setMessages, onClick },
-  ref
-) => {
+const Friend = ({
+  address,
+  username,
+  profilePic,
+  setMessages,
+  onClick,
+  onNew,
+}) => {
   const ctx = useContext(DataContext);
 
   const [thread, setThread] = useState(null);
@@ -30,6 +34,7 @@ const Friend = (
       setMessages(_messages);
 
       _thread.onUpdate(() => {
+        onNew();
         setHasNew(true);
         _thread.getPosts().then(setMessages);
       });

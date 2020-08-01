@@ -8,12 +8,12 @@
   padding: 10px 15px !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  transition: 0.3s all;
+  transition: background-color 0.3s;
   color: grey;
 }
 
 .friend:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .bold-user {

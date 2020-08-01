@@ -20,3 +20,9 @@
   color: #263238;
   background-color: #f4f7f9;
 }
+
+.timestamp {
+  color: grey;
+  font-size: 0.6rem;
+  margin: 0 10px;
+}

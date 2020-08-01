@@ -9,6 +9,7 @@ const Messages = ({ messages }) => {
   return messages.map((message, index) => (
     <Message
       key={index}
+      timestamp={message.timestamp}
       message={message.message.message}
       profilePic={ctx.profilePics[message.message.address]}
       sent={message.message.address === ctx.address}

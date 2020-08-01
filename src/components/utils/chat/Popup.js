@@ -92,7 +92,7 @@ const Footer = ({ state, thread, address }) => {
   );
 };
 
-const Popup = ({ onClose, username, profilePic }) => {
+const Popup = ({ open, onNew, onClose }) => {
   const ctx = useContext(DataContext);
 
   const [state, setState] = useState(0);
@@ -111,16 +111,19 @@ const Popup = ({ onClose, username, profilePic }) => {
   };
 
   return (
-    <div className={styles['popup']}>
+    <div
+      className={styles['popup']}
+      style={{ visibility: open ? 'visible' : 'hidden' }}
+    >
       <Header
         state={state}
         title={title}
-        username={username}
-        profilePic={profilePic}
+        username={ctx.profile.username}
+        profilePic={ctx.profilePics[ctx.address]}
         onClose={onClose}
         onBack={onBack}
       />
-      <Content onClick={onClick} state={state} />
+      <Content onClick={onClick} state={state} onNew={onNew} />
       <Footer state={state} thread={thread} address={ctx.address} />
     </div>
   );
