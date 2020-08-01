@@ -131,6 +131,12 @@ class Message {
     return thread._address;
   }
 
+  async createPostThread(id) {
+    const name = `${app.name}_likes_comments_${id}`;
+    const thread = await this.box.joinThread(name);
+    return thread._address;
+  }
+
   async joinThreadByAddress(address) {
     return await this.box.joinThreadByAddress(address);
   }

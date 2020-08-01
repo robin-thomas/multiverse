@@ -16,7 +16,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { Row, Col } from 'react-bootstrap';
 
+import PostFooter from './PostFooter';
 import Box from '../../../../utils/3box';
 import Crypto from '../../../../utils/crypto';
 import Timer from '../../../utils/Timer';
@@ -204,6 +207,7 @@ const Post = React.memo(({ username, profilePic, post, onDelete }) => {
         ) : (
           <div dangerouslySetInnerHTML={{ __html: postContent }} />
         )}
+        <PostFooter address={post.thread} />
       </CardContent>
     </Card>
   );

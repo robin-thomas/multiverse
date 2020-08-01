@@ -78,13 +78,17 @@ const Post = ({ history }) => {
     Bucket.getKey(now.toString()).then(setBucketKey);
   }, []);
 
-  const createPost = () => {
+  const createPost = async () => {
     setOpen(true);
+
+    // Create a thread for likes & comments.
+    const thread = await Box.message.createPostThread(postId);
 
     const post = JSON.stringify({
       id: postId,
       bucket: bucketKey,
       content: input,
+      thread,
       attachments: {
         image: imageFileNames,
         audio: '',
