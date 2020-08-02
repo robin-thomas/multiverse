@@ -23,7 +23,7 @@ import Bucket from '../../../../utils/bucket';
 import Content from '../../../app/Content';
 import ImagePreview from './ImagePreview';
 import Visibility from './Visibility';
-import Upload from '../../../utils/upload';
+import UploadButton from './UploadButton';
 import Editor from '../../../utils/Editor';
 import { DataContext } from '../../../utils/DataProvider';
 
@@ -126,6 +126,25 @@ const Post = ({ history }) => {
     history.push(`/profile/${ctx.address}`);
   };
 
+  const removeImage = (index) => {
+    setImages((_images) => [
+      ..._images.slice(0, index),
+      ..._images.slice(index + 1),
+    ]);
+    setImageRows((_imageRows) => [
+      ..._imageRows.slice(0, index),
+      ..._imageRows.slice(index + 1),
+    ]);
+    setUploaded((_uploaded) => [
+      ..._uploaded.slice(0, index),
+      ..._uploaded.slice(index + 1),
+    ]);
+    setImageFileNames((_names) => [
+      ..._names.slice(0, index),
+      ..._names.slice(index + 1),
+    ]);
+  };
+
   return (
     <Content>
       {ctx.address ? (
@@ -150,49 +169,20 @@ const Post = ({ history }) => {
                   <Row>
                     <Col>
                       <CardActions className={classes.cardAction}>
-                        {bucketKey ? (
-                          <>
-                            <Button
-                              size="small"
-                              variant="outlined"
-                              color="primary"
-                              onClick={() => setShow(true)}
-                            >
-                              Upload images
-                            </Button>
-                            <Upload
-                              show={show}
-                              toggle={() => setShow(!show)}
-                              imageRows={imageRows}
-                              setImageRows={setImageRows}
-                              bucketKey={bucketKey}
-                              uploaded={uploaded}
-                              setUploaded={setUploaded}
-                              addImageUrl={(_imageUrl) =>
-                                setImages((_images) => [..._images, _imageUrl])
-                              }
-                              addFileNames={(_fileNames) => {
-                                console.log('_fileNames', _fileNames);
-                                setImageFileNames((_names) => [
-                                  ..._names,
-                                  _fileNames,
-                                ]);
-                              }}
-                              multiple={true}
-                              resize={100}
-                              encryptionKey={encryptionKey}
-                            />
-                          </>
-                        ) : (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            color="primary"
-                            disabled
-                          >
-                            Upload images
-                          </Button>
-                        )}
+                        <UploadButton
+                          show={show}
+                          setShow={setShow}
+                          imageRows={imageRows}
+                          setImageRows={setImageRows}
+                          bucketKey={bucketKey}
+                          uploaded={uploaded}
+                          setUploaded={setUploaded}
+                          setImages={setImages}
+                          setImageFileNames={setImageFileNames}
+                          multiple={true}
+                          resize={100}
+                          encryptionKey={encryptionKey}
+                        />
                       </CardActions>
                     </Col>
                   </Row>
@@ -208,27 +198,7 @@ const Post = ({ history }) => {
                   </Row>
                   <Row>
                     <Col>
-                      <ImagePreview
-                        images={images}
-                        removeImage={(index) => {
-                          setImages((_images) => [
-                            ..._images.slice(0, index),
-                            ..._images.slice(index + 1),
-                          ]);
-                          setImageRows((_imageRows) => [
-                            ..._imageRows.slice(0, index),
-                            ..._imageRows.slice(index + 1),
-                          ]);
-                          setUploaded((_uploaded) => [
-                            ..._uploaded.slice(0, index),
-                            ..._uploaded.slice(index + 1),
-                          ]);
-                          setImageFileNames((_names) => [
-                            ..._names.slice(0, index),
-                            ..._names.slice(index + 1),
-                          ]);
-                        }}
-                      />
+                      <ImagePreview images={images} removeImage={removeImage} />
                     </Col>
                   </Row>
                   <hr />

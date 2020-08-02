@@ -11,16 +11,19 @@ const ImagePreview = ({ images, removeImage }) => {
     ref.current.recalculate();
   }, [images]);
 
+  const onRemoveImage = (index) => {
+    removeImage(index);
+    ref.current.recalculate();
+  };
+
   return (
     <SimpleBar ref={ref} style={{ maxHeight: '130px' }}>
       {images.map((url, index) => (
         <Image
           key={index}
           url={url}
-          removeImage={() => {
-            removeImage(index);
-            ref.current.recalculate();
-          }}
+          index={index}
+          removeImage={onRemoveImage}
         />
       ))}
     </SimpleBar>
