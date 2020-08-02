@@ -17,6 +17,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 
+import Photos from './Photos';
 import PostFooter from './PostFooter';
 import Box from '../../../../utils/3box';
 import Crypto from '../../../../utils/crypto';
@@ -186,9 +187,7 @@ const Post = React.memo(({ username, profilePic, post, onDelete }) => {
           </>
         }
       />
-      {images.length > 0 ? (
-        <CardMedia className={styles['media']} image={images[0]} />
-      ) : null}
+      <Photos images={images} />
       <CardContent>
         {editable ? (
           <>

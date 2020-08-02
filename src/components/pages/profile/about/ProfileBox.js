@@ -33,7 +33,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
   useEffect(() => {
     setAbout(ctx.profile.about ? ctx.profile.about : '');
     offBackdrop();
-  }, [ctx.profile]);
+  }, [ctx.profile.about, offBackdrop]);
 
   useEffect(() => {
     if (imageHashes) {
@@ -48,6 +48,22 @@ const ProfileBox = ({ url, offBackdrop }) => {
 
   const updateAbout = () => {
     Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, { about });
+  };
+
+  const onShow = () => {
+    setShow(true);
+  };
+
+  const toggle = () => {
+    setShow((_show) => !_show);
+  };
+
+  const addFileNames = (_imageHashes) => {
+    setImageHashes(_imageHashes);
+  };
+
+  const addImageUrl = (_imageUrl) => {
+    ctx.setProfilePic(_imageUrl);
   };
 
   return (
@@ -69,7 +85,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
                 size="medium"
                 color="primary"
                 className={styles['icon']}
-                onClick={() => setShow(true)}
+                onClick={onShow}
               >
                 <EditIcon />
               </Fab>
@@ -86,22 +102,22 @@ const ProfileBox = ({ url, offBackdrop }) => {
       </GridListTile>
       <Upload
         show={show}
-        toggle={() => setShow(!show)}
+        toggle={toggle}
         imageRows={imageRows}
         setImageRows={setImageRows}
-        addFileNames={(_imageHashes) => setImageHashes(_imageHashes)}
-        addImageUrl={(_imageUrl) => ctx.setProfilePic(_imageUrl)}
+        addFileNames={addFileNames}
+        addImageUrl={addImageUrl}
         bucketKey={ctx.bucketKeys.profilePic}
       />
       <CardContent className={styles['card-content']}>
         <Row>
-          <Col md="auto">
+          <Col md="auto" sm="12">
             <Avatar
               alt={ctx.profile.username}
               src={ctx.profilePics[ctx.profile.address]}
             />
           </Col>
-          <Col md="7">
+          <Col md="7" xs="12">
             <Typography variant="button" display="block" gutterBottom>
               About
             </Typography>
@@ -115,7 +131,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
               />
             </Typography>
           </Col>
-          <Col md="auto" className="ml-auto">
+          <Col md="auto" xs="12" className="ml-auto">
             <ShareButton url={url} />
           </Col>
         </Row>

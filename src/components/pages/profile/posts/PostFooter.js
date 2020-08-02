@@ -3,8 +3,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import Avatar from '@material-ui/core/Avatar';
-import TextField from '@material-ui/core/TextField';
 import { Row, Col } from 'react-bootstrap';
 
 import Like from './Like';

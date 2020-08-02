@@ -127,34 +127,36 @@ const Page = ({ history, location }) => {
     history.push(`/profile/${query.profile}`);
   }
 
+  const onLeave = (_, destination) => {
+    switch (destination.index) {
+      case 1:
+        setButton('');
+        break;
+
+      case 2:
+      case 3:
+        break;
+
+      case 0:
+      default:
+        setButton('primary');
+    }
+  };
+
   return (
     <>
       <HomeHeader button={button} />
       <ReactFullpage
         navigation
         sectionsColor={['#191A1E', '#8e24aa', '#191A1E', '#0798ec']}
-        onLeave={(_, destination) => {
-          switch (destination.index) {
-            case 1:
-              setButton('');
-              break;
-
-            case 2:
-            case 3:
-              break;
-
-            case 0:
-            default:
-              setButton('primary');
-          }
-        }}
+        onLeave={onLeave}
         render={() => (
-          <div>
+          <>
             <Home />
             <Which />
             <FriendshipRequest />
             <Finish />
-          </div>
+          </>
         )}
       />
     </>

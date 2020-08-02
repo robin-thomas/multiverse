@@ -49,10 +49,7 @@ const Profile = ({ history }) => {
           address,
         });
       } else {
-        const [, data] = await Promise.all([
-          Bucket.getClient(),
-          Box.getAll(address),
-        ]);
+        await Promise.all([Bucket.getClient(), Box.getAll(address)]);
 
         ctx.setProfile({
           ...Box.storage[Box.DATASTORE_KEY_PROFILE_PUBLIC].value,

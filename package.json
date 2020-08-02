@@ -36,6 +36,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
     "react-share": "^4.2.1",
+    "react-swipeable-views": "^0.13.9",
+    "react-swipeable-views-utils": "^0.13.9",
     "simplebar-react": "^2.2.1",
     "text-encoder-lite": "^2.0.0",
     "tweetnacl": "^1.0.3",

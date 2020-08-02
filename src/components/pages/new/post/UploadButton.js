@@ -24,7 +24,6 @@ const UploadButton = ({
   };
 
   const addFileNames = (_fileNames) => {
-    console.debug('_fileNames', _fileNames);
     setImageFileNames((_names) => [..._names, _fileNames]);
   };
 

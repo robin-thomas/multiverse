@@ -121,6 +121,7 @@ const Post = ({ history }) => {
     } else {
       Box.set(Box.DATASTORE_KEY_PROFILE_PRIVATE, arg);
     }
+    console.debug('Post created', arg);
 
     setOpen(false);
     history.push(`/profile/${ctx.address}`);

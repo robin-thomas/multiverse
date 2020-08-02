@@ -17,32 +17,43 @@ const Bucket = {
         secret: '',
       });
 
-      const identity = await Libp2pCryptoIdentity.fromRandom();
+      const identity = await Bucket.getIdentity();
       await Bucket.client.getToken(identity);
     }
 
     return Bucket.client;
   },
 
+  getIdentity: async () => {
+    const stored = localStorage.getItem('identity');
+    if (!stored) {
+      const identity = await Libp2pCryptoIdentity.fromRandom();
+      localStorage.setItem('identity', identity.toString());
+      return identity;
+    }
+
+    return Libp2pCryptoIdentity.fromString(stored);
+  },
+
   getKey: async (bucketName) => {
     const client = await Bucket.getClient();
 
     const root = await client.open(bucketName);
-
-    if (root) {
-      console.debug('root bucket', root, bucketName);
-      return root.key;
-    } else {
-      const created = await client.init(bucketName);
-      console.debug('bucket', created);
-      return created.root ? created.root.key : null;
+    if (!root) {
+      throw new Error(`Failed to open bucket ${bucketName}`);
     }
+    console.debug('bucket', root);
+
+    return root.key;
   },
 
   upload: async (bucketKey, path, ab) => {
-    console.log(bucketKey, path);
-    const client = await Bucket.getClient();
-    return await client.pushPath(bucketKey, path, ab);
+    try {
+      const client = await Bucket.getClient();
+      return await client.pushPath(bucketKey, path, ab);
+    } catch (err) {
+      console.error(err);
+    }
   },
 
   download: async (bucketKey, path) => {

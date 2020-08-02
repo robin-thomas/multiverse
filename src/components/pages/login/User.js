@@ -46,7 +46,9 @@ const User = ({ history }) => {
   const [error, setError] = useState(false);
   const [name, setName] = useState('');
 
-  const onChange = (name) => {
+  const onChange = (e) => {
+    const name = e.target.value;
+
     if (/^[a-z0-9]+$/.test(name)) {
       setError(false);
     } else {
@@ -90,7 +92,7 @@ const User = ({ history }) => {
                     <TextField
                       required
                       value={name}
-                      onChange={(e) => onChange(e.target.value)}
+                      onChange={onChange}
                       label="Username"
                       helperText="Only [a-z0-9] characters"
                       variant="outlined"
@@ -100,7 +102,7 @@ const User = ({ history }) => {
                     <TextField
                       required
                       value={name}
-                      onChange={(e) => onChange(e.target.value)}
+                      onChange={onChange}
                       label="Username"
                       helperText="Yup! That's all for now"
                       variant="outlined"

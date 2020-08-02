@@ -39,12 +39,14 @@ const File = {
       });
     };
 
-    const promises = Array.from(
-      Array(Math.ceil(file.size / app.chunk.size)),
-      (_, i) => chunker(i * app.chunk.size, i)
-    );
+    const results = [];
+    const len = Math.ceil(file.size / app.chunk.size);
+    for (let i = 0; i < len; ++i) {
+      const result = await chunker(i * app.chunk.size, i);
+      results.push(result);
+    }
 
-    return await Promise.all(promises);
+    return results;
   },
 
   imageUpload: async (

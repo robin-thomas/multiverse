@@ -13,7 +13,7 @@ const Name = () => {
     if (ctx.profile.username) {
       setUsername(ctx.profile.username);
     }
-  }, [ctx.profile]);
+  }, [ctx.profile.username]);
 
   return (
     <Row>

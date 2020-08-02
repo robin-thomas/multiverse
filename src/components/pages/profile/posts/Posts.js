@@ -20,10 +20,7 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    if (
-      _.has(ctx.profile, 'posts') &&
-      Object.keys(ctx.profile.posts).length > 0
-    ) {
+    if (ctx.profile.posts && Object.keys(ctx.profile.posts).length > 0) {
       let _posts = [];
 
       for (const postId of Object.keys(ctx.profile.posts)) {
@@ -56,17 +53,12 @@ const Posts = () => {
             _post.decryptionKey = Crypto.symmetric.decrypt(key, _post.key);
           }
 
-          try {
-            const dPost = Crypto.symmetric.decrypt(
-              _post.decryptionKey,
-              _post.post
-            );
-            _post = { ..._post, ...JSON.parse(dPost) };
-            delete _post.post;
-          } catch (err) {
-            _post = { ..._post, ..._post.post };
-            delete _post.post;
-          }
+          const dPost = Crypto.symmetric.decrypt(
+            _post.decryptionKey,
+            _post.post
+          );
+          _post = { ..._post, ...JSON.parse(dPost) };
+          delete _post.post;
 
           console.log('post', _post);
 
@@ -78,7 +70,7 @@ const Posts = () => {
 
       setPosts(_posts);
     }
-  }, [ctx.profile]);
+  }, [ctx.profile.posts]);
 
   const onDelete = (postId, visibility) => {
     if (window.confirm('Are you sure you want to delete this post?')) {

@@ -92,7 +92,7 @@ const Upload = ({
   };
 
   return (
-    <MDBModal isOpen={show} toggle={onToggle} disableBackdrop={true}>
+    <MDBModal isOpen={show} toggle={onToggle} disableBackdrop>
       <MDBModalHeader toggle={onToggle} style={{ padding: '0.5rem' }}>
         <Button
           variant="contained"
@@ -114,7 +114,7 @@ const Upload = ({
               >
                 <div className={styles['file-upload-progress-container']}>
                   {imageRows.length > 0 ? (
-                    imageRows.map((item, index) => (
+                    imageRows.map((item) => (
                       <ImageRow
                         key={item.name}
                         item={item}
