@@ -29,15 +29,15 @@ const Profile = ({ history }) => {
 
   useEffect(() => {
     const fn = async () => {
+      ctx.setBackdropOpen(true);
       ctx.setProfilePic(null);
-      await Bucket.getClient();
 
       if (ctx.address !== address) {
-        // on backdrop.
-        ctx.setBackdropOpen(true);
-
-        const data = await Box.getAllPublic(address);
-        console.log('data', data);
+        const [, data] = await Promise.all([
+          Bucket.getClient(),
+          Box.getAllPublic(address),
+        ]);
+        console.debug(`loaded all public data of ${address}`, data);
 
         // if no profile found.
         if (!Box.get(Box.DATASTORE_KEY_PROFILE_PUBLIC, 'username', data)) {
@@ -49,7 +49,11 @@ const Profile = ({ history }) => {
           address,
         });
       } else {
-        await Box.getAll(address);
+        const [, data] = await Promise.all([
+          Bucket.getClient(),
+          Box.getAll(address),
+        ]);
+
         ctx.setProfile({
           ...Box.storage[Box.DATASTORE_KEY_PROFILE_PUBLIC].value,
           address,
@@ -69,19 +73,21 @@ const Profile = ({ history }) => {
   useEffect(() => {
     const fn = async () => {
       try {
-        if (_.has(ctx.profile, 'profilePic')) {
+        if (ctx.profile.profilePic) {
           const buck = textile.buckets.profile;
           const img = await File.loadImageByName(buck, ctx.profile.profilePic);
           ctx.setProfilePic(img);
 
           // Resize the image for avatar purposes.
-          const resizedImg = await Image.resize(img, 50);
-          ctx.setProfilePics((_pics) => {
-            return {
-              ..._pics,
-              [ctx.profile.address]: resizedImg,
-            };
-          });
+          if (!ctx.profilePics[ctx.profile.address]) {
+            const resizedImg = await Image.resize(img, 50);
+            ctx.setProfilePics((_pics) => {
+              return {
+                ..._pics,
+                [ctx.profile.address]: resizedImg,
+              };
+            });
+          }
         }
       } catch (err) {
         console.error(err);
@@ -89,7 +95,7 @@ const Profile = ({ history }) => {
     };
 
     fn();
-  }, [ctx.profile]);
+  }, [ctx.profile.profilePic]);
 
   useEffect(() => {
     for (const request of ctx.friendRequestsSent) {
@@ -102,7 +108,10 @@ const Profile = ({ history }) => {
             secretKey: Crypto.box.secretKey(),
           }
         );
-        console.debug('encryptionKey', encryptionKey);
+        console.debug(
+          `EncryptionKey of friend ${request.friend.address}`,
+          encryptionKey
+        );
 
         Box.set(Box.DATASTORE_KEY_PROFILE_PRIVATE, {
           chats: {
@@ -137,6 +146,10 @@ const Profile = ({ history }) => {
     history.push('/new/post');
   };
 
+  const offBackdrop = () => {
+    ctx.setBackdropOpen(false);
+  };
+
   return (
     <Content>
       <EmptyRow rows={2} />
@@ -145,7 +158,7 @@ const Profile = ({ history }) => {
           {app.features.profileBox && isValidProfile() ? (
             <ProfileBox
               url={`${_url}?profile=${address}`}
-              offBackdrop={() => ctx.setBackdropOpen(false)}
+              offBackdrop={offBackdrop}
             />
           ) : null}
         </Col>

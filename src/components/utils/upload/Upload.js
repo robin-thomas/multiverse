@@ -40,6 +40,10 @@ const Upload = ({
   const [readSize, setReadSize] = useState(0);
   const [totalSize, setTotalSize] = useState(0);
 
+  const onClick = () => {
+    hiddenFileInput.current.click();
+  };
+
   const onChange = (e) => {
     let newSize = totalSize;
     const processedFiles = [];
@@ -83,6 +87,10 @@ const Upload = ({
     toggle();
   };
 
+  const setSize = (newSize) => {
+    setReadSize((_readSize) => _readSize + newSize);
+  };
+
   return (
     <MDBModal isOpen={show} toggle={onToggle} disableBackdrop={true}>
       <MDBModalHeader toggle={onToggle} style={{ padding: '0.5rem' }}>
@@ -90,7 +98,7 @@ const Upload = ({
           variant="contained"
           color="primary"
           startIcon={<CloudUploadIcon />}
-          onClick={() => hiddenFileInput.current.click()}
+          onClick={onClick}
           disabled={!multiple && imageRows.length > 0}
         >
           Upload
@@ -110,9 +118,7 @@ const Upload = ({
                       <ImageRow
                         key={item.name}
                         item={item}
-                        setSize={(newSize) =>
-                          setReadSize((_readSize) => _readSize + newSize)
-                        }
+                        setSize={setSize}
                         addImageUrl={addImageUrl}
                         addFileNames={addFileNames}
                         resize={resize}

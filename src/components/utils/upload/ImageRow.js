@@ -38,8 +38,7 @@ const ImageRow = ({
           encryptionKey
         );
 
-        console.log('resizedUrl', resizedUrl);
-        console.log('paths', paths);
+        console.debug(`Uploaded image to ${bucketKey}`, paths);
 
         addImageUrl(resizedUrl);
         addFileNames(paths);
