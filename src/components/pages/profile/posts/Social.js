@@ -8,7 +8,12 @@ import styles from './PostFooter.module.css';
 const Social = ({ count, text, children }) => {
   const [openModal, setOpenModal] = useState(false);
 
-  const toggleModal = () => setOpenModal((_open) => !_open);
+  const toggleModal = (e) => {
+    if (!openModal) {
+      e.preventDefault();
+    }
+    setOpenModal((_open) => !_open);
+  };
 
   return count !== null ? (
     <>

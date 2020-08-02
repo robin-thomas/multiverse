@@ -3,10 +3,14 @@ import React, { useState, useEffect, useContext } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import Avatar from '@material-ui/core/Avatar';
+import TextField from '@material-ui/core/TextField';
 import { Row, Col } from 'react-bootstrap';
 
 import Like from './Like';
 import Social from './Social';
+import Comment from './Comment';
+import Comments from './Comments';
 import Box from '../../../../utils/3box';
 import { DataContext } from '../../../utils/DataProvider';
 
@@ -17,6 +21,8 @@ const PostFooter = ({ address }) => {
   const [liked, setLiked] = useState(-1);
   const [likeId, setLikeId] = useState(null);
   const [likeCount, setLikeCount] = useState(null);
+
+  const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(null);
 
   const init = (posts) => {
@@ -35,6 +41,7 @@ const PostFooter = ({ address }) => {
     }
 
     setLikes(_likes);
+    setComments(_comments);
   };
 
   useEffect(() => {
@@ -105,10 +112,16 @@ const PostFooter = ({ address }) => {
             ))}
           </Social>
           <Social count={commentCount} text="comments">
-            (...)
+            <Comments comments={comments} />
           </Social>
         </Col>
       </Row>
+      <Comment
+        address={ctx.address}
+        tAddress={address}
+        username={ctx.profilePrivate.username}
+        profilePic={ctx.profilePics[ctx.address]}
+      />
     </>
   );
 };
