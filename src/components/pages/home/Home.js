@@ -16,6 +16,7 @@ import EmptyRow from '../../utils/EmptyRow';
 
 import FriendshipImage from '../../../assets/how_friend_request.jpg';
 import PostImage from '../../../assets/post.png';
+import LikeImage from '../../../assets/likes.png';
 
 import styles from './Home.module.css';
 
@@ -101,6 +102,18 @@ const Post = () => (
   </div>
 );
 
+const Like = () => (
+  <div className="section">
+    <Container>
+      <Row>
+        <Col md="10" className="mx-auto">
+          <img src={LikeImage} width="90%" />
+        </Col>
+      </Row>
+    </Container>
+  </div>
+);
+
 const FriendshipRequest = () => (
   <div className="section">
     <Container>
@@ -143,6 +156,7 @@ const Page = ({ history, location }) => {
   const onLeave = (_, destination) => {
     switch (destination.index) {
       case 0:
+      case 3:
         setButton('primary');
         break;
 
@@ -157,13 +171,21 @@ const Page = ({ history, location }) => {
       <HomeHeader button={button} />
       <ReactFullpage
         navigation
-        sectionsColor={['#191A1E', '#8e24aa', '#0798ec', '#191A1E', '#0798ec']}
+        sectionsColor={[
+          '#191A1E',
+          '#8e24aa',
+          '#0798ec',
+          '#FEEF02',
+          '#191A1E',
+          '#0798ec',
+        ]}
         onLeave={onLeave}
         render={() => (
           <>
             <Home />
             <Which />
             <Post />
+            <Like />
             <FriendshipRequest />
             <Finish />
           </>
