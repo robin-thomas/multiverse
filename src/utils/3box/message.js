@@ -14,17 +14,18 @@ class Message {
     this.response = new Response(box);
   }
 
-  setRequestCallback(callback) {
-    this.requestCallback = callback;
+  setRequestCallback(_callback) {
+    this.requestCallback = _callback;
     return this;
   }
 
-  setResponseCallback(callback) {
-    this.responseCallback = callback;
+  setResponseCallback(_callback) {
+    this.responseCallback = _callback;
     return this;
   }
 
   async load(address) {
+    console.debug('message load triggered');
     const filter = { address, friend: address };
 
     await Promise.all([
@@ -34,6 +35,7 @@ class Message {
   }
 
   callback() {
+    console.debug('message callback triggered');
     this.pending();
     this.completed();
   }

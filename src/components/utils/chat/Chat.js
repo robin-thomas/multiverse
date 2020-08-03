@@ -25,9 +25,13 @@ const Chat = () => {
     }
   };
 
+  const onClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div className={styles['chat']}>
-      <Popup open={open} onNew={onNew} onClose={() => setOpen(false)} />
+      <Popup open={open} onNew={onNew} onClose={onClose} />
       <Badge color="secondary" variant={`${hasNew ? 'dot' : 'standard'}`}>
         <Fab color="primary" onClick={onOpen}>
           {open ? (

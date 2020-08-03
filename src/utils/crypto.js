@@ -88,7 +88,7 @@ const Crypto = {
         pbkdf2.pbkdf2Sync(signature, salt, 1000, 32)
       );
 
-      return new Keypair(keypair);
+      return new Keypair(keypair).toString();
     },
 
     genNonce: () => new Nonce(tweetnacl.randomBytes(NONCE_LENGTH)),

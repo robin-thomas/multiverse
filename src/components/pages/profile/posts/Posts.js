@@ -82,7 +82,7 @@ const Posts = () => {
     if (ctx.profile.username) {
       setLoading(0);
     }
-  }, [ctx.profile.username]);
+  }, [posts]);
 
   const onDelete = (postId, visibility) => {
     if (window.confirm('Are you sure you want to delete this post?')) {

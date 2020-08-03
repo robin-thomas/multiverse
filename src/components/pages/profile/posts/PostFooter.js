@@ -15,6 +15,8 @@ import { DataContext } from '../../../utils/DataProvider';
 const PostFooter = ({ address }) => {
   const ctx = useContext(DataContext);
 
+  let cancel = false;
+
   const [likes, setLikes] = useState([]);
   const [liked, setLiked] = useState(-1);
   const [likeId, setLikeId] = useState(null);
@@ -43,24 +45,35 @@ const PostFooter = ({ address }) => {
   };
 
   useEffect(() => {
+    let thread;
+
     const fn = async () => {
       console.debug('post thread', address);
 
       let posts;
       if (Box.message.box) {
-        const thread = await Box.message.joinThreadByAddress(address);
+        thread = await Box.message.joinThreadByAddress(address);
         posts = await thread.getPosts();
         thread.onUpdate(() => thread.getPosts().then(init));
       } else {
         posts = await Box.getPostsByAddress(address);
       }
 
-      init(posts);
+      if (!cancel) {
+        init(posts);
+      }
     };
 
     if (address) {
       fn();
     }
+
+    return () => {
+      cancel = true;
+      if (thread) {
+        thread.onUpdate(() => {});
+      }
+    };
   }, [address]);
 
   const toggleLike = async () => {
@@ -73,7 +86,6 @@ const PostFooter = ({ address }) => {
         like: true,
         address: ctx.address,
         username: ctx.profilePrivate.username,
-        profilePic: ctx.profilePrivate.profilePic,
       });
     } else {
       await thread.deletePost(likeId);

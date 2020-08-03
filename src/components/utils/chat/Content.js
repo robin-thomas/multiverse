@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 
-import _ from 'lodash';
 import SimpleBar from 'simplebar-react';
 
 import Friend from './Friend';
@@ -21,23 +20,24 @@ const Content = ({ state, onNew, onClick }) => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    if (_.has(ctx.profilePrivate, 'chats')) {
-      const _friends = Object.keys(ctx.profilePrivate.chats).map((_address) => {
-        let _friend = Box.message.request.items.find(
-          (e) => e.message.me.address === _address
-        );
-        if (!_friend) {
-          _friend = Box.message.response.items.find(
+    if (ctx.profilePrivate.chats) {
+      const _friends = Object.keys(ctx.profilePrivate.chats)
+        .map((_address) => {
+          let _friend = Box.message.request.items.find(
             (e) => e.message.me.address === _address
           );
-        }
+          if (!_friend) {
+            _friend = Box.message.response.items.find(
+              (e) => e.message.me.address === _address
+            );
+          }
 
-        return {
-          address: _address,
-          username: _friend.message.me.username,
-          profilePic: _friend.message.me.profilePic,
-        };
-      });
+          return {
+            address: _address,
+            username: _friend.message.me.username,
+          };
+        })
+        .filter((e) => e !== null);
 
       setFriends(_friends);
     }
@@ -47,8 +47,15 @@ const Content = ({ state, onNew, onClick }) => {
     const load = async () => {
       for (const friend of friends) {
         if (!ctx.profilePics[friend.address]) {
-          if (friend.profilePic) {
-            const imgUrl = await File.avatar(friend.profilePic);
+          const data = await Box.getAllPublic(friend.address);
+          const pic = Box.get(
+            Box.DATASTORE_KEY_PROFILE_PUBLIC,
+            'profilePic',
+            data
+          );
+
+          if (pic) {
+            const imgUrl = await File.avatar(pic);
 
             ctx.setProfilePics((_pics) => {
               return {

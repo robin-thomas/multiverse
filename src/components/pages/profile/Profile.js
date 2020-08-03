@@ -4,8 +4,6 @@ import { useParams } from 'react-router-dom';
 
 import _ from 'lodash';
 import { Row, Col } from 'react-bootstrap';
-import Button from '@material-ui/core/Button';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import Posts from './posts';
 import Box from '../../../utils/3box';
@@ -59,12 +57,14 @@ const Profile = ({ history }) => {
         if (privProf.posts) {
           posts = { ...posts, ...privProf.posts };
         }
-        posts = Object.keys(posts).reduce((p, c) => {
-          if (posts[c]) {
-            p[c] = posts[c];
-          }
-          return p;
-        }, {});
+        if (posts) {
+          posts = Object.keys(posts).reduce((p, c) => {
+            if (posts[c]) {
+              p[c] = posts[c];
+            }
+            return p;
+          }, {});
+        }
         console.log('posts', posts);
 
         ctx.setProfilePrivate({ ...privProf, ...profile });
@@ -79,29 +79,25 @@ const Profile = ({ history }) => {
 
   useEffect(() => {
     const fn = async () => {
-      try {
-        if (ctx.profile.profilePic) {
-          const buck = textile.buckets.profile;
-          const img = await File.loadImageByName(buck, ctx.profile.profilePic);
-          ctx.setProfilePic(img);
+      const buck = textile.buckets.profile;
+      const img = await File.loadImageByName(buck, ctx.profile.profilePic);
+      ctx.setProfilePic(img);
 
-          // Resize the image for avatar purposes.
-          if (!ctx.profilePics[ctx.profile.address]) {
-            const resizedImg = await Image.resize(img, 50);
-            ctx.setProfilePics((_pics) => {
-              return {
-                ..._pics,
-                [ctx.profile.address]: resizedImg,
-              };
-            });
-          }
-        }
-      } catch (err) {
-        console.error(err);
+      // Resize the image for avatar purposes.
+      if (!ctx.profilePics[ctx.profile.address]) {
+        const resizedImg = await Image.resize(img, 50);
+        ctx.setProfilePics((_pics) => {
+          return {
+            ..._pics,
+            [ctx.profile.address]: resizedImg,
+          };
+        });
       }
     };
 
-    fn();
+    if (ctx.profile.profilePic) {
+      fn();
+    }
   }, [ctx.profile.profilePic]);
 
   useEffect(() => {
@@ -130,6 +126,14 @@ const Profile = ({ history }) => {
             },
           },
         });
+
+        Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, {
+          friends: {
+            [request.friend.address]: {
+              username: request.friend.username,
+            },
+          },
+        });
       }
     }
   }, [ctx.friendRequestsSent]);
@@ -147,10 +151,6 @@ const Profile = ({ history }) => {
 
   const isValidProfile = () => {
     return _.has(ctx.profile, 'address');
-  };
-
-  const redirect = () => {
-    history.push('/new/post');
   };
 
   const offBackdrop = () => {

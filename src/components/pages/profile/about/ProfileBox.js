@@ -15,8 +15,9 @@ import Fab from '@material-ui/core/Fab';
 import Name from './Name';
 import FriendRequest from './FriendRequest';
 import ShareButton from './ShareButton';
-import Box from '../../../../utils/3box/index.js';
+import Box from '../../../../utils/3box';
 import TextInput from '../../../utils/TextInput';
+import Image from '../../../../utils/image';
 import Upload from '../../../utils/upload';
 import { DataContext } from '../../../utils/DataProvider';
 
@@ -37,8 +38,6 @@ const ProfileBox = ({ url, offBackdrop }) => {
 
   useEffect(() => {
     if (imageHashes) {
-      console.log('imageHashes', imageHashes);
-
       // Store it in 3box public profile.
       Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, {
         profilePic: imageHashes,
@@ -64,6 +63,15 @@ const ProfileBox = ({ url, offBackdrop }) => {
 
   const addImageUrl = (_imageUrl) => {
     ctx.setProfilePic(_imageUrl);
+
+    Image.resize(_imageUrl, 50).then((resizedImg) => {
+      ctx.setProfilePics((_pics) => {
+        return {
+          ..._pics,
+          [ctx.address]: resizedImg,
+        };
+      });
+    });
   };
 
   return (
@@ -98,6 +106,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
         />
       </GridListTile>
       <Upload
+        resize={512}
         show={show}
         toggle={toggle}
         imageRows={imageRows}

@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 
-import _ from 'lodash';
 import { Row, Col, ListGroupItem } from 'react-bootstrap';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 
 import Alert from './Alert';
+import Box from '../../../utils/3box';
 import File from '../../../utils/file';
 import { DataContext } from '../../utils/DataProvider';
 import FriendRequest from './FriendRequest';
@@ -33,15 +33,24 @@ const FriendRequests = () => {
 
     const load = async () => {
       for (const item of ctx.friendRequests) {
-        if (!ctx.profilePics[item.me.address] && _.has(item.me, 'profilePic')) {
-          const imgUrl = await File.avatar(item.me.profilePic);
+        if (!ctx.profilePics[item.me.address]) {
+          const data = await Box.getAllPublic(item.me.address);
+          const pic = Box.get(
+            Box.DATASTORE_KEY_PROFILE_PUBLIC,
+            'profilePic',
+            data
+          );
 
-          ctx.setProfilePics((_pics) => {
-            return {
-              ..._pics,
-              [item.me.address]: imgUrl,
-            };
-          });
+          if (pic) {
+            const imgUrl = await File.avatar(pic);
+
+            ctx.setProfilePics((_pics) => {
+              return {
+                ..._pics,
+                [item.me.address]: imgUrl,
+              };
+            });
+          }
         }
       }
     };

@@ -21,7 +21,10 @@ class Request extends Thread {
         threebox.address.threadRequest
       );
 
-      this.updateCallback(() => this.getAll.bind(this)(filter).then(callback));
+      this.updateCallback(() => {
+        console.debug('request mesage callback triggered');
+        this.getAll.bind(this)(filter).then(callback);
+      });
 
       // const posts = await this.thread.getPosts();
       // for (const post of posts) {

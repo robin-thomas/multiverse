@@ -55,7 +55,6 @@ const Space = ({ setStage }) => {
           Bucket.getKey(textile.buckets.profile),
           Box.getAll(ctx.address),
         ]);
-        console.log('data', Box.storage);
 
         ctx.setBucketKeys((_bucketKeys) => {
           return { ..._bucketKeys, profilePic: bucketKey };
@@ -65,9 +64,7 @@ const Space = ({ setStage }) => {
         if (!keypair) {
           // Create encryptionKey and keypair
           const encryptionKey = Crypto.symmetric.genKey();
-          keypair = (
-            await Crypto.asymmetric.genKeypair(ctx.address)
-          ).toString();
+          keypair = await Crypto.asymmetric.genKeypair(ctx.address);
 
           Box.set(
             Box.DATASTORE_KEY_PROFILE_PRIVATE,
@@ -101,32 +98,6 @@ const Space = ({ setStage }) => {
 
     fn();
   }, [ctx.address]);
-
-  // useEffect(() => {
-  //   console.log('triggering deletion', ctx.friendRequestsSent);
-  //   for (const request of ctx.friendRequestsSent) {
-  //     if (request.status === 'ok') {
-  //       // decrypt the encryptionKey.
-  //       const encryptionKey = Crypto.asymmetric.decrypt(
-  //         request.encryptedKey,
-  //         request.nonce, {
-  //         publicKey: request.pubKey,
-  //         secretKey: Crypto.box.secretKey(),
-  //       });
-  //       console.log('encryptionKey', encryptionKey);
-  //
-  //       Box.set(Box.DATASTORE_KEY_PROFILE_PRIVATE, {
-  //         keys: {
-  //           encryptionKeys: {
-  //             [request.friend]: encryptionKey,
-  //           }
-  //         }
-  //       });
-  //     }
-  //
-  //     Box.message.request.deleteById(request.id);
-  //   }
-  // }, [ctx.friendRequestsSent]);
 
   return (
     <>

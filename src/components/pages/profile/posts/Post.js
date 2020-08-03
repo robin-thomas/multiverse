@@ -4,7 +4,6 @@ import _ from 'lodash';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -59,6 +58,8 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem);
 
 const Post = React.memo(({ username, profilePic, post, onDelete }) => {
+  let cancel = false;
+
   const ctx = useContext(DataContext);
 
   const [images, setImages] = useState([]);
@@ -90,7 +91,7 @@ const Post = React.memo(({ username, profilePic, post, onDelete }) => {
             }
           }
 
-          if (_images.length > 0) {
+          if (_images.length > 0 && !cancel) {
             setLoading(false);
             setImages(_images);
           }
@@ -98,9 +99,13 @@ const Post = React.memo(({ username, profilePic, post, onDelete }) => {
       }
     };
 
-    if (post.decryptionKey) {
+    if (post.decryptionKey && !cancel) {
       fn();
     }
+
+    return () => {
+      cancel = true;
+    };
   }, [post.decryptionKey]);
 
   const _edit = () => {

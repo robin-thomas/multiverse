@@ -41,24 +41,32 @@ const Header = ({ history }) => {
       <EmptyRow />
       <Row>
         {ctx.address ? (
+          <Col md={{ span: 2, offset: 1 }}>
+            <Link
+              to={`/profile/${ctx.address}`}
+              className={styles['home-logo']}
+            >
+              {app.name}
+            </Link>
+          </Col>
+        ) : (
+          <Col md={{ span: 2, offset: 1 }}>
+            <Link to="/" className={styles['home-logo']}>
+              {app.name}
+            </Link>
+          </Col>
+        )}
+        {app.features.search ? (
+          <Col md="5" className="ml-auto align-self-center">
+            <Search />
+          </Col>
+        ) : (
+          <Col md="5" className="ml-auto">
+            &nbsp;
+          </Col>
+        )}
+        {ctx.address ? (
           <>
-            <Col md={{ span: 2, offset: 1 }}>
-              <Link
-                to={`/profile/${ctx.address}`}
-                className={styles['home-logo']}
-              >
-                {app.name}
-              </Link>
-            </Col>
-            {app.features.search ? (
-              <Col md="5" className="ml-auto align-self-center">
-                <Search />
-              </Col>
-            ) : (
-              <Col md="5" className="ml-auto">
-                &nbsp;
-              </Col>
-            )}
             <Col md="auto" className="ml-auto align-self-center">
               <Tooltip title="Create new post">
                 <Link to="/new/post">
@@ -86,11 +94,7 @@ const Header = ({ history }) => {
             </Col>
           </>
         ) : (
-          <Col md={{ span: 2, offset: 1 }}>
-            <Link to="/" className={styles['home-logo']}>
-              {app.name}
-            </Link>
-          </Col>
+          <Col>&nbsp;</Col>
         )}
         <Col md="1">&nbsp;</Col>
       </Row>

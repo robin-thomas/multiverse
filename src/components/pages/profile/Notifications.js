@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 
-import _ from 'lodash';
 import { Row, Col, ListGroupItem } from 'react-bootstrap';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import Alert from './Alert';
 import Notification from './Notification';
+import Box from '../../../utils/3box';
 import File from '../../../utils/file';
 import { DataContext } from '../../utils/DataProvider';
 
@@ -33,18 +33,24 @@ const Notifications = () => {
 
     const load = async () => {
       for (const item of ctx.friendRequestsSent) {
-        if (
-          !ctx.profilePics[item.friend.address] &&
-          _.has(item.friend, 'profilePic')
-        ) {
-          const imgUrl = await File.avatar(item.friend.profilePic);
+        if (!ctx.profilePics[item.friend.address]) {
+          const data = await Box.getAllPublic(item.friend.address);
+          const pic = Box.get(
+            Box.DATASTORE_KEY_PROFILE_PUBLIC,
+            'profilePic',
+            data
+          );
 
-          ctx.setProfilePics((_pics) => {
-            return {
-              ..._pics,
-              [item.friend.address]: imgUrl,
-            };
-          });
+          if (pic) {
+            const imgUrl = await File.avatar(pic);
+
+            ctx.setProfilePics((_pics) => {
+              return {
+                ..._pics,
+                [item.friend.address]: imgUrl,
+              };
+            });
+          }
         }
       }
     };
@@ -64,9 +70,9 @@ const Notifications = () => {
       simpleBar={simpleBar}
       icon={<NotificationsIcon fontSize="large" />}
     >
-      {ctx.friendRequestsSent > 0 ? (
-        ctx.friendRequestsSent.map((item, index) => (
-          <Notification key={index} message={item} setOpen={setOpen} />
+      {ctx.friendRequestsSent.length > 0 ? (
+        ctx.friendRequestsSent.map((item) => (
+          <Notification key={item.id} message={item} setOpen={setOpen} />
         ))
       ) : (
         <ListGroupItem>

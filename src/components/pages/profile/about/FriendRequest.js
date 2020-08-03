@@ -52,7 +52,6 @@ const FriendRequest = () => {
           `friendRequests.${ctx.profile.address}`
         );
         if (isSent) {
-          console.log(ctx.friendRequestsSent);
           const response = ctx.friendRequestsSent.find(
             (e) => e.friend.address === ctx.profile.address
           );
@@ -89,12 +88,10 @@ const FriendRequest = () => {
       me: {
         username: ctx.profilePrivate.username,
         address: ctx.address,
-        profilePic: ctx.profilePrivate.profilePic,
       },
       friend: {
         username: ctx.profile.username,
         address: ctx.profile.address,
-        profilePic: ctx.profile.profilePic,
       },
     };
 
