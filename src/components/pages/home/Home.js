@@ -15,6 +15,7 @@ import { HomeHeader } from './Header';
 import EmptyRow from '../../utils/EmptyRow';
 
 import FriendshipImage from '../../../assets/how_friend_request.jpg';
+import PostImage from '../../../assets/post.png';
 
 import styles from './Home.module.css';
 
@@ -88,6 +89,18 @@ const Which = () => (
   </div>
 );
 
+const Post = () => (
+  <div className="section">
+    <Container>
+      <Row>
+        <Col md="10" className="mx-auto">
+          <img src={PostImage} width="90%" />
+        </Col>
+      </Row>
+    </Container>
+  </div>
+);
+
 const FriendshipRequest = () => (
   <div className="section">
     <Container>
@@ -129,17 +142,13 @@ const Page = ({ history, location }) => {
 
   const onLeave = (_, destination) => {
     switch (destination.index) {
-      case 1:
+      case 0:
+        setButton('primary');
+        break;
+
+      default:
         setButton('');
         break;
-
-      case 2:
-      case 3:
-        break;
-
-      case 0:
-      default:
-        setButton('primary');
     }
   };
 
@@ -148,11 +157,12 @@ const Page = ({ history, location }) => {
       <HomeHeader button={button} />
       <ReactFullpage
         navigation
-        sectionsColor={['#191A1E', '#8e24aa', '#191A1E', '#0798ec']}
+        sectionsColor={['#191A1E', '#0798ec', '#8e24aa', '#191A1E', '#0798ec']}
         onLeave={onLeave}
         render={() => (
           <>
             <Home />
+            <Post />
             <Which />
             <FriendshipRequest />
             <Finish />
