@@ -81,14 +81,11 @@ const ProfileBox = ({ url, offBackdrop }) => {
           <GridListTileBar
             titlePosition="top"
             actionIcon={
-              <Fab
-                size="medium"
-                color="primary"
-                className={styles['icon']}
-                onClick={onShow}
-              >
-                <EditIcon />
-              </Fab>
+              <div className={styles['icon-div']}>
+                <Fab size="medium" color="primary" onClick={onShow}>
+                  <EditIcon />
+                </Fab>
+              </div>
             }
             actionPosition="left"
             className={styles['title-bar']}

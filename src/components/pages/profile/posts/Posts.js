@@ -3,6 +3,8 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import _ from 'lodash';
 import { Row, Col } from 'react-bootstrap';
 import SimpleBar from 'simplebar-react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Alert from '@material-ui/lab/Alert';
 
 import Post from './Post';
 import Box from '../../../../utils/3box';
@@ -18,9 +20,13 @@ const Posts = () => {
   const simpleBar = useRef(null);
 
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(-1);
 
   useEffect(() => {
     let _posts = [];
+    if (ctx.profile.username) {
+      setLoading(1);
+    }
 
     if (ctx.profile.posts && Object.keys(ctx.profile.posts).length > 0) {
       for (const postId of Object.keys(ctx.profile.posts)) {
@@ -72,6 +78,12 @@ const Posts = () => {
     setPosts(_posts);
   }, [ctx.profile.posts]);
 
+  useEffect(() => {
+    if (ctx.profile.username) {
+      setLoading(0);
+    }
+  }, [ctx.profile.username]);
+
   const onDelete = (postId, visibility) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       const arg = {
@@ -93,21 +105,31 @@ const Posts = () => {
   };
 
   return (
-    <SimpleBar ref={simpleBar} className={styles['content']}>
-      <Row>
-        <Col md="8">
-          {posts.map((post, index) => (
-            <Post
-              key={index}
-              profilePic={ctx.profilePics[ctx.profile.address]}
-              username={ctx.profile.username}
-              post={post}
-              onDelete={onDelete}
-            />
-          ))}
-        </Col>
-      </Row>
-    </SimpleBar>
+    <>
+      {loading === 1 ? (
+        <CircularProgress color="inherit" />
+      ) : posts.length > 0 ? (
+        <SimpleBar ref={simpleBar} className={styles['content']}>
+          <Row>
+            <Col md="8">
+              {posts.map((post, index) => (
+                <Post
+                  key={index}
+                  profilePic={ctx.profilePics[ctx.profile.address]}
+                  username={ctx.profile.username}
+                  post={post}
+                  onDelete={onDelete}
+                />
+              ))}
+            </Col>
+          </Row>
+        </SimpleBar>
+      ) : loading !== -1 ? (
+        <Alert severity="info" style={{ width: '395px' }}>
+          Oops. This user has not made any posts yet!
+        </Alert>
+      ) : null}
+    </>
   );
 };
 

@@ -7,10 +7,23 @@
   border: 1px solid rgba(0, 0, 0, 0.9) !important;
 }
 
-.media {
-  height: 0;
+.media,
+.media-loading {
   border: 0 !important;
-  padding-top: 56.25%;
+  height: 400px;
+}
+
+.media-loading {
+  background: rgba(0, 0, 0, 0.9) !important;
+}
+
+.circular {
+  margin: 0 auto;
+  width: 50%;
+  left: 48%;
+}
+
+.media {
   cursor: pointer;
 }
 

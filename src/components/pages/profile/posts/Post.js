@@ -64,31 +64,36 @@ const Post = React.memo(({ username, profilePic, post, onDelete }) => {
   const [images, setImages] = useState([]);
   const [editable, setEditable] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [postContent, setPostContent] = useState(post.content);
 
   useEffect(() => {
     const fn = async () => {
-      if (
-        _.has(post, 'attachments.image') &&
-        post.attachments.image.length > 0
-      ) {
-        const _images = [];
-        for (const image of post.attachments.image) {
-          try {
-            const _image = await File.loadImageByName(
-              post.id,
-              image,
-              null,
-              post.decryptionKey
-            );
-            _images.push(_image);
-          } catch (err) {
-            console.error(err);
-          }
-        }
+      if (_.has(post, 'attachments.image')) {
+        if (post.attachments.image.length === 0) {
+          setLoading(false);
+        } else {
+          setLoading(true);
 
-        if (_images.length > 0) {
-          setImages(_images);
+          const _images = [];
+          for (const image of post.attachments.image) {
+            try {
+              const _image = await File.loadImageByName(
+                post.id,
+                image,
+                null,
+                post.decryptionKey
+              );
+              _images.push(_image);
+            } catch (err) {
+              console.error(err);
+            }
+          }
+
+          if (_images.length > 0) {
+            setLoading(false);
+            setImages(_images);
+          }
         }
       }
     };
@@ -187,7 +192,7 @@ const Post = React.memo(({ username, profilePic, post, onDelete }) => {
           </>
         }
       />
-      <Photos images={images} />
+      <Photos loading={loading} images={images} />
       <CardContent>
         {editable ? (
           <>

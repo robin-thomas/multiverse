@@ -157,13 +157,13 @@ const Page = ({ history, location }) => {
       <HomeHeader button={button} />
       <ReactFullpage
         navigation
-        sectionsColor={['#191A1E', '#0798ec', '#8e24aa', '#191A1E', '#0798ec']}
+        sectionsColor={['#191A1E', '#8e24aa', '#0798ec', '#191A1E', '#0798ec']}
         onLeave={onLeave}
         render={() => (
           <>
             <Home />
-            <Post />
             <Which />
+            <Post />
             <FriendshipRequest />
             <Finish />
           </>

@@ -169,21 +169,7 @@ const Profile = ({ history }) => {
             />
           ) : null}
         </Col>
-        <Col md="7" className="mr-auto">
-          {ctx.address ? (
-            <Row>
-              <Col md="auto" className="ml-auto">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  startIcon={<CloudUploadIcon />}
-                  onClick={redirect}
-                >
-                  Create New Post
-                </Button>
-              </Col>
-            </Row>
-          ) : null}
+        <Col>
           <Row>
             <Col md={{ span: 10, offset: 2 }}>
               <Posts />

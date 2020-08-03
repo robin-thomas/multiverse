@@ -14,6 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import { Row, Col } from 'react-bootstrap';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import styles from './Post.module.css';
 
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Photos = ({ images }) => {
+const Photos = ({ loading, images }) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -61,7 +62,15 @@ const Photos = ({ images }) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  return images.length > 0 ? (
+  return loading === true ? (
+    <div className={styles['media-loading']}>
+      <Row style={{ height: '100%' }}>
+        <Col md="auto" className="mx-auto align-self-center">
+          <CircularProgress className={styles['circular']} />
+        </Col>
+      </Row>
+    </div>
+  ) : images.length > 0 ? (
     <>
       <GridListTile className={styles['tile']}>
         <CardMedia

@@ -22,6 +22,11 @@
   ) !important;
 }
 
+.icon-div {
+  padding: 0 10px;
+  margin-top: 15px;
+}
+
 .icon-bottom {
   color: white;
   margin-right: 10px !important;

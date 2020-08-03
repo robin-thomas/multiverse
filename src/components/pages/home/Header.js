@@ -7,6 +7,7 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import EmptyRow from '../../utils/EmptyRow';
 import Search from '../profile/search';
@@ -59,6 +60,15 @@ const Header = ({ history }) => {
               </Col>
             )}
             <Col md="auto" className="ml-auto align-self-center">
+              <Tooltip title="Create new post">
+                <Link to="/new/post">
+                  <IconButton color="primary">
+                    <AddCircleIcon fontSize="large" />
+                  </IconButton>
+                </Link>
+              </Tooltip>
+            </Col>
+            <Col md="auto" className="pl-0 align-self-center">
               <Notifications />
             </Col>
             <Col md="auto" className="pl-0 align-self-center">

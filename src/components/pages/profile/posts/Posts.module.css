@@ -1,5 +1,5 @@
 .content {
-  height: 700px;
+  height: calc(100vh - 173px);
   max-width: 100%;
   overflow-x: hidden;
 }
