@@ -11,6 +11,9 @@ import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import Fab from '@material-ui/core/Fab';
 import CloseIcon from '@material-ui/icons/Close';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import { Row, Col } from 'react-bootstrap';
 
 import styles from './Post.module.css';
 
@@ -60,11 +63,23 @@ const Photos = ({ images }) => {
 
   return images.length > 0 ? (
     <>
-      <CardMedia
-        className={styles['media']}
-        image={images[0]}
-        onClick={handleToggle}
-      />
+      <GridListTile className={styles['tile']}>
+        <CardMedia
+          className={styles['media']}
+          image={images[0]}
+          onClick={handleToggle}
+        />
+        {images.length > 0 ? (
+          <GridListTileBar
+            title={
+              <Row>
+                <Col md="auto">{images.length} photo(s)</Col>
+              </Row>
+            }
+            className={styles['bottom-tile-bar']}
+          />
+        ) : null}
+      </GridListTile>
       <Backdrop className={classes.backdrop} open={open}>
         <div className={classes.root}>
           <Fab

@@ -11,6 +11,7 @@
   height: 0;
   border: 0 !important;
   padding-top: 56.25%;
+  cursor: pointer;
 }
 
 .avatar {
@@ -23,4 +24,16 @@
 
 .editor-btn {
   margin-top: 15px !important;
+}
+
+.tile {
+  line-height: 0 !important;
+}
+
+.bottom-tile-bar {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 5px;
+  height: 50px;
+  width: 110px;
+  margin: 10px;
 }

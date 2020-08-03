@@ -5,9 +5,7 @@ import Moment from '../../utils/moment';
 const formatTime = (time) => Moment(time).fromNow();
 
 const Timer = (props) => {
-  const [time] = useState(
-    !props.time ? new Date() : new Date(props.time * 1000)
-  );
+  const time = !props.time ? new Date() : new Date(props.time * 1000);
   const [timeStr, setTimeStr] = useState(formatTime(time));
 
   useEffect(() => {

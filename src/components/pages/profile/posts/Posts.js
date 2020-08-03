@@ -20,9 +20,9 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    if (ctx.profile.posts && Object.keys(ctx.profile.posts).length > 0) {
-      let _posts = [];
+    let _posts = [];
 
+    if (ctx.profile.posts && Object.keys(ctx.profile.posts).length > 0) {
       for (const postId of Object.keys(ctx.profile.posts)) {
         let _post = { ...ctx.profile.posts[postId] };
 
@@ -67,9 +67,9 @@ const Posts = () => {
       }
 
       _posts.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1));
-
-      setPosts(_posts);
     }
+
+    setPosts(_posts);
   }, [ctx.profile.posts]);
 
   const onDelete = (postId, visibility) => {

@@ -4,7 +4,7 @@ import { Container, Row, Col, ProgressBar } from 'react-bootstrap';
 
 import styles from './Upload.module.css';
 
-const formatNum = (num) => (isNaN(num) ? 0.0 : num);
+const formatNum = (num) => (isNaN(num) ? 0.0 : num.toFixed(2));
 
 const Footer = ({
   hiddenFileInput,

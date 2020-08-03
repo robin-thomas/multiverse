@@ -43,8 +43,15 @@ const Search = ({ history }) => {
   const [items, setItems] = useState([]);
   const [value, setValue] = useState('');
   const [disabled, setDisabled] = useState(true);
+  const [searchDisabled, setSearchDisabled] = useState(false);
 
-  const onChange = (_value) => {
+  const onClick = (item) => {
+    setValue('');
+    history.push(`/profile/${item.address}`);
+  };
+
+  const onChange = (e) => {
+    const _value = e.target.value;
     setDisabled(!_value || _value === '');
     setValue(_value);
   };
@@ -57,6 +64,7 @@ const Search = ({ history }) => {
 
   const search = async () => {
     setDisabled(true);
+    setSearchDisabled(true);
 
     // Verify that the username exists.
     if (Ethers.isAddress(value)) {
@@ -98,6 +106,7 @@ const Search = ({ history }) => {
     }
 
     setDisabled(false);
+    setSearchDisabled(false);
   };
 
   return (
@@ -117,9 +126,7 @@ const Search = ({ history }) => {
               key={index}
               search={true}
               message={{ me: item }}
-              onClick={() => {
-                history.push(`/profile/${item.address}`);
-              }}
+              onClick={() => onClick(item)}
             />
           ))}
         </div>
@@ -128,8 +135,9 @@ const Search = ({ history }) => {
         className={classes.input}
         placeholder="Search Multiverse"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange}
         onKeyDown={onKeyDown}
+        disabled={searchDisabled}
       />
       <IconButton
         className={classes.iconButton}

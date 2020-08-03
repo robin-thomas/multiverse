@@ -51,14 +51,24 @@ const Profile = ({ history }) => {
       } else {
         await Promise.all([Bucket.getClient(), Box.getAll(address)]);
 
-        ctx.setProfile({
-          ...Box.storage[Box.DATASTORE_KEY_PROFILE_PUBLIC].value,
-          address,
-        });
-        ctx.setProfilePrivate({
-          ...Box.storage[Box.DATASTORE_KEY_PROFILE_PRIVATE].value,
-          ...Box.storage[Box.DATASTORE_KEY_PROFILE_PUBLIC].value,
-        });
+        const privProf = Box.storage[Box.DATASTORE_KEY_PROFILE_PRIVATE].value;
+        const profile = Box.storage[Box.DATASTORE_KEY_PROFILE_PUBLIC].value;
+        console.debug(`loaded all data of ${address}`, profile, privProf);
+
+        let posts = profile.posts;
+        if (privProf.posts) {
+          posts = { ...posts, ...privProf.posts };
+        }
+        posts = Object.keys(posts).reduce((p, c) => {
+          if (posts[c]) {
+            p[c] = posts[c];
+          }
+          return p;
+        }, {});
+        console.log('posts', posts);
+
+        ctx.setProfilePrivate({ ...privProf, ...profile });
+        ctx.setProfile({ ...profile, posts, address });
       }
 
       ctx.setEditable(ctx.address === address);
