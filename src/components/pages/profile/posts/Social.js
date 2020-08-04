@@ -5,7 +5,7 @@ import { MDBModal, MDBModalHeader, MDBModalBody } from 'mdbreact';
 
 import styles from './PostFooter.module.css';
 
-const Social = ({ count, text, children }) => {
+const Social = ({ count, text, children, title }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const toggleModal = (e) => {
@@ -17,7 +17,7 @@ const Social = ({ count, text, children }) => {
 
   return count !== null ? (
     <>
-      {count > 0 ? (
+      {count && count > 0 ? (
         <Link href="#" onClick={toggleModal} color="inherit">
           <span className={styles['likes']}>
             {count} {text}
@@ -25,13 +25,13 @@ const Social = ({ count, text, children }) => {
         </Link>
       ) : (
         <span className={styles['likes']}>
-          {count} {text}
+          {count ? count : ''} {text}
         </span>
       )}
       {text === 'likes' ? <span>&nbsp;.&nbsp;</span> : null}
       <MDBModal isOpen={openModal} toggle={toggleModal} centered>
         <MDBModalHeader toggle={toggleModal}>
-          <span className={styles['capitalize']}>{text}</span>
+          <span className={styles['capitalize']}>{title ? title : text}</span>
         </MDBModalHeader>
         <MDBModalBody>{children}</MDBModalBody>
       </MDBModal>

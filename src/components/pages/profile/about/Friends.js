@@ -6,6 +6,8 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
+import Like from '../posts/Like';
+import Social from '../posts/Social';
 import Box from '../../../../utils/3box';
 import File from '../../../../utils/file';
 import { DataContext } from '../../../utils/DataProvider';
@@ -25,7 +27,10 @@ const Picture = ({ height, pic }) => {
       <CardMedia
         style={{
           height: height ? `${height}px` : '100px',
-          border: '1px solid rgba(255,255,255,1)',
+          border: '1px solid rgba(0,0,0,.2)',
+          borderBottom: '0',
+          borderRight: '0',
+          borderTop: pic[2] >= 3 ? '1px solid rgba(0,0,0,1)' : '0',
         }}
         image={pic[0].imgUrl}
       />
@@ -54,7 +59,11 @@ const Friends = () => {
           if (pic) {
             const imgUrl = await File.avatar(pic);
 
-            friends.push({ imgUrl, address });
+            friends.push({
+              imgUrl,
+              address,
+              username: ctx.profile.friends[address].username,
+            });
 
             ctx.setProfilePics((_pics) => {
               return {
@@ -83,20 +92,36 @@ const Friends = () => {
       return [
         {
           imgUrl:
-            'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=',
+            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAQAAADa613fAAAAaUlEQVR42u3PQREAAAgDoC251Y3g34MGNJMXKiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiJyWeRuMgFyCP0cAAAAAElFTkSuQmCC',
         },
         false,
+        index,
       ];
     }
 
-    return [pics[index], true];
+    return [pics[index], true, index];
   };
 
   return (
     <>
-      <Typography variant="button" display="block" gutterBottom>
-        Friends
-      </Typography>
+      <Row>
+        <Col md="auto">
+          <Typography variant="button" display="block" gutterBottom>
+            Friends
+          </Typography>
+        </Col>
+        <Col md="auto" className="ml-auto">
+          <Social count={pics.length} text="friends" title="Friends">
+            {pics.map((friend, index) => (
+              <Like
+                key={index}
+                like={{ message: friend }}
+                profilePic={ctx.profilePics[friend.address]}
+              />
+            ))}
+          </Social>
+        </Col>
+      </Row>
       <Row noGutters={true} style={{ height: '100px' }}>
         <Col md="4">
           <Picture pic={getPic(0)} />

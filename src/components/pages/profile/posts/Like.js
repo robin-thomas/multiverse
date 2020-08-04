@@ -16,11 +16,13 @@ const Like = ({ like, profilePic }) => (
     <Col md="6" className="align-self-center pr-0">
       @{like.message.username}
     </Col>
-    <Col md="4" className="align-self-center ml-auto text-right">
-      <span className={styles['timestamp']}>
-        {new Date(like.timestamp * 1000).toLocaleString()}
-      </span>
-    </Col>
+    {like.timestamp ? (
+      <Col md="4" className="align-self-center ml-auto text-right">
+        <span className={styles['timestamp']}>
+          {new Date(like.timestamp * 1000).toLocaleString()}
+        </span>
+      </Col>
+    ) : null}
   </Row>
 );
 

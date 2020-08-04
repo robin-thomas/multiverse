@@ -160,13 +160,23 @@ const ProfileBox = ({ url, offBackdrop }) => {
           </Col>
           <Col>
             <Row noGutters={true}>
-              <Col md="auto" className="ml-auto">
-                <Tooltip title="Change profile picture">
-                  <IconButton color="primary" component="span" onClick={onShow}>
-                    <PhotoCamera />
-                  </IconButton>
-                </Tooltip>
-              </Col>
+              {ctx.address === ctx.profile.address ? (
+                <Col md="auto" className="ml-auto">
+                  <Tooltip title="Change profile picture">
+                    <IconButton
+                      color="primary"
+                      component="span"
+                      onClick={onShow}
+                    >
+                      <PhotoCamera />
+                    </IconButton>
+                  </Tooltip>
+                </Col>
+              ) : (
+                <Col md="1" className="ml-auto">
+                  &nbsp;
+                </Col>
+              )}
               <Col md="auto">
                 <FriendRequest pending={pending} setPending={setPending} />
               </Col>
