@@ -14,10 +14,6 @@ import Circle from './Circle';
 import { HomeHeader } from './Header';
 import EmptyRow from '../../utils/EmptyRow';
 
-import FriendshipImage from '../../../assets/how_friend_request.jpg';
-import PostImage from '../../../assets/post.png';
-import LikeImage from '../../../assets/likes.png';
-
 import styles from './Home.module.css';
 
 const Home = () => (
@@ -95,7 +91,7 @@ const Post = () => (
     <Container>
       <Row>
         <Col md="10" className="mx-auto">
-          <img src={PostImage} width="90%" />
+          <img src="/images/post.png" width="90%" />
         </Col>
       </Row>
     </Container>
@@ -107,7 +103,7 @@ const Like = () => (
     <Container>
       <Row>
         <Col md="10" className="mx-auto">
-          <img src={LikeImage} width="90%" />
+          <img src="/images/likes.png" width="90%" />
         </Col>
       </Row>
     </Container>
@@ -119,7 +115,7 @@ const FriendshipRequest = () => (
     <Container>
       <Row>
         <Col md="10" className="mx-auto">
-          <img src={FriendshipImage} width="90%" />
+          <img src="/images/how_friend_request.jpg" width="90%" />
         </Col>
         <Col md="2" className="align-self-center">
           <Row>

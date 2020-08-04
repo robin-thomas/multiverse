@@ -31,5 +31,6 @@ node_modules
 .env
 
 # custom
+yarn.lock
 package-lock.json
 build

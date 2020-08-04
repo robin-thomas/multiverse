@@ -10,12 +10,6 @@
       "search": true
     }
   },
-  "ipfs": {
-    "protocol": "https",
-    "host": "ipfs.infura.io",
-    "port": 5001,
-    "gateway": "https://ipfs.infura.io/ipfs/"
-  },
   "threebox": {
     "flushInterval": 30000,
     "address": {

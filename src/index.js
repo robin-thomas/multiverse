@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 import * as serviceWorker from './components/app/serviceWorker';
 
@@ -15,9 +15,9 @@ import 'simplebar/dist/simplebar.min.css';
 
 const Multiverse = () => (
   <DataProvider>
-    <BrowserRouter>
+    <HashRouter>
       <App />
-    </BrowserRouter>
+    </HashRouter>
   </DataProvider>
 );
 

@@ -6,10 +6,9 @@
   "author": "Robin Thomas <robinthomas2591@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "HTTPS=true react-app-rewired start",
+    "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "mocha 'src/**/*.spec.js'",
-    "coverage": "nyc npm run test"
+    "dev-build": "GENERATE_SOURCEMAP=false react-app-rewired build"
   },
   "dependencies": {
     "3box": "^1.20.3",
@@ -21,9 +20,8 @@
     "@textile/threads-core": "^0.1.33",
     "buffer": "^5.6.0",
     "crypto-js": "^4.0.0",
-    "ethers": "^5.0.4",
+    "ethers": "^5.0.7",
     "fernet": "^0.3.1",
-    "ipfs-http-client": "^44.3.0",
     "lodash": "^4.17.19",
     "mdbreact": "^4.27.0",
     "moment": "^2.27.0",
@@ -32,25 +30,19 @@
     "react": "^16.13.1",
     "react-bootstrap": "1.0.1",
     "react-dom": "^16.13.1",
-    "react-froala-wysiwyg": "^3.1.1-1",
+    "react-froala-wysiwyg": "^3.2.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
     "react-share": "^4.2.1",
     "react-swipeable-views": "^0.13.9",
     "react-swipeable-views-utils": "^0.13.9",
     "simplebar-react": "^2.2.1",
-    "text-encoder-lite": "^2.0.0",
-    "tweetnacl": "^1.0.3",
-    "uuid": "^8.2.0"
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "customize-cra": "^1.0.0",
     "husky": "^4.2.5",
-    "ipfs-only-hash": "^2.0.1",
-    "jsdom": "^16.2.2",
     "lint-staged": "^10.2.11",
-    "mocha": "^8.0.1",
-    "nyc": "^15.1.0",
     "prettier": "^2.0.5",
     "react-app-rewired": "^2.1.6"
   },
