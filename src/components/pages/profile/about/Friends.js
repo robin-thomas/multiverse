@@ -35,35 +35,41 @@ const Friends = () => {
     const fn = async () => {
       const friends = [];
       setPics(friends);
-      setCount(friends.length);
+      setCount(null);
 
-      for (const address of Object.keys(ctx.profile.friends)) {
-        if (!ctx.profilePics[address]) {
-          const data = await Box.getAllPublic(address);
-          const pic = Box.get(
-            Box.DATASTORE_KEY_PROFILE_PUBLIC,
-            'profilePic',
-            data
-          );
+      if (ctx.profile.friends) {
+        for (const address of Object.keys(ctx.profile.friends)) {
+          if (!ctx.profilePics[address]) {
+            const data = await Box.getAllPublic(address);
+            const pic = Box.get(
+              Box.DATASTORE_KEY_PROFILE_PUBLIC,
+              'profilePic',
+              data
+            );
 
-          if (pic) {
-            const imgUrl = await File.avatar(pic);
+            if (pic) {
+              const imgUrl = await File.avatar(pic);
 
+              friends.push({
+                imgUrl,
+                address,
+                username: ctx.profile.friends[address].username,
+              });
+
+              ctx.setProfilePics((_pics) => {
+                return {
+                  ..._pics,
+                  [address]: imgUrl,
+                };
+              });
+            }
+          } else {
             friends.push({
-              imgUrl,
-              address,
+              imgUrl: ctx.profilePics[address],
               username: ctx.profile.friends[address].username,
-            });
-
-            ctx.setProfilePics((_pics) => {
-              return {
-                ..._pics,
-                [address]: imgUrl,
-              };
+              address,
             });
           }
-        } else {
-          friends.push({ imgUrl: ctx.profilePics[address], address });
         }
       }
 

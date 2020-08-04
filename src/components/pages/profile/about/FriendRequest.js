@@ -29,10 +29,7 @@ const FriendRequest = ({ pending, setPending }) => {
     if (!ctx.address || ctx.profile.address === ctx.address) {
       setPending(4);
     } else {
-      const isFriend = _.has(
-        ctx.profilePrivate,
-        `keys.encryptionKeys.${ctx.profile.address}`
-      );
+      const isFriend = _.has(ctx.profilePrivate.friends, ctx.profile.address);
       if (isFriend) {
         setPending(2);
       } else {

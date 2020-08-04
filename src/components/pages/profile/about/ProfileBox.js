@@ -148,7 +148,7 @@ const ProfileBox = ({ url, offBackdrop }) => {
             </Row>
             {pending >= 1 && pending <= 3 ? (
               <Row style={{ marginTop: '5px' }}>
-                <Col className="text-center">
+                <Col>
                   <Chip
                     avatar={<FaceIcon />}
                     label={getTitle(pending)}

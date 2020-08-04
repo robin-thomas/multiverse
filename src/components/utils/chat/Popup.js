@@ -110,6 +110,11 @@ const Popup = ({ open, onNew, onClose }) => {
     setTitle('Chat');
   };
 
+  const _onClose = () => {
+    onClose();
+    setTimeout(onBack, 1500);
+  };
+
   return (
     <div
       className={styles['popup']}
@@ -120,7 +125,7 @@ const Popup = ({ open, onNew, onClose }) => {
         title={title}
         username={ctx.profile.username}
         profilePic={ctx.profilePics[ctx.address]}
-        onClose={onClose}
+        onClose={_onClose}
         onBack={onBack}
       />
       <Content onClick={onClick} state={state} onNew={onNew} />

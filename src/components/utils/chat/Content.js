@@ -18,26 +18,25 @@ const Content = ({ state, onNew, onClick }) => {
 
   const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [chatThread, setChatThread] = useState(null);
 
   useEffect(() => {
     if (ctx.profilePrivate.chats) {
-      const _friends = Object.keys(ctx.profilePrivate.chats)
-        .map((_address) => {
-          let _friend = Box.message.request.items.find(
+      const _friends = Object.keys(ctx.profilePrivate.chats).map((_address) => {
+        let _friend = Box.message.request.items.find(
+          (e) => e.message.me.address === _address
+        );
+        if (!_friend) {
+          _friend = Box.message.response.items.find(
             (e) => e.message.me.address === _address
           );
-          if (!_friend) {
-            _friend = Box.message.response.items.find(
-              (e) => e.message.me.address === _address
-            );
-          }
+        }
 
-          return {
-            address: _address,
-            username: _friend.message.me.username,
-          };
-        })
-        .filter((e) => e !== null);
+        return {
+          address: _address,
+          username: _friend.message.me.username,
+        };
+      });
 
       setFriends(_friends);
     }
@@ -80,6 +79,24 @@ const Content = ({ state, onNew, onClick }) => {
     }
   }, [state, messages]);
 
+  const _onClick = ({ address, username, chatThread }) => {
+    onClick({ address, username, chatThread });
+    setChatThread((prevThread) => {
+      if (prevThread) {
+        prevThread.onUpdate(() => {});
+      }
+      return chatThread;
+    });
+  };
+
+  useEffect(() => {
+    if (chatThread) {
+      chatThread.onUpdate(() => {
+        chatThread.getPosts().then(setMessages);
+      });
+    }
+  }, [chatThread]);
+
   return (
     <SimpleBar
       ref={simpleBar}
@@ -92,7 +109,7 @@ const Content = ({ state, onNew, onClick }) => {
             key={index}
             {...friend}
             setMessages={setMessages}
-            onClick={onClick}
+            onClick={_onClick}
             onNew={onNew}
             profilePic={ctx.profilePics[friend.address]}
           />

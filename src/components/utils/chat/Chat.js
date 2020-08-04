@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Fab from '@material-ui/core/Fab';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
@@ -19,14 +19,15 @@ const Chat = () => {
     setHasNew(false);
   };
 
-  const onNew = () => {
+  const onNew = useCallback(() => {
     if (!open) {
       setHasNew(true);
     }
-  };
+  }, [open, setHasNew]);
 
   const onClose = () => {
     setOpen(false);
+    setHasNew(false);
   };
 
   return (

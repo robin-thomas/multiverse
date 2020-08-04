@@ -25,25 +25,18 @@ const Friend = ({
   const [hasNew, setHasNew] = useState(false);
 
   useEffect(() => {
-    const fn = async () => {
-      const _address = ctx.profilePrivate.chats[address];
-      const _thread = await Box.message.joinThreadByAddress(_address);
+    const _address = ctx.profilePrivate.chats[address];
+    Box.message.joinThreadByAddress(_address).then((_thread) => {
       setThread(_thread);
-
-      const _messages = await _thread.getPosts();
-      setMessages(_messages);
-
       _thread.onUpdate(() => {
         onNew();
         setHasNew(true);
-        _thread.getPosts().then(setMessages);
       });
-    };
-
-    fn();
-  }, []);
+    });
+  }, [address]);
 
   const click = () => {
+    thread.getPosts().then(setMessages);
     onClick({ address, username, chatThread: thread });
     setHasNew(false);
   };
