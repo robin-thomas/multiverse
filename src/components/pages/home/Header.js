@@ -20,7 +20,7 @@ import { app } from '../../../../config.json';
 
 import styles from './Header.module.css';
 
-const Header = ({ history }) => {
+const Header = ({ history, disable }) => {
   const ctx = useContext(DataContext);
 
   const logout = () => {
@@ -40,7 +40,7 @@ const Header = ({ history }) => {
     <div className={styles['header']}>
       <EmptyRow />
       <Row>
-        {ctx.address ? (
+        {!disable && ctx.address ? (
           <Col md={{ span: 2, offset: 1 }}>
             <Link
               to={`/profile/${ctx.address}`}
@@ -56,8 +56,8 @@ const Header = ({ history }) => {
             </Link>
           </Col>
         )}
-        {app.features.search ? (
-          <Col md="5" className="ml-auto align-self-center">
+        {!disable && app.features.search ? (
+          <Col lg="5" xs="4" className="ml-auto align-self-center">
             <Search />
           </Col>
         ) : (
@@ -65,7 +65,7 @@ const Header = ({ history }) => {
             &nbsp;
           </Col>
         )}
-        {ctx.address ? (
+        {!disable && ctx.address ? (
           <>
             <Col md="auto" className="ml-auto align-self-center">
               <Tooltip title="Create new post">

@@ -11,7 +11,7 @@ const Box = ({ open, setOpen, children, icon }) => (
     arrow={false}
     open={open}
     title={
-      <Card style={{ width: '750px' }}>
+      <Card style={{ width: '700px' }}>
         <Card.Body className={styles['card-body']}>
           <ListGroup className="list-group-flush">{children}</ListGroup>
         </Card.Body>

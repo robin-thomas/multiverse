@@ -161,7 +161,11 @@ const Profile = ({ history }) => {
     <Content>
       <EmptyRow rows={2} />
       <Row style={{ height: '100vh' }}>
-        <Col md={{ span: 2, offset: 1 }}>
+        <Col
+          lg={{ span: 2, offset: 1 }}
+          sm={{ span: 4, offset: 1 }}
+          className="pr-0"
+        >
           {app.features.profileBox && isValidProfile() ? (
             <ProfileBox
               url={`${_url}?profile=${address}`}
@@ -170,8 +174,8 @@ const Profile = ({ history }) => {
           ) : null}
         </Col>
         <Col>
-          <Row>
-            <Col md={{ span: 10, offset: 2 }}>
+          <Row noGutters={true}>
+            <Col lg={{ span: 10, offset: 2 }} sm={{ span: 11 }}>
               <Posts />
             </Col>
           </Row>

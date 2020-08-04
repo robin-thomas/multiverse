@@ -172,11 +172,6 @@ const Box = {
       data
     );
 
-    Object.keys(privateData[Box.DATASTORE_KEY_PROFILE_PRIVATE]).forEach(
-      (key) =>
-        key === undefined &&
-        delete privateData[Box.DATASTORE_KEY_PROFILE_PRIVATE][key]
-    );
     client.private.set(
       Box.DATASTORE_KEY_PROFILE_PRIVATE,
       privateData[Box.DATASTORE_KEY_PROFILE_PRIVATE]

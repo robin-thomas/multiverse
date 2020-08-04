@@ -53,11 +53,25 @@ const FriendRequest = ({ pending, setPending }) => {
             setPending(1);
           }
         } else {
-          setPending(0);
+          // Check whether a friend request has been received.
+          const isPending = ctx.friendRequests.find(
+            (e) => e.friend.address === ctx.address
+          );
+
+          if (isPending) {
+            setPending(1);
+          } else {
+            setPending(0);
+          }
         }
       }
     }
-  }, [ctx.profile, ctx.friendRequestsSent, ctx.profilePrivate]);
+  }, [
+    ctx.profile,
+    ctx.friendRequests,
+    ctx.friendRequestsSent,
+    ctx.profilePrivate,
+  ]);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

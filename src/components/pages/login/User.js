@@ -49,7 +49,7 @@ const User = ({ history }) => {
   const onChange = (e) => {
     const name = e.target.value;
 
-    if (/^[a-z0-9]+$/.test(name)) {
+    if (/^[a-z_0-9]+$/.test(name)) {
       setError(false);
     } else {
       setError(true);
@@ -67,8 +67,8 @@ const User = ({ history }) => {
   };
 
   return (
-    <Content>
-      <Row style={{ height: '100vh' }}>
+    <Content disable={true}>
+      <Row style={{ height: '100vh', marginTop: '-75px' }}>
         <Col md="auto" className="mx-auto align-self-center">
           <Card className={classes.root} variant="outlined">
             <CardHeader
@@ -88,26 +88,19 @@ const User = ({ history }) => {
               <EmptyRow />
               <Row>
                 <Col>
-                  {error ? (
-                    <TextField
-                      required
-                      value={name}
-                      onChange={onChange}
-                      label="Username"
-                      helperText="Only [a-z0-9] characters"
-                      variant="outlined"
-                      error
-                    />
-                  ) : (
-                    <TextField
-                      required
-                      value={name}
-                      onChange={onChange}
-                      label="Username"
-                      helperText="Yup! That's all for now"
-                      variant="outlined"
-                    />
-                  )}
+                  <TextField
+                    required
+                    value={name}
+                    onChange={onChange}
+                    label="Username"
+                    helperText={`${
+                      name.length === 0 && !error
+                        ? "Yup! That's all for now"
+                        : 'Only [a-z_0-9] characters'
+                    }`}
+                    variant="outlined"
+                    error={error}
+                  />
                 </Col>
               </Row>
               <hr />
@@ -117,7 +110,7 @@ const User = ({ history }) => {
                     variant="contained"
                     color="primary"
                     startIcon={<PersonIcon />}
-                    disabled={error}
+                    disabled={error || name.length === 0}
                     onClick={register}
                   >
                     Register

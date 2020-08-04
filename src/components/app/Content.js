@@ -9,12 +9,12 @@ import Header from '../pages/home/Header';
 
 import styles from './Content.module.css';
 
-const Content = ({ children }) => {
+const Content = ({ children, disable }) => {
   const ctx = useContext(DataContext);
 
   return (
     <>
-      <Header />
+      <Header disable={disable} />
       <Container fluid={true} className={styles['container']}>
         {children}
       </Container>

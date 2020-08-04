@@ -56,9 +56,10 @@ const Space = ({ setStage }) => {
           Box.getAll(ctx.address),
         ]);
 
-        ctx.setBucketKeys((_bucketKeys) => {
-          return { ..._bucketKeys, profilePic: bucketKey };
-        });
+        ctx.setBucketKeys((_bucketKeys) => ({
+          ..._bucketKeys,
+          profilePic: bucketKey,
+        }));
 
         let keypair = Crypto.box.keypair();
         if (!keypair) {

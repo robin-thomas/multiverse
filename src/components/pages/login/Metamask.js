@@ -50,6 +50,7 @@ const Metamask = ({ setStage }) => {
       } catch (err) {
         switch (err.message) {
           case 'User denied account authorization':
+          case 'User rejected the request.':
             setError('Uh oh.. you denied Metamask!');
             setErrorNext(
               <>

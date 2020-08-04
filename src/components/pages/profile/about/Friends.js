@@ -15,37 +15,27 @@ import { DataContext } from '../../../utils/DataProvider';
 const Picture = ({ height, pic }) => {
   return pic[0].address ? (
     <Link to={`/profile/${pic[0].address}`}>
-      <Card square>
+      <Card square style={{ boxShadow: 'none' }}>
         <CardMedia
-          style={{ height: height ? `${height}px` : '100px' }}
+          style={{ height: height ? `${height}vh` : '7vh' }}
           image={pic[0].imgUrl}
         />
       </Card>
     </Link>
-  ) : (
-    <Card square>
-      <CardMedia
-        style={{
-          height: height ? `${height}px` : '100px',
-          border: '1px solid rgba(0,0,0,.2)',
-          borderBottom: '0',
-          borderRight: '0',
-          borderTop: pic[2] >= 3 ? '1px solid rgba(0,0,0,1)' : '0',
-        }}
-        image={pic[0].imgUrl}
-      />
-    </Card>
-  );
+  ) : null;
 };
 
 const Friends = () => {
   const ctx = useContext(DataContext);
 
   const [pics, setPics] = useState([]);
+  const [count, setCount] = useState(null);
 
   useEffect(() => {
     const fn = async () => {
       const friends = [];
+      setPics(friends);
+      setCount(friends.length);
 
       for (const address of Object.keys(ctx.profile.friends)) {
         if (!ctx.profilePics[address]) {
@@ -77,32 +67,24 @@ const Friends = () => {
         }
       }
 
-      if (friends.length >= 0) {
-        setPics(friends);
-      }
+      setPics(friends);
+      setCount(friends.length);
     };
 
-    if (ctx.profile.friends) {
+    if (ctx.profile.address) {
       fn();
     }
-  }, [ctx.profile.friends]);
+  }, [ctx.profile.address, ctx.profile.friends]);
 
   const getPic = (index) => {
     if (index >= pics.length) {
-      return [
-        {
-          imgUrl:
-            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAQAAADa613fAAAAaUlEQVR42u3PQREAAAgDoC251Y3g34MGNJMXKiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiJyWeRuMgFyCP0cAAAAAElFTkSuQmCC',
-        },
-        false,
-        index,
-      ];
+      return [{ imgUrl: '' }, false, index];
     }
 
     return [pics[index], true, index];
   };
 
-  return (
+  return pics.length > 0 ? (
     <>
       <Row>
         <Col md="auto">
@@ -111,7 +93,7 @@ const Friends = () => {
           </Typography>
         </Col>
         <Col md="auto" className="ml-auto">
-          <Social count={pics.length} text="friends" title="Friends">
+          <Social count={count} text="friends" title="Friends">
             {pics.map((friend, index) => (
               <Like
                 key={index}
@@ -122,7 +104,7 @@ const Friends = () => {
           </Social>
         </Col>
       </Row>
-      <Row noGutters={true} style={{ height: '100px' }}>
+      <Row noGutters={true}>
         <Col md="4">
           <Picture pic={getPic(0)} />
         </Col>
@@ -133,7 +115,7 @@ const Friends = () => {
           <Picture pic={getPic(2)} />
         </Col>
       </Row>
-      <Row noGutters={true} style={{ height: '200px' }}>
+      <Row noGutters={true}>
         <Col md="4">
           <Row noGutters={true}>
             <Col>
@@ -147,11 +129,11 @@ const Friends = () => {
           </Row>
         </Col>
         <Col md="8">
-          <Picture pic={getPic(4)} height="200" />
+          <Picture pic={getPic(4)} height="14" />
         </Col>
       </Row>
     </>
-  );
+  ) : null;
 };
 
 export default Friends;

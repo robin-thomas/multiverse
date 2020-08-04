@@ -111,7 +111,7 @@ const Posts = () => {
       ) : posts.length > 0 ? (
         <SimpleBar ref={simpleBar} className={styles['content']}>
           <Row>
-            <Col md="8">
+            <Col lg="8" xs="12">
               {posts.map((post, index) => (
                 <Post
                   key={index}

@@ -10,6 +10,11 @@
 
 .home-logo {
   font-family: 'Grand Hotel', cursive;
-  color: white !important;
+  color: white;
   font-size: 2.8rem !important;
+  text-shadow: 2px 2px 2px black, 0 0 1em black;
+}
+
+.home-logo:hover {
+  color: white;
 }

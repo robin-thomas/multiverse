@@ -161,7 +161,7 @@ const Page = ({ history, location }) => {
         break;
 
       default:
-        setButton('');
+        setButton('default');
         break;
     }
   };

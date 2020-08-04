@@ -25,7 +25,7 @@ const Social = ({ count, text, children, title }) => {
         </Link>
       ) : (
         <span className={styles['likes']}>
-          {count ? count : ''} {text}
+          {count} {text}
         </span>
       )}
       {text === 'likes' ? <span>&nbsp;.&nbsp;</span> : null}
