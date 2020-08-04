@@ -13,6 +13,7 @@ import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 
 import Name from './Name';
+import Friends from './Friends';
 import FriendRequest from './FriendRequest';
 import ShareButton from './ShareButton';
 import Box from '../../../../utils/3box';
@@ -173,20 +174,26 @@ const ProfileBox = ({ url, offBackdrop }) => {
                 <ShareButton url={url} />
               </Col>
             </Row>
+            <EmptyRow />
             <Row noGutters={true}>
               <Col md="11" className="ml-auto">
                 <Name />
-                <Typography variant="caption">
-                  <TextInput
-                    type="textarea"
-                    value={about}
-                    hint="<Write that killer bio about yourself>"
-                    onChange={setAbout}
-                    updateText={updateAbout}
-                  />
-                </Typography>
               </Col>
             </Row>
+          </Col>
+        </Row>
+        <EmptyRow />
+        <Row>
+          <Col>
+            <Typography variant="caption">
+              <TextInput
+                type="textarea"
+                value={about}
+                hint="<Write that killer bio about yourself>"
+                onChange={setAbout}
+                updateText={updateAbout}
+              />
+            </Typography>
           </Col>
         </Row>
         <EmptyRow />
@@ -216,6 +223,8 @@ const ProfileBox = ({ url, offBackdrop }) => {
             </Card>
           </Col>
         </Row>
+        <hr />
+        <Friends />
       </CardContent>
     </Card>
   );

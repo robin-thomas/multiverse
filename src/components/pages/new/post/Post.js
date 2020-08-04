@@ -180,7 +180,6 @@ const Post = ({ history }) => {
                           setUploaded={setUploaded}
                           setImages={setImages}
                           setImageFileNames={setImageFileNames}
-                          multiple={true}
                           resize={100}
                           encryptionKey={encryptionKey}
                         />
