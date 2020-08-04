@@ -85,7 +85,7 @@ const Profile = ({ history }) => {
 
       // Resize the image for avatar purposes.
       if (!ctx.profilePics[ctx.profile.address]) {
-        const resizedImg = await Image.resize(img, 50);
+        const resizedImg = await Image.resize(img, 200);
         ctx.setProfilePics((_pics) => {
           return {
             ..._pics,
@@ -161,7 +161,7 @@ const Profile = ({ history }) => {
     <Content>
       <EmptyRow rows={2} />
       <Row style={{ height: '100vh' }}>
-        <Col md={{ span: 3, offset: 1 }}>
+        <Col md={{ span: 2, offset: 1 }}>
           {app.features.profileBox && isValidProfile() ? (
             <ProfileBox
               url={`${_url}?profile=${address}`}

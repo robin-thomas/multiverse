@@ -17,10 +17,7 @@ const Name = () => {
 
   return (
     <Row>
-      <Col md="auto" className="pr-0 align-self-justify">
-        @
-      </Col>
-      <Col className="pl-0 align-self-justify">{username}</Col>
+      <Col style={{ fontWeight: '500' }}>@{username}</Col>
     </Row>
   );
 };

@@ -126,7 +126,7 @@ const File = {
   },
 
   avatar: async (pic) => {
-    return await File.loadImageByName(textile.buckets.profile, pic, 50);
+    return await File.loadImageByName(textile.buckets.profile, pic, 150);
   },
 };
 

@@ -9,8 +9,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import CheckIcon from '@material-ui/icons/Check';
-import BlockIcon from '@material-ui/icons/Block';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 
 import Box from '../../../../utils/3box';
 import Crypto from '../../../../utils/crypto';
@@ -18,27 +19,15 @@ import { DataContext } from '../../../utils/DataProvider';
 
 import styles from './FriendRequest.module.css';
 
-const FriendRequest = () => {
+const FriendRequest = ({ pending, setPending }) => {
   const ctx = useContext(DataContext);
 
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState(null);
   const [backdropOpen, setBackdropOpen] = useState(false);
 
-  // -1 => loading
-  //  0 => no pending
-  //  1 => pending
-  //  2 => approved
-  //  3 => blocked
-  const [pending, setPending] = useState(-1);
-
   useEffect(() => {
-    if (_.has(ctx.profile, 'username')) {
-      setName(ctx.profile.username);
-    }
-
-    if (ctx.profile.address === ctx.address) {
-      setPending(0);
+    if (!ctx.address || ctx.profile.address === ctx.address) {
+      setPending(4);
     } else {
       const isFriend = _.has(
         ctx.profilePrivate,
@@ -57,7 +46,7 @@ const FriendRequest = () => {
           );
 
           if (!response) {
-            setPending(0);
+            setPending(1);
           } else if (response.status !== 'pending') {
             setPending(response.status === 'ok' ? 2 : 3);
           } else {
@@ -104,57 +93,34 @@ const FriendRequest = () => {
     setBackdropOpen(false);
   };
 
-  return (
+  const getTitle = (_pending) => {
+    switch (_pending) {
+      case 0:
+        return 'Add as friend';
+
+      default:
+        return '';
+    }
+  };
+
+  return pending === 0 || pending === -1 ? (
     <>
-      {!ctx.editable && ctx.address && pending === 0 ? (
-        <Button
-          variant="contained"
+      <Tooltip title={getTitle(pending)}>
+        <IconButton
           color="primary"
-          className={styles['icon-bottom']}
+          component="span"
           onClick={handleClickOpen}
+          disabled={pending !== 0}
         >
-          Add as friend
-        </Button>
-      ) : pending === 1 ? (
-        <Button
-          variant="contained"
-          color="primary"
-          className={styles['icon-bottom']}
-          disableElevation
-          style={{ cursor: 'not-allowed' }}
-          startIcon={<CircularProgress color="inherit" size={15} />}
-        >
-          Pending Friend
-        </Button>
-      ) : pending === 2 ? (
-        <Button
-          variant="contained"
-          color="primary"
-          className={styles['icon-bottom']}
-          disableElevation
-          startIcon={<CheckIcon />}
-          style={{ cursor: 'not-allowed' }}
-        >
-          Friend
-        </Button>
-      ) : pending === 3 ? (
-        <Button
-          variant="contained"
-          color="primary"
-          className={styles['icon-bottom']}
-          disableElevation
-          startIcon={<BlockIcon />}
-          style={{ cursor: 'not-allowed' }}
-        >
-          Blocked
-        </Button>
-      ) : null}
+          <PermContactCalendarIcon />
+        </IconButton>
+      </Tooltip>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Send a friend request?</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            <strong>@{name}</strong> will need to confirm that you are friends.
-            Okay?
+            <strong>@{ctx.profile.username}</strong> will need to confirm that
+            you are friends. Okay?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -170,7 +136,7 @@ const FriendRequest = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
     </>
-  );
+  ) : null;
 };
 
 export default FriendRequest;

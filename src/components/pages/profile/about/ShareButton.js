@@ -28,7 +28,7 @@ const ShareButton = ({ url }) => {
       title="Share Profile"
       open={open}
       setOpen={setOpen}
-      icon={<ShareIcon />}
+      icon={<ShareIcon fontSize="small" />}
     >
       <Row style={{ height: '60px' }}>
         <Col className="pr-0 text-center align-self-center">

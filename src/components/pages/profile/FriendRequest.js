@@ -45,6 +45,14 @@ const FriendRequest = ({ search, message, setOpen, onClick }) => {
         },
       });
 
+      Box.set(Box.DATASTORE_KEY_PROFILE_PUBLIC, {
+        friends: {
+          [message.me.address]: {
+            username: message.me.username,
+          },
+        },
+      });
+
       await Box.message.response.post({
         thread,
         encryptedKey,
