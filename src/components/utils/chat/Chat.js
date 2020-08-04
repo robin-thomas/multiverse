@@ -19,11 +19,11 @@ const Chat = () => {
     setHasNew(false);
   };
 
-  const onNew = useCallback(() => {
+  const onNew = () => {
     if (!open) {
       setHasNew(true);
     }
-  }, [open, setHasNew]);
+  };
 
   const onClose = () => {
     setOpen(false);

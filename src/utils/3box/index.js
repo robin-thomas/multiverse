@@ -171,11 +171,7 @@ const Box = {
       `keys.encryptionKeys.${address}`,
       data
     );
-
-    client.private.set(
-      Box.DATASTORE_KEY_PROFILE_PRIVATE,
-      privateData[Box.DATASTORE_KEY_PROFILE_PRIVATE]
-    );
+    console.debug('getAll data', data);
 
     return Object.keys(data).reduce((p, c) => {
       const item = data[c];
