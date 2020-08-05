@@ -173,7 +173,7 @@ const Profile = ({ history }) => {
             />
           ) : null}
         </Col>
-        <Col>
+        <Col lg="9" sm="7">
           <Row noGutters={true}>
             <Col lg={{ span: 10, offset: 2 }} sm={{ span: 11 }}>
               <Posts />

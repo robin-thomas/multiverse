@@ -22,21 +22,27 @@ const Content = ({ state, onNew, onClick }) => {
 
   useEffect(() => {
     if (ctx.profilePrivate.chats) {
-      const _friends = Object.keys(ctx.profilePrivate.chats).map((_address) => {
-        let _friend = Box.message.request.items.find(
-          (e) => e.message.me.address === _address
-        );
-        if (!_friend) {
-          _friend = Box.message.response.items.find(
+      const _friends = Object.keys(ctx.profilePrivate.chats)
+        .map((_address) => {
+          let _friend = Box.message.request.items.find(
             (e) => e.message.me.address === _address
           );
-        }
+          if (!_friend) {
+            _friend = Box.message.response.items.find(
+              (e) => e.message.me.address === _address
+            );
+          }
 
-        return {
-          address: _address,
-          username: _friend.message.me.username,
-        };
-      });
+          if (!_friend) {
+            return null;
+          }
+
+          return {
+            address: _address,
+            username: _friend.message.me.username,
+          };
+        })
+        .filter((e) => e !== null);
 
       setFriends(_friends);
     }
