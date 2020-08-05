@@ -2,7 +2,10 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const { removeModuleScopePlugin } = require('customize-cra');
+const {
+  addWebpackExternals,
+  removeModuleScopePlugin,
+} = require('customize-cra');
 
 module.exports = function override(config, env) {
   // do stuff with the webpack config...
@@ -28,6 +31,10 @@ module.exports = function override(config, env) {
   );
 
   removeModuleScopePlugin()(config);
+
+  const externals = {};
+  externals['3box'] = 'Box';
+  addWebpackExternals(externals)(config);
 
   return config;
 };
