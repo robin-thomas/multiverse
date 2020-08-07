@@ -15,6 +15,34 @@ Social networks, once a fun and novel way to connect with friends and interests 
 Could decentralized web technologies be the key for breaking their hold over our online social lives, all the while protecting our data? **Multiverse** is one such attempt, with no central authority and users own their data.
 
 # Features
+- Create an account with just a username
+- Profile:
+  - About you
+  - Profile picture (and change it when required)
+  - Friend list with avatars
+  - Posts
+  - Share a profile (with LinkedIn, Twitter and so on)
+- Search
+  - supports searching profiles using address
+- Posts
+  - Text
+  - Photo albums
+  - Likes and Comments
+    - Add or delete a like/comment
+    - See the like/comment
+    - See the list of likers/commenters
+    - Real-time updates if logged-in
+    - Avatar and timestamp of like/comment
+  - Visibility (private, friends and public)
+  - Post is stored in encrypted form in 3Box public storage (or private if visibility is private). Its encrypted using a symmetric key, that is shared in plaintext form (if visibility is public). If not, the key is encrypted using the encryption key of poster (which friends do have access to)
+- Friend Request
+    - Send friend request to anyone
+    - If the request is denied, the requestor is added to the block list of the recipient
+    - If the recipient removes from the block list, friend request can be received again
+    - It's used for exchange of encryption keys and creating chat thread
+- Chat
+  - Chat can be done only between friends
+  - It uses a private thread
 
 # Tech
 - "multiverses.crypto" domain from **[Unstoppable Domains](https://unstoppabledomains.com/)**
