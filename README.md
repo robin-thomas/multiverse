@@ -2,6 +2,8 @@
 ![](https://img.shields.io/badge/React-v16.13-red)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
+![](https://ethglobal.s3.amazonaws.com/recv6AELyNfJFmwb7/logo_icon.png)
+
 # Table of Contents
 1. [Introduction](#introduction)
 2. [Features](#features)
@@ -15,9 +17,9 @@ Could decentralized web technologies be the key for breaking their hold over our
 # Features
 
 # Tech
-- "multiverses.crypto" domain from **Unstoppable Domains**
-- React app hosted in IPFS using **Fleek**
-- **3Box**:
+- "multiverses.crypto" domain from **[Unstoppable Domains](https://unstoppabledomains.com/)**
+- React app hosted in IPFS using **[Fleek](https://fleek.co/)**
+- **[3Box](https://3box.io/)**:
     - Built a cache layer (for optimization) in front of 3Box. All write requests within 30 seconds will be batched up and sent as one request
     - Subscriptions for various 3Box threads for live updates while the user is logged in (like chat messages, likes & comments and so on)
     - Using 3Box for:
@@ -26,9 +28,11 @@ Could decentralized web technologies be the key for breaking their hold over our
       - open thread for sending/receiving friend requests
       - open thread per post for likes and comments
       - private member thread for chats
-- **Textile**:
+- **[Textile](https://textile.io/)**:
     - Images are split into chunks of 256KB, encrypted (for post images) and stored in buckets
     - Creates and store an identity in the browser localStorage
     - Using Textile Buckets for:
       - Post images. One bucket per post
       - Profile pictures. One common bucket for all users
+
+![](https://i.imgur.com/vrckHYc.jpg)
